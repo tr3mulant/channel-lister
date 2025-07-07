@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IGE\ChannelLister;
 
+use IGE\ChannelLister\Console\InstallCommand;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -17,6 +18,7 @@ class ChannelListerServiceProvider extends ServiceProvider
         $this->registerPublishing();
         $this->registerRoutes();
         $this->registerResources();
+        $this->registerCommands();
         if (! config('channel-lister.enabled')) {
             return;
         }
@@ -39,7 +41,7 @@ class ChannelListerServiceProvider extends ServiceProvider
     {
         Route::group([
             'domain' => config('channel-lister.domain', null),
-            'namespace' => 'IGE\ChannelLister\Controllers',
+            'namespace' => 'IGE\ChannelLister\Http\Controllers',
             'prefix' => config('channel-lister.path'),
             'middleware' => 'channel-lister',
         ], function (): void {
@@ -50,6 +52,13 @@ class ChannelListerServiceProvider extends ServiceProvider
     protected function registerResources(): void
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'channel-lister');
+    }
+
+    protected function registerCommands(): void
+    {
+        $this->commands([
+            InstallCommand::class,
+        ]);
     }
 
     /**

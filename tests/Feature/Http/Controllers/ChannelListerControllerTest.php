@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use IGE\ChannelLister\Http\Controllers\ChannelListerController;
-
-test('can construct', function (): void {
-    expect(new ChannelListerController)->toBeInstanceOf(ChannelListerController::class);
+test('index returns 200 status code', function (): void {
+    $this->get(route('channel-lister'))
+        ->assertStatus(200)
+        ->assertSee('hello world');
 });

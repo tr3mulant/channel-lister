@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'enabled' => env('CHANNEL_LISTER_ENABLED', true),
+
     /*
     |--------------------------------------------------------------------------
     | Channel Lister Domain
