@@ -2,7 +2,7 @@ laravel: "@testbench"
 
 providers:
   - IGE\ChannelLister\ChannelListerServiceProvider
-  - Workbench\App\Providers\TelescopeServiceProvider
+  - Workbench\App\Providers\ChannelListerServiceProvider
 
 migrations:
   - workbench/database/migrations
