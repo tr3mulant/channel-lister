@@ -78,6 +78,10 @@ class ChannelListerServiceProvider extends ServiceProvider
             ], 'channel-lister-migrations');
 
             $this->publishes([
+                __DIR__.'/../resources' => resource_path('vendor/channel-lister'),
+            ], ['channel-lister-resources', 'laravel-resources']);
+
+            $this->publishes([
                 __DIR__.'/../public' => public_path('vendor/channel-lister'),
             ], ['channel-lister-assets', 'laravel-assets']);
 
