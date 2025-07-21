@@ -25,7 +25,7 @@ return [
     | affect the paths of its internal API that aren't exposed to users.
     |
     */
-    'path' => env('CHANNEL_LISTER_PATH', 'channel-lister'),
+    'path' => env('CHANNEL_LISTER_PATH', null),
 
     /*
     |--------------------------------------------------------------------------
@@ -38,4 +38,17 @@ return [
     |
     */
     'middleware' => ['web'],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Channel Lister Route Middleware
+    |--------------------------------------------------------------------------
+    |
+    | The marketplace.disabled key can be filled with a list of marketplaces that should be disabled 
+    | for the channel-lister form tabs
+    |
+    */
+    'marketplaces' => [
+        'disabled' => []
+    ]
 ];
