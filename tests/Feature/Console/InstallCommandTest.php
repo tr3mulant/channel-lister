@@ -64,10 +64,15 @@ test('install command publishes all resources', function (): void {
     }
 });
 
-test('install command registers service provider in app config', function (): void {
+test('install command registers service provider in app config (Laravel 10)', function (): void {
     // Skip this test in CI or if app.php doesn't exist
     if (! File::exists(config_path('app.php'))) {
         $this->markTestSkipped('app.php config file not found');
+    }
+
+    // Skip if Laravel 11+ (has bootstrap/providers.php)
+    if (File::exists(base_path('bootstrap/providers.php'))) {
+        $this->markTestSkipped('This test is for Laravel 10 and below');
     }
 
     // Backup original app.php
@@ -85,12 +90,43 @@ test('install command registers service provider in app config', function (): vo
         // Run install command
         $this->artisan('channel-lister:install')->assertExitCode(0);
 
-        // Verify service provider was registered
+        // Verify service provider was registered in config/app.php
         $updatedConfig = File::get(config_path('app.php'));
         expect($updatedConfig)->toContain('App\\Providers\\ChannelListerServiceProvider::class');
     } finally {
         // Always restore original config
         File::put(config_path('app.php'), $originalConfig);
+        cleanupPublishedFiles();
+    }
+});
+
+test('install command registers service provider in bootstrap providers (Laravel 11+)', function (): void {
+    // Skip if not Laravel 11+
+    if (! File::exists(base_path('bootstrap/providers.php'))) {
+        $this->markTestSkipped('This test is for Laravel 11+');
+    }
+
+    // Backup original bootstrap/providers.php
+    $originalProviders = File::get(base_path('bootstrap/providers.php'));
+
+    try {
+        // Remove any existing registration
+        $cleanProviders = str_replace(
+            "App\\Providers\\ChannelListerServiceProvider::class,\n",
+            '',
+            $originalProviders
+        );
+        File::put(base_path('bootstrap/providers.php'), $cleanProviders);
+
+        // Run install command
+        $this->artisan('channel-lister:install')->assertExitCode(0);
+
+        // Verify service provider was registered in bootstrap/providers.php
+        $updatedProviders = File::get(base_path('bootstrap/providers.php'));
+        expect($updatedProviders)->toContain('App\\Providers\\ChannelListerServiceProvider::class');
+    } finally {
+        // Always restore original providers file
+        File::put(base_path('bootstrap/providers.php'), $originalProviders);
         cleanupPublishedFiles();
     }
 });
