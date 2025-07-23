@@ -17,76 +17,53 @@ class ChannelListerController extends Controller
 {
     public function index(Request $request): View
     {
-        $marketplaces = ChannelListerField::query()->select(['id', 'name'])->get()->toArray();
-        
-        foreach (config('channel-lister.marketplaces.disabled') as $marketplace) {
-            unset($marketplaces[array_search($marketplace, $marketplaces)]);
+        /** @var string[]|string $disabledMarketplaces */
+        $disabledMarketplaces = config('channel-lister.marketplaces.disabled', []);
+
+        if (! is_array($disabledMarketplaces)) {
+            $disabledMarketplaces = [$disabledMarketplaces];
         }
 
-        // $marketplaces = $this->dc->m_ChannelLister->getMarketplaces();
-        // foreach (self::DEACTIVATED_MARKETPLACES as $marketplace) {
-            // unset($marketplaces[array_search($marketplace, $marketplaces)]);
-        // }
-        sort($marketplaces);
+        /** @var string[] $marketplaces */
+        $marketplaces = ChannelListerField::query()
+            ->select('marketplace')
+            ->whereNotIn('marketplace', $disabledMarketplaces)
+            ->pluck('marketplace')
+            ->sort()
+            ->toArray();
 
-        $platform_json = '[';
-        foreach ($marketplaces as $marketplace) {
-            $platform_json .= '{id: "' . $marketplace . '", name: "' . $this->mapMarketplaceToName($marketplace) . '"},';
-        }
-        $platform_json .= '];';
+        $platform_json = collect($marketplaces)
+            ->map(fn (string $marketplace): array => [
+                'id' => $marketplace,
+                'name' => $this->mapMarketplaceToName($marketplace),
+            ])
+            ->toArray();
 
-
-
-        return view('channel-lister::index', [
+        return view('channel-lister::channel-lister.index', [
             'marketplaces' => $marketplaces,
-            'platform_json' => $platform_json
+            'platform_json' => $platform_json,
         ]);
     }
 
     /**
-	 * Maps lowercase marketplace names to form used in labels
-	 * @param  string $marketplace lowercase name of marketplace
-	 * @return string              Marketplace formatted as used in label
-	 */
-	protected function mapMarketplaceToName($marketplace)
-	{
-		switch ($marketplace) {
-			case 'amazon':
-				$marketplace = 'Amazon US';
-				break;
-
-			case 'amazon-ca':
-				$marketplace = 'Amazon CA';
-				break;
-
-			case 'amazon-au':
-				$marketplace = 'Amazon AU';
-				break;
-
-			case 'amazon-mx':
-				$marketplace = 'Amazon MX';
-				break;
-
-			case 'dealsonly':
-				$marketplace = 'DealsOnly';
-				break;
-
-			case 'ebay':
-				$marketplace = 'eBay';
-				break;
-
-			case 'resourceridge':
-				$marketplace = 'Resource Ridge';
-				break;
-
-			case 'walmart-ca':
-				$marketplace = 'Walmart CA';
-				break;
-
-			default:
-				$marketplace = ucwords($marketplace);
-				break;
-		}
-		return $marketplace;
-	}
+     * Maps lowercase marketplace names to form used in labels
+     *
+     * @param  string  $marketplace  lowercase name of marketplace
+     * @return string Marketplace formatted as used in label
+     */
+    protected function mapMarketplaceToName($marketplace): string
+    {
+        return match ($marketplace) {
+            'amazon', 'amazon-us', 'amazon_us' => 'Amazon US',
+            'amazon-ca', 'amazon_ca' => 'Amazon CA',
+            'amazon-au', 'amazon_au' => 'Amazon AU',
+            'amazon-mx', 'amazon_mx' => 'Amazon MX',
+            'dealsonly' => 'DealsOnly',
+            'ebay' => 'eBay',
+            'resourceridge' => 'Resource Ridge',
+            'walmart', 'walmart-us', 'walmart_us' => 'Walmart US',
+            'walmart-ca', 'walmart_ca' => 'Walmart CA',
+            default => ucwords($marketplace),
+        };
+    }
 }

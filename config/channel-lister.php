@@ -44,11 +44,11 @@ return [
     | Channel Lister Route Middleware
     |--------------------------------------------------------------------------
     |
-    | The marketplace.disabled key can be filled with a list of marketplaces that should be disabled 
+    | The marketplace.disabled key can be filled with a list of marketplaces that should be disabled
     | for the channel-lister form tabs
     |
     */
     'marketplaces' => [
-        'disabled' => []
-    ]
+        'disabled' => [],
+    ],
 ];

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('listing_mechanism')->nullable();
             $table->string('cas_no')->nullable();
             $table->string('nsrl_or_madl')->nullable()->comment('µg/day');
-            $table->timestamp('date_listed');           
+            $table->timestamp('date_listed');
             $table->timestamp('last_update')->useCurrent()->useCurrentOnUpdate();
 
             // Add index on chemical column

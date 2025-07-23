@@ -2,19 +2,34 @@
 
 namespace IGE\ChannelLister\Models;
 
+use IGE\ChannelLister\Database\Factories\ChannelListerFieldFactory;
 use IGE\ChannelLister\Enums\InputType;
 use IGE\ChannelLister\Enums\Type;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 /**
- * This is placeholder for m/ChannelLister.
- * I don't expect to keep this as we will need to extract the database records the m/ChannelLister
- * creates/uses into their own model classes
+ * @property int $id
+ * @property int $ordering
+ * @property string $field_name
+ * @property string|null $display_name
+ * @property string|null $tooltip
+ * @property string|null $example
+ * @property string $marketplace
+ * @property InputType $input_type
+ * @property string|null $input_type_aux
+ * @property bool $required
+ * @property string $grouping
+ * @property Type $type
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
  */
 class ChannelListerField extends Model
 {
+    /** @use HasFactory<ChannelListerFieldFactory> */
     use HasFactory;
 
     /**
@@ -23,13 +38,6 @@ class ChannelListerField extends Model
      * @var string
      */
     protected $table = 'channel_lister_fields';
-
-    /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    //public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.
@@ -59,101 +67,59 @@ class ChannelListerField extends Model
         'required' => 'boolean',
         'ordering' => 'integer',
         'input_type' => InputType::class,
-        'type' => Type::class
+        'type' => Type::class,
     ];
 
     /**
-     * Get the parsed input_type_aux as an array. And 
-     * Set the input_type_aux from an array.
-     *
-     * @return Attribute
+     * Create a new factory instance for the model.
      */
-    protected function inputTypeAux(): Attribute {
-        
-        return Attribute::make(
-            get: function (string $value) {
-                if (empty($value)) {
-                    return [];
-                }
-        
-                return explode('||', $value);
-            },
-            set: function (array $value) {
-                return implode('||', $value);
-            }
-        );
-    }
-
-    /**
-     * Get the display name or fall back to field name.
-     *
-     * @return Attribute
-     */
-    protected function displayName(): Attribute
+    protected static function newFactory(): ChannelListerFieldFactory
     {
-        //return $this->attributes['display_name'] ?? $this->field_name;
-
-        return Attribute::make(
-            get: function (?string $value): string {
-               if($value){
-                return $value; 
-               } 
-               return str($this->field_name)->replace('_', ' ')->title()->toString();
-            }
-        );
+        return ChannelListerFieldFactory::new();
     }
 
     /**
      * Scope a query to only include fields for a specific marketplace.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $marketplace
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  Builder<ChannelListerField>  $query
      */
-    public function scopeForMarketplace($query, string $marketplace)
+    public function scopeForMarketplace(Builder $query, string $marketplace): void
     {
-        return $query->where('marketplace', $marketplace);
+        $query->where('marketplace', $marketplace);
     }
 
     /**
      * Scope a query to only include required fields.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  Builder<ChannelListerField>  $query
      */
-    public function scopeRequired($query)
+    public function scopeRequired(Builder $query): void
     {
-        return $query->where('required', true);
+        $query->where('required', true);
     }
 
     /**
      * Scope a query to only include fields by grouping.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $grouping
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  Builder<ChannelListerField>  $query
      */
-    public function scopeByGrouping($query, string $grouping)
+    public function scopeByGrouping(Builder $query, string $grouping): void
     {
-        return $query->where('grouping', $grouping);
+        $query->where('grouping', $grouping);
     }
 
     /**
      * Scope a query to order by the ordering field.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $direction
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  Builder<ChannelListerField>  $query
      */
-    public function scopeOrdered($query, string $direction = 'asc')
+    public function scopeOrdered(Builder $query, string $direction = 'asc'): void
     {
-        return $query->orderBy('ordering', $direction);
+        $query->orderBy('ordering', $direction);
     }
 
     /**
      * Check if this field is a custom field.
-     *
-     * @return bool
      */
     public function isCustom(): bool
     {
@@ -162,12 +128,43 @@ class ChannelListerField extends Model
 
     /**
      * Check if this field is a ChannelAdvisor field.
-     *
-     * @return bool
      */
     public function isChannelAdvisor(): bool
     {
         return $this->type === Type::CHANNEL_ADVISOR;
     }
 
+    /**
+     * Get the parsed input_type_aux as an array. And
+     * Set the input_type_aux from an array.
+     */
+    protected function inputTypeAux(): Attribute
+    {
+        return Attribute::make(
+            get: function (string $value): array {
+                if ($value === '' || $value === '0') {
+                    return [];
+                }
+
+                return explode('||', $value);
+            },
+            set: fn (string|array $value): string => is_array($value) ? implode('||', $value) : $value
+        );
+    }
+
+    /**
+     * Get the display name or fall back to field name.
+     */
+    protected function displayName(): Attribute
+    {
+        return Attribute::make(
+            get: function (?string $value, array $attributes): string {
+                if ($value !== null && $value !== '' && $value !== '0') {
+                    return $value;
+                }
+
+                return Str::of($attributes['field_name'])->replace('_', ' ')->title()->toString();
+            }
+        );
+    }
 }

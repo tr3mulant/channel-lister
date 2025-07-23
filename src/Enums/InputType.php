@@ -1,7 +1,5 @@
 <?php
 
-// namespace IGE\ChannelLister\Http\Controllers;
-
 namespace IGE\ChannelLister\Enums;
 
 enum InputType: string
@@ -18,5 +16,4 @@ enum InputType: string
     case TEXT = 'text';
     case TEXTAREA = 'textarea';
     case URL = 'url';
-
 };

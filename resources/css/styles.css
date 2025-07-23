@@ -1,0 +1,15 @@
+div#loading {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  background: white;
+  z-index: 15;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 5em;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

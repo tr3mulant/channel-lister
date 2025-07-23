@@ -53,10 +53,12 @@ class InstallCommand extends Command
      */
     protected function registerChannelListerServiceProvider()
     {
+        // for laravel 11+
         if ($this->addProviderToBootstrapFile()) {
             return;
         }
 
+        // for laravel 10 and below
         $namespace = Str::replaceLast('\\', '', $this->laravel->getNamespace());
 
         $appConfig = file_get_contents(config_path('app.php'));
@@ -80,11 +82,25 @@ class InstallCommand extends Command
         /**
          * Add the namespaced ChannelListerServiceProvider to the app.php config file.
          */
-        file_put_contents(config_path('app.php'), str_replace(
-            "{$namespace}\\Providers\RouteServiceProvider::class,".$eol,
-            "{$namespace}\\Providers\RouteServiceProvider::class,".$eol."        {$namespace}\Providers\ChannelListerServiceProvider::class,".$eol,
-            $appConfig
-        ));
+        if (Str::contains($appConfig, 'ServiceProvider::defaultProviders()->merge(['.$eol)) {
+            // we have a laravel 10 config
+            $appConfig = str_replace(
+                'ServiceProvider::defaultProviders()->merge(['.$eol,
+                'ServiceProvider::defaultProviders()->merge(['.$eol."        {$namespace}\Providers\ChannelListerServiceProvider::class,".$eol,
+                $appConfig
+            );
+
+            file_put_contents(config_path('app.php'), $appConfig);
+        } else {
+            // we have an older config (8/9) that has the providers array key
+            $appConfig = str_replace(
+                "{$namespace}\\Providers\\RouteServiceProvider::class,".$eol,
+                "{$namespace}\\Providers\\RouteServiceProvider::class,".$eol."        {$namespace}\Providers\ChannelListerServiceProvider::class,".$eol,
+                $appConfig
+            );
+
+            file_put_contents(config_path('app.php'), $appConfig);
+        }
 
         if (! file_exists(app_path('Providers/ChannelListerServiceProvider.php'))) {
             return;
@@ -105,7 +121,7 @@ class InstallCommand extends Command
 
     protected function addProviderToBootstrapFile(): bool
     {
-        if (method_exists(ServiceProvider::class, 'addProviderToBootstrapFile')) {
+        if (! method_exists(ServiceProvider::class, 'addProviderToBootstrapFile')) {
             return false;
         }
 

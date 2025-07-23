@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace IGE\ChannelLister;
+namespace App\Providers;
 
 use IGE\ChannelLister\Console\InstallCommand;
 use Illuminate\Support\Facades\Route;

@@ -7,6 +7,8 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\Attributes\WithMigration;
+use Orchestra\Testbench\Concerns\WithLaravelMigrations;
+use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as TestbenchTestCase;
 
 /**
@@ -15,7 +17,12 @@ use Orchestra\Testbench\TestCase as TestbenchTestCase;
 #[WithMigration('laravel', 'session')]
 abstract class TestCase extends TestbenchTestCase
 {
-    use InteractsWithViews, RefreshDatabase;
+    use InteractsWithViews, RefreshDatabase, WithLaravelMigrations, WithWorkbench;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+    }
 
     /**
      * Get package providers.
@@ -58,14 +65,11 @@ abstract class TestCase extends TestbenchTestCase
      *
      * @return void
      */
-    protected function defineDatabaseMigrations()
-    {
-        /**
-         * To run migrations that are only used for testing purposes and not part of your package
-         *
-         * $this->loadMigrationsFrom(workbench_path('database/migrations'));
-         */
-    }
+    // protected function defineDatabaseMigrations()
+    // {
+    // Load package migrations
+    // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+    // }
 
     /**
      * Define routes setup.
