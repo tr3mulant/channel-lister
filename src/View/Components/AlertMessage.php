@@ -1,0 +1,44 @@
+<?php
+
+namespace IGE\ChannelLister\View\Components;
+
+use IGE\ChannelLister\Models\ChannelListerField;
+use Illuminate\View\Component;
+
+/**
+ * This is placeholder for v/ChannelLister.
+ * I don't expect to keep this either as we should expect to extract the view components that exist
+ * in v/ChannelLister into their own component classes and associated views.
+ */
+class AlertMessage extends Component
+{
+
+    const VALID_ALERT_TYPES = ['success', 'info', 'warning', 'danger'];
+
+    public function __construct(public ChannelListerField $params)
+    {
+        //
+    }
+
+    public function render()
+    {
+        //TODO may need to come back and make sure syntax is correct
+		$alert_type = empty($this->params->input_type_aux) ? 'info' : $this->params->input_type_aux;
+		if (!in_array($alert_type, self::VALID_ALERT_TYPES)) {
+			throw new \RuntimeException("Invalid alert type '$alert_type' in field 'input_type_aux' must be one of " . implode(', ', self::VALID_ALERT_TYPES));
+		}
+		$name = empty($this->params['display_name']) ? $this->params['field_name'] : $this->params['display_name'];
+		$message = $this->params['tooltip'];
+		$additional_text = $this->params['example'];
+
+        //
+        return view('channel-lister::components.alert-message', data: [
+            'params' => $this->params,
+            'alert_type' => $alert_type,
+            'name' => $name,
+            'message' => $message,
+            'additional_text' => $additional_text,
+        ]);
+    }
+
+}

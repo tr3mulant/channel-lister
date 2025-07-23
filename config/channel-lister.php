@@ -49,6 +49,9 @@ return [
     |
     */
     'marketplaces' => [
-        'disabled' => [],
+        'disabled' => []
     ],
+
+    'upc_prefixes' => [
+    ]
 ];

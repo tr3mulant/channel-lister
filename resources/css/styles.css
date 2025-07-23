@@ -1,15 +1,155 @@
 div#loading {
-  position: absolute;
-  height: 100vh;
-  width: 100vw;
-  background: white;
-  z-index: 15;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 5em;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    background: white;
+    z-index: 15;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 5em;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#form {
+	min-height: 70vh;
+}
+
+#form h4 {
+	margin-top      : 10px;
+	margin-bottom   : 10px;
+	font-size       : 18px;
+	float           : initial;
+	text-decoration : initial;
+	padding         : initial;
+	border          : initial;
+	color           : initial;
+	background      : initial;
+}
+
+input.es-input.form-control {
+	background: white;
+}
+
+#pantab {
+	overflow-y    : auto;
+	overflow-x    : hidden;
+	padding       : initial;
+	border-radius : initial;
+	resize        : initial;
+	height        : initial;
+	overflow-y    : auto;
+	overflow-x    : hidden;
+}
+
+.nav > li > a.platform {display: flex !important;}
+.nav > li > a > span {flex-grow: 1;}
+
+.nav > li i.glyphicon {
+	font-size   : small;
+	line-height : 1.5;
+}
+
+.nav > li i.glyphicon-upload, .nav > li i.glyphicon-ban-circle {
+	margin-right: 5px;
+}
+
+/*.nav > li > a > i {flex-grow: 1;}*/
+
+#pantab > div {
+	padding: 0.5em;
+	height: 100%;
+}
+
+#buttons_div {
+	margin: 1em;
+}
+
+
+.form-divisor {
+	box-shadow    : 0 1px 3px rgba(0, 0, 0, 0.12), 0 0 1px #FFFFFF inset;
+	border-color  : #E6E6E6 #D4D4D4 #CDCDCD;
+	border-image  : none;
+	border-style  : solid;
+	border-width  : 1px;
+	padding       : 1em;
+	margin-bottom : 1em;
+}
+
+#form .panel {
+	min-width: initial;
+}
+
+#form .panel_content {
+	padding: 1em;
+}
+
+#form ul {
+	padding-left: 0;
+	list-style: none;
+}
+
+#sears_atts .in_text {
+	float     : none;
+	width     : 100%;
+	max-width : initial;
+	overflow  : initial;
+	display   : flex;
+}
+
+#sears_atts input {
+	margin-left : 1em;
+	flex-grow   : 1;
+}
+
+#sears_atts select {
+	margin-left : 1em;
+	flex-grow   : 1;
+}
+
+#sears_atts br, #sears_atts .in_info, br.clear {
+	display: none;
+}
+
+.val_error {
+	background-color: red;
+}
+
+.cat_results_wrapper {
+	z-index: 3000;
+}
+
+@media only screen and (max-width: 1588px) {
+  #form {
+    margin-top: 3rem;
+  }
+}
+
+@media only screen and (max-width: 1104px) {
+	#form {
+		margin-top: 6rem;
+	}	
+}
+
+div.fixed-bottom-right {
+	z-index:10;
+	position: fixed;
+	bottom: 1rem;
+	right: 6rem;
+}
+
+.tt-caml-update-table > .tooltip-inner, .tt-hoponinator-update-table > .tooltip-inner {
+	background-color:rgba(68, 68, 68, 0.9);
+	overflow-wrap: break-word;
+}
+
+.tt-min-w-5 > .tooltip-inner{
+	min-width: 5vw;
+}
+
+.tt-max-w-50 > .tooltip-inner{
+	max-width: 50vw;
 }
