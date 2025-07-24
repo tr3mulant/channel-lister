@@ -1,5 +1,4 @@
 {{-- resources/views/components/custom-form-input.blade.php --}}
-
 @switch($params->field_name)
     @case('UPC')
     @case('amazon_upc')
@@ -8,77 +7,77 @@
     @case('upc_newegg')
     @case('upc_sears')
     @case('upc_wish')
-        @include('channel-lister::custom.upc-html')
+        <x-channel-lister::custom.custom-upc-html />
         @break
     
     @case('Labels')
-        @include('channel-lister::custom.label-html')
+        <x-channel-lister::custom.label-html />
         @break
     
     @case('item_type_amazon')
-        @include('channel-lister::custom.amazon-item-type-html')
+        <x-channel-lister::custom.amazon-item-type-html />
         @break
     
     @case('category_dealsonly')
-        @include('channel-lister::custom.category-dealsonly-html')
+        <x-channel-lister::custom.category-dealsonly-html />
         @break
     
     @case('StoreCategoryID')
     @case('StoreCategoryID2')
-        @include('channel-lister::custom.ebay-store-category-html')
+        <x-channel-lister::custom.ebay-store-category-html />
         @break
     
     @case('ebay_categories')
-        @include('channel-lister::custom.ebay-category-html')
+        <x-channel-lister::custom.ebay-category-html />
         @break
     
     @case('jet_cat')
-        @include('channel-lister::custom.jet-category-html')
+        <x-channel-lister::custom.jet-category-html />
         @break
     
     @case('taxonomy_etsy')
-        @include('channel-lister::custom.etsy-category-html')
+        <x-channel-lister::custom.etsy-category-html />
         @break
     
     @case('category_newegg')
-        @include('channel-lister::custom.newegg-category-html')
+        <x-channel-lister::custom.newegg-category-html />
         @break
     
     @case('sears_cat')
-        @include('channel-lister::custom.sears-category-html')
+        <x-channel-lister::custom.sears-category-html />
         @break
     
     @case('walmart_cat')
-        @include('channel-lister::custom.walmart-category-html')
+        <x-channel-lister::custom.walmart-category-html />
         @break
     
     @case('walmart_subcat')
-        @include('channel-lister::custom.walmart-subcategory-html')
+        <x-channel-lister::custom.walmart-subcategory-html />
         @break
     
     @case('cost_shipping')
-        @include('channel-lister::custom.cost-shipping-html')
+        <x-channel-lister::custom.cost-shipping-html />
         @break
     
     @case('calculated_shipping_service')
-        @include('channel-lister::custom.calculated-shipping-service-html')
+        <x-channel-lister::custom.calculated-shipping-service-html />
         @break
     
     @case('listed_by')
-        @include('channel-lister::custom.listed-by-html')
+        <x-channel-lister::custom.listed-by-html />
         @break
     
     @case('Bundle Components')
     @case('BundleComponents')
-        @include('channel-lister::custom.sku-bundle-html')
+        <x-channel-lister::custom.sku-bundle-html />
         @break
     
     @case('prop65')
-        @include('channel-lister::custom.prop65-html')
+        <x-channel-lister::custom.prop65-html />
         @break
     
     @case('brand_id_wish')
-        @include('channel-lister::custom.wish-brand-directory-id-input')
+        <x-channel-lister::custom.wish-brand-directory-id-input />
         @break
     
     @case('special_features_amazon')
@@ -86,7 +85,7 @@
     @case('thesaurus_subject_amazon')
     @case('target_audience_amazon')
     @case('specific_uses_amazon')
-        @include('channel-lister::custom.amazon-special-refinements-html')
+        <x-channel-lister::custom.amazon-special-refinements-html />
         @break
     
     @default

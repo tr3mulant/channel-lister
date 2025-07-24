@@ -12,7 +12,7 @@ use Illuminate\View\Component;
  */
 class ChannelListerFields extends Component
 {
-    public function __construct(public string $marketplace)
+    public function __construct(public string $marketplace, public string $class_str_default = 'form-control')
     {
         
     }
@@ -24,7 +24,7 @@ class ChannelListerFields extends Component
             ->get()
             ->groupBy('grouping');
 
-        return view('channel-lister::components.channel-lister-fields', data: compact('fields'));
+        return view('channel-lister::channel-lister-fields', data: compact('fields', 'class_str_default'));
     }
 
 }

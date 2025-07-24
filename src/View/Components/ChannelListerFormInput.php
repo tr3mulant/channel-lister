@@ -21,7 +21,7 @@ class ChannelListerFormInput extends Component
 
     public function render()
     {
-        return view('channel-lister::components.channel-lister-form-input');
+        return view('channel-lister::channel-lister-form-input');
     }
 
 }

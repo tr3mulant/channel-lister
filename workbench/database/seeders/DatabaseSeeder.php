@@ -5,6 +5,7 @@ namespace Workbench\Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Workbench\Database\Factories\UserFactory;
+use Workbench\Database\Seeders\ChannelListerFieldSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,6 +18,10 @@ class DatabaseSeeder extends Seeder
             'name' => 'Channel Lister',
             'email' => 'channel@lister.com',
             'password' => Hash::make('password'),
+        ]);
+
+        $this->call([
+            ChannelListerFieldSeeder::class,
         ]);
     }
 }

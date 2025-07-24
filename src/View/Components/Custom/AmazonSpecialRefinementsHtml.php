@@ -21,24 +21,29 @@ class AmazonSpecialRefinementsHtml extends Component
     public function render()
     {
         $element_name = $this->params->field_name;
-		$options = $this->params->input_type_aux;
-		$required = empty($this->params->required) ? '' : 'required';
-		$label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
-		$id = $this->params->field_name . '-id';
-		$tooltip = $this->params->tooltip;
-		$placeholder = $this->params->example;
-		$maps_to_text = 'Maps To: <code>' . $this->params->field_name . '</code>';
-		$limit = $options["limit"];
-		$display_sets = [];
-		foreach ($options as $key => $option_set) {
-			if ($key !== "limit") {
-				$display_sets[ucwords(str_replace("_", " ", $key))] = [];
-				$options_group = explode("||", $option_set);
-				foreach ($options_group as $value) {
-					$display_sets[ucwords(str_replace("_", " ", $key))][$value] = $value;
-				}
-			}
-		}
+        $options = $this->params->input_type_aux;
+        
+        // Ensure options is an array
+        if (!is_array($options)) {
+            $options = [];
+        }
+        $required = empty($this->params->required) ? '' : 'required';
+        $label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
+        $id = $this->params->field_name . '-id';
+        $tooltip = $this->params->tooltip;
+        $placeholder = $this->params->example;
+        $maps_to_text = 'Maps To: <code>' . $this->params->field_name . '</code>';
+        $limit = isset($options["limit"]) ? $options["limit"] : null;
+        $display_sets = [];
+        foreach ($options as $key => $option_set) {
+            if ($key !== "limit") {
+                $display_sets[ucwords(str_replace("_", " ", $key))] = [];
+                $options_group = explode("||", $option_set);
+                foreach ($options_group as $value) {
+                    $display_sets[ucwords(str_replace("_", " ", $key))][$value] = $value;
+                }
+            }
+        }
 		$checkbox_count = 1;
 
         return view('channel-lister::components.custom.amazon-special-refinements-html', data: [

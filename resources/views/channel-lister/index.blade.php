@@ -27,6 +27,7 @@
             <div id="pantab" class="tab-content">
                 <div class="tab-pane active platform-container" id="common">
                     {{ 'this should be writeTabeContents("common")' }}
+                    <x-channel-lister::channel-lister-fields marketplace="common"/>
                 </div>
             </div>
             <div class="form-group row" id="buttons_div"

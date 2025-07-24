@@ -22,9 +22,7 @@ class CustomFormInput extends Component
     {
 
         //HUGE switch case statement incoming:
-        //TODO making customCOmponents for each of the switch case statement arguments 
-        
-
+        //TODO making customComponents for each of the switch case statement arguments 
         
         return view('channel-lister::components.checkbox-form-input', data: [
             'params' => $this->params,

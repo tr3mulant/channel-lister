@@ -2,9 +2,11 @@
 
 namespace IGE\ChannelLister\Models;
 
+use Exception;
 use IGE\ChannelLister\Database\Factories\ChannelListerFieldFactory;
 use IGE\ChannelLister\Enums\InputType;
 use IGE\ChannelLister\Enums\Type;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -132,6 +134,73 @@ class ChannelListerField extends Model
     public function isChannelAdvisor(): bool
     {
         return $this->type === Type::CHANNEL_ADVISOR;
+    }
+
+    public function render(): Htmlable {
+        if (!isset($params['type'])) {
+			throw new \RuntimeException("Params missing required field 'type'");
+		}
+		try {
+			switch ($params['input_type']) {
+				case 'alert':
+					$html = $this->buildAlertMessage($params);
+					break;
+
+				case 'checkbox':
+					$html = $this->buildCheckboxFormInput($params);
+					break;
+
+				case 'clonesite-tags':
+					$html = $this->buildCloneSiteTagsHtml($params);
+					break;
+
+				case 'clonesite-cats':
+					$html = $this->buildCloneSiteCategoryHtml($params);
+					break;
+
+				case 'commaseparated':
+					$html = $this->buildCommaSeparatedFormInput($params);
+					break;
+
+				case 'currency':
+					$html = $this->buildCurrencyFormInput($params);
+					break;
+
+				case 'custom':
+					$html = $this->buildCustomFormInput($params);
+					break;
+
+				case 'decimal':
+					$html = $this->buildDecimalFormInput($params);
+					break;
+
+				case 'integer':
+					$html = $this->buildIntegerFormInput($params);
+					break;
+
+				case 'select':
+					$html = $this->buildSelectFormInput($params);
+					break;
+
+				case 'text':
+					$html = $this->buildTextFormInput($params);
+					break;
+
+				case 'textarea':
+					$html = $this->buildTextareaFormInput($params);
+					break;
+
+				case 'url':
+					$html = $this->buildUrlFormInput($params);
+					break;
+
+				default:
+					throw new \RuntimeException("Unrecognized input_type: '{$params['input_type']}'");
+			}
+		} catch (\Exception $e) {
+			$html = $this->exceptionToAlert($e);
+		}
+		return $html;
     }
 
     /**
