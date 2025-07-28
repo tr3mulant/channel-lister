@@ -29,6 +29,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Channel Lister API Path
+    |--------------------------------------------------------------------------
+    |
+    | This is the URI path where Channel Lister's API will be accessible from.
+    | Feel free to change this path to anything you like.
+    |
+    */
+    'api_path' => env('CHANNEL_LISTER_API_PATH', 'api'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Channel Lister Route Middleware
     |--------------------------------------------------------------------------
     |
@@ -49,9 +60,10 @@ return [
     |
     */
     'marketplaces' => [
-        'disabled' => []
+        'disabled' => [],
     ],
 
-    'upc_prefixes' => [
-    ]
+    'upc_prefixes' => [],
+
+    'cache_prefix' => 'channel-lister',
 ];
