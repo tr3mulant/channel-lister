@@ -29,7 +29,7 @@ class ChannelListerFields extends Component
      *
      * @return string Marketplace formatted as used in label
      */
-    protected function mapMarketplaceToName($marketplace): string
+    protected function mapMarketplaceToName(string $marketplace): string
     {
         return match ($marketplace) {
             'amazon' => 'Amazon US',
@@ -40,7 +40,7 @@ class ChannelListerFields extends Component
             'ebay' => 'eBay',
             'resourceridge' => 'Resource Ridge',
             'walmart-ca' => 'Walmart CA',
-            default => ucwords((string) $marketplace),
+            default => ucwords($marketplace),
         };
     }
 }

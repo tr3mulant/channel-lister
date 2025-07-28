@@ -29,7 +29,7 @@ class CloneSiteTags extends Component
         $placeholder = $this->params->example;
         $maps_to_text = 'Maps To: <code>'.$this->params->field_name.'</code>';
         $marketplace = $this->params->marketplace;
-        $tags = json_decode($this->params->input_type_aux, true);
+        $tags = json_decode($this->params->input_type_aux ?? '', true);
         if (is_null($tags)) {
             throw new \RuntimeException('Unable to decode json in input_type_aux field');
         }

@@ -135,34 +135,34 @@ class ChannelListerField extends Model
         return $this->type === Type::CHANNEL_ADVISOR;
     }
 
-    public function render(): Htmlable
-    {
-        if (! isset($params['type'])) {
-            throw new \RuntimeException("Params missing required field 'type'");
-        }
-        try {
-            $html = match ($params['input_type']) {
-                'alert' => $this->buildAlertMessage($params),
-                'checkbox' => $this->buildCheckboxFormInput($params),
-                'clonesite-tags' => $this->buildCloneSiteTagsHtml($params),
-                'clonesite-cats' => $this->buildCloneSiteCategoryHtml($params),
-                'commaseparated' => $this->buildCommaSeparatedFormInput($params),
-                'currency' => $this->buildCurrencyFormInput($params),
-                'custom' => $this->buildCustomFormInput($params),
-                'decimal' => $this->buildDecimalFormInput($params),
-                'integer' => $this->buildIntegerFormInput($params),
-                'select' => $this->buildSelectFormInput($params),
-                'text' => $this->buildTextFormInput($params),
-                'textarea' => $this->buildTextareaFormInput($params),
-                'url' => $this->buildUrlFormInput($params),
-                default => throw new \RuntimeException("Unrecognized input_type: '{$params['input_type']}'"),
-            };
-        } catch (\Exception $e) {
-            $html = $this->exceptionToAlert($e);
-        }
+    // public function render(): Htmlable
+    // {
+    //     if (! isset($params['type'])) {
+    //         throw new \RuntimeException("Params missing required field 'type'");
+    //     }
+    //     try {
+    //         $html = match ($params['input_type']) {
+    //             'alert' => $this->buildAlertMessage($params),
+    //             'checkbox' => $this->buildCheckboxFormInput($params),
+    //             'clonesite-tags' => $this->buildCloneSiteTagsHtml($params),
+    //             'clonesite-cats' => $this->buildCloneSiteCategoryHtml($params),
+    //             'commaseparated' => $this->buildCommaSeparatedFormInput($params),
+    //             'currency' => $this->buildCurrencyFormInput($params),
+    //             'custom' => $this->buildCustomFormInput($params),
+    //             'decimal' => $this->buildDecimalFormInput($params),
+    //             'integer' => $this->buildIntegerFormInput($params),
+    //             'select' => $this->buildSelectFormInput($params),
+    //             'text' => $this->buildTextFormInput($params),
+    //             'textarea' => $this->buildTextareaFormInput($params),
+    //             'url' => $this->buildUrlFormInput($params),
+    //             default => throw new \RuntimeException("Unrecognized input_type: '{$params['input_type']}'"),
+    //         };
+    //     } catch (\Exception $e) {
+    //         $html = $this->exceptionToAlert($e);
+    //     }
 
-        return $html;
-    }
+    //     return $html;
+    // }
 
     /**
      * Get the parsed input_type_aux as an array. And

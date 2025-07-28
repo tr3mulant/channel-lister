@@ -20,7 +20,9 @@ class AmazonSpecialRefinementsHtml extends Component
     public function render()
     {
         $element_name = $this->params->field_name;
-        $options = $this->params->input_type_aux;
+
+        /** @var array<int|string, mixed> $options */
+        $options = $this->params->input_type_aux ?? '';
 
         // Ensure options is an array
         if (! is_array($options)) {
@@ -32,11 +34,17 @@ class AmazonSpecialRefinementsHtml extends Component
         $tooltip = $this->params->tooltip;
         $placeholder = $this->params->example;
         $maps_to_text = 'Maps To: <code>'.$this->params->field_name.'</code>';
-        $limit = $options['limit'] ?? null;
+
+        $limit = null;
+        if (isset($options['limit'])) {
+            $limit = $options['limit'];
+            unset($options['limit']);
+        }
+
         $display_sets = [];
         foreach ($options as $key => $option_set) {
             $display_sets[ucwords(str_replace('_', ' ', $key))] = [];
-            $options_group = explode('||', $option_set);
+            $options_group = explode('||', (string) $option_set);
             foreach ($options_group as $value) {
                 $display_sets[ucwords(str_replace('_', ' ', $key))][$value] = $value;
             }

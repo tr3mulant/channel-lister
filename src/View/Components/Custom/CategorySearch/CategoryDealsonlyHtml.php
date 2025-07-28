@@ -9,6 +9,8 @@ use Illuminate\View\Component;
  * This is placeholder for v/ChannelLister.
  * I don't expect to keep this either as we should expect to extract the view components that exist
  * in v/ChannelLister into their own component classes and associated views.
+ *
+ * @deprecated This component is not implemented and should not be used.
  */
 class CategoryDealsonlyHtml extends Component
 {
@@ -17,10 +19,13 @@ class CategoryDealsonlyHtml extends Component
         //
     }
 
-    public function render(): void
+    /**
+     * Render the component.
+     *
+     * @throws \RuntimeException
+     */
+    public function render()
     {
-
-        $params = ob_get_clean();
-        throw new \RuntimeException('should not have been called: '.$params);
+        throw new \RuntimeException('should not have been called: '.$this->params);
     }
 }

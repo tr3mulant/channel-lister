@@ -15,41 +15,12 @@ class Prop65Html extends Component
 {
     const TABLE_PROP65_CHEMICAL_DATA = 'prop65_chemical_data';
 
-    protected array $primarykey_cache = [];
-
-    protected array $schema_cache = [];
-
-    protected $in_transaction = false;
-
-    protected $private_link;
-
-    protected $connection_manager;
-
-    protected $server;
-
-    protected $user;
-
-    protected $pass;
-
-    protected $database;
-
-    protected $port;
-
-    private static $instance;
-
-    public $debugMode = false;
-
-    public function __construct(public ChannelListerField $params)
-    {
-        //
-        $this->connection_manager = app('IGE\ChannelLister\Database\ConnectionManager');
-
-    }
+    public function __construct(public ChannelListerField $params) {}
 
     public function render()
     {
         $container_id = $this->params->field_name.'-container-id';
-        $options = explode('&&', $this->params->input_type_aux);
+        $options = $this->params->input_type_aux ? explode('&&', $this->params->input_type_aux) : [];
         $this->params->input_type_aux = $options[0];
 
         $prop65_warning = [
@@ -62,7 +33,8 @@ class Prop65Html extends Component
         ];
 
         // Get Chemical Names
-        $chem_names = Prop65ChemicalData::select('chemical')->pluck('chemical')->toArray();
+        /** @var string[] $chem_names */
+        $chem_names = Prop65ChemicalData::query()->select('chemical')->pluck('chemical')->toArray();
         $chem_input_aux = '';
         if (! empty($chem_names)) {
             $chem_input_aux .= $chem_names[0].'=='.ucwords(str_replace('_', ' ', $chem_names[0]));

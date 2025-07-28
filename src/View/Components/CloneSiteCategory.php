@@ -54,7 +54,12 @@ class CloneSiteCategory extends Component
         ]);
     }
 
-    protected function explodeOndoubleBar($input_aux): array
+    /**
+     * Explode a string on double bar '||' and return an array.
+     *
+     * @return string[]
+     */
+    protected function explodeOndoubleBar(?string $input_aux): array
     {
         return explode('||', (string) $input_aux);
     }

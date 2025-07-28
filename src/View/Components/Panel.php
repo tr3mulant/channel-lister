@@ -14,56 +14,49 @@ class Panel extends Component
 
     public string $class = 'panel';
 
-    public bool $inverted = false;
-
     public string $id = '';
 
-    public int $id_count = 0;
+    public int $idCount = 0;
 
     public int $last_id = 0;
 
     /**
-     * Build a new panel component.
+     * Construct a new Panel component.
      *
-     * @param  Collection<int|string, ChannelListerField|string|int>  $fields
+     * @template TKey of string|int
+     * @template TModel of ChannelListerField
+     *
+     * @param  Collection<TKey, TModel>  $fields
      */
-    public function __construct(public Collection $fields, public string $grouping_name, public int $panel_num, public bool $wide = false, public bool $start_collapsed = true)
+    public function __construct(public Collection $fields, public string $grouping_name, ?string $title = null, ?string $content = null, ?string $class = null, public int $panel_num = 0, ?string $id = null, ?int $idCount = null, public bool $wide = false, public bool $start_collapsed = true, public bool $inverted = false)
     {
         $this->class .= ' panel_'.$this->grouping_name;
-
         if ($this->wide) {
             $this->class .= ' panel_wide';
         }
-
         if ($this->start_collapsed) {
             $this->class .= ' panel_collapsed';
         }
-
-        if (isset($this->fields['title']) && is_string($this->fields['title'])) {
-            $this->title = $this->fields['title'];
+        if ($title !== null) {
+            $this->title = $title;
         }
-
-        if (isset($this->fields['content']) && is_string($this->fields['content'])) {
-            $this->content = $this->fields['content'];
+        if ($content !== null) {
+            $this->content = $content;
         }
-
-        if (isset($this->fields['wide']) && $this->fields['wide']) {
+        if ($class !== null) {
+            $this->class .= ' '.$class;
+        }
+        if ($this->wide) {
             $this->class .= ' panel_wide';
         }
-
-        $this->id_count = isset($this->fields['id_count']) && is_int($this->fields['id_count']) ? $this->fields['id_count'] : $this->last_id++;
-
-        if (isset($this->fields['id']) && is_string($this->fields['id'])) {
-            $this->id = $this->fields['id'];
-        }
-
-        if (isset($this->fields['inverted']) && $this->fields['inverted']) {
-            $this->inverted = true;
+        $this->idCount = $idCount ?? $this->last_id++;
+        if ($id !== null) {
+            $this->id = $id;
         }
     }
 
     public function render()
     {
-        return view('channel-lister::components.panel');
+        return view('channel-lister::panel');
     }
 }

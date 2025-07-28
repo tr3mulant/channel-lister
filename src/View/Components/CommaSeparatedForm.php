@@ -21,7 +21,7 @@ class CommaSeparatedForm extends Component
     {
         // TODO may need to come back and make sure syntax is correct
         $element_name = $this->params->field_name;
-        $options = explode('||', $this->params->input_type_aux);
+        $options = explode('||', $this->params->input_type_aux ?? '');
         $required = empty($this->params->required) ? '' : 'required';
         $label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
         $id = $this->params->field_name.'-id';
