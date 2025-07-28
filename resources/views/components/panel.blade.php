@@ -1,22 +1,23 @@
-@if (inverted)
-    <div class="{{ $this->class }} panel-default" id="{{ $this->id }}">
-        <div id="panel-content-{{ $this->idCount }}" class="panel-collapse collapse {{ $start_collapsed ? '' : 'in' }}">
-            <div class="panel-body">{{ $this->content }}</div>
+@if ($inverted)
+    <div class="{{ $class }} panel-default" id="{{ $id }}">
+        <div id="panel-content-{{ $id_count }}" class="panel-collapse collapse {{ $start_collapsed ? '' : 'in' }}">
+            <div class="panel-body">{{ $content }}</div>
         </div>
-        <div class="panel-heading sticky-top" data-toggle="collapse" href="#panel-content-{{ $this->idCount }}">
+        <div class="panel-heading sticky-top" data-toggle="collapse" href="#panel-content-{{ $id_count }}">
             <h4 class="panel-title">
-                <a>{{ $this->title }}</a>
+                <a>{{ $title }}</a>
             </h4>
         </div>
     </div>
 @else
-    <div class="{{ $this->class }} panel-default" id="{{ $this->id }}">
-        <div class="panel-heading sticky-top" data-toggle="collapse" href="#panel-content-{{ $this->idCount }}">
+    <div class="{{ $class }} panel-default" id="{{ $id }}">
+        <div class="panel-heading sticky-top" data-toggle="collapse" href="#panel-content-{{ $id_count }}">
             <h4 class="panel-title">
-                <a>{{ $this->title }}</a>
+                <a>{{ $title }}</a>
             </h4>
         </div>
-        <div id="panel-content-{{ $this->idCount }}" class="panel-collapse collapse {{ $start_collapsed ? '' : 'in' }}">
+        <div id="panel-content-{{ $id_count }}"
+            class="panel-collapse collapse {{ $start_collapsed ? '' : 'in' }}">
             <div class="panel-body">
 
                 @foreach ($fields as $groups => $field)

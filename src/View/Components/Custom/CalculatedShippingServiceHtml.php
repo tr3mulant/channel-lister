@@ -12,7 +12,6 @@ use Illuminate\View\Component;
  */
 class CalculatedShippingServiceHtml extends Component
 {
-
     public function __construct(public ChannelListerField $params)
     {
         //
@@ -20,14 +19,14 @@ class CalculatedShippingServiceHtml extends Component
 
     public function render()
     {
-		$element_name = $this->params->field_name;
-		$pattern = empty($this->params['input_type_aux']) ? '' : "pattern='{$this->params['input_type_aux']}'";
-		$required = empty($this->params['required']) ? '' : 'required';
-		$label_text = empty($this->params['display_name']) ? $this->params['field_name'] : $this->params['display_name'];
-		$id = $this->params['field_name'] . '-id';
-		$tooltip = $this->params['tooltip'];
-		$placeholder = $this->params['example'];
-		$maps_to_text = 'Maps To: <code>' . $this->params['field_name'] . '</code>';
+        $element_name = $this->params->field_name;
+        $pattern = empty($this->params['input_type_aux']) ? '' : "pattern='{$this->params['input_type_aux']}'";
+        $required = empty($this->params['required']) ? '' : 'required';
+        $label_text = empty($this->params['display_name']) ? $this->params['field_name'] : $this->params['display_name'];
+        $id = $this->params['field_name'].'-id';
+        $tooltip = $this->params['tooltip'];
+        $placeholder = $this->params['example'];
+        $maps_to_text = 'Maps To: <code>'.$this->params['field_name'].'</code>';
 
         return view('channel-lister::components.custom.calculated-shipping-service-html', data: [
             'element_name' => $element_name,
@@ -40,5 +39,4 @@ class CalculatedShippingServiceHtml extends Component
             'maps_to_text' => $maps_to_text,
         ]);
     }
-
 }

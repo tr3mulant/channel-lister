@@ -12,7 +12,6 @@ use Illuminate\View\Component;
  */
 class GenericCategorySearchHtml extends Component
 {
-
     public function __construct(public ChannelListerField $params)
     {
         //
@@ -21,13 +20,13 @@ class GenericCategorySearchHtml extends Component
     public function render()
     {
         $element_name = $this->params->field_name;
-		$required = empty($this->params->required) ? '' : 'required';
-		$label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
-		$id = $this->params->field_name . '-id';
-		$tooltip = $this->params->tooltip;
-		$placeholder = $this->params->example;
-		$maps_to_text = 'Maps To: <code>' . $this->params->field_name . '</code>';
-		$marketplace = $this->params->marketplace;
+        $required = empty($this->params->required) ? '' : 'required';
+        $label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
+        $id = $this->params->field_name.'-id';
+        $tooltip = $this->params->tooltip;
+        $placeholder = $this->params->example;
+        $maps_to_text = 'Maps To: <code>'.$this->params->field_name.'</code>';
+        $marketplace = $this->params->marketplace;
 
         return view('channel-lister::components.custom.category-search.generic-category-search-html', [
             'params' => $this->params,
@@ -41,5 +40,4 @@ class GenericCategorySearchHtml extends Component
             'marketplace' => $marketplace,
         ]);
     }
-
 }

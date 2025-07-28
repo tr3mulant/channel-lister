@@ -23,5 +23,4 @@ class JetCategoryHtml extends Component
     {
         return view('channel-lister::components.custom.category-search.jet-category-html');
     }
-
 }

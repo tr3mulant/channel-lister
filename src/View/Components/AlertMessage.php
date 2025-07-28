@@ -12,7 +12,6 @@ use Illuminate\View\Component;
  */
 class AlertMessage extends Component
 {
-
     const VALID_ALERT_TYPES = ['success', 'info', 'warning', 'danger'];
 
     public function __construct(public ChannelListerField $params)
@@ -22,14 +21,14 @@ class AlertMessage extends Component
 
     public function render()
     {
-        //TODO may need to come back and make sure syntax is correct
-		$alert_type = empty($this->params->input_type_aux) ? 'info' : $this->params->input_type_aux;
-		if (!in_array($alert_type, self::VALID_ALERT_TYPES)) {
-			throw new \RuntimeException("Invalid alert type '$alert_type' in field 'input_type_aux' must be one of " . implode(', ', self::VALID_ALERT_TYPES));
-		}
-		$name = empty($this->params['display_name']) ? $this->params['field_name'] : $this->params['display_name'];
-		$message = $this->params['tooltip'];
-		$additional_text = $this->params['example'];
+        // TODO may need to come back and make sure syntax is correct
+        $alert_type = empty($this->params->input_type_aux) ? 'info' : $this->params->input_type_aux;
+        if (! in_array($alert_type, self::VALID_ALERT_TYPES)) {
+            throw new \RuntimeException("Invalid alert type '$alert_type' in field 'input_type_aux' must be one of ".implode(', ', self::VALID_ALERT_TYPES));
+        }
+        $name = empty($this->params['display_name']) ? $this->params['field_name'] : $this->params['display_name'];
+        $message = $this->params['tooltip'];
+        $additional_text = $this->params['example'];
 
         //
         return view('channel-lister::components.alert-message', data: [
@@ -40,5 +39,4 @@ class AlertMessage extends Component
             'additional_text' => $additional_text,
         ]);
     }
-
 }

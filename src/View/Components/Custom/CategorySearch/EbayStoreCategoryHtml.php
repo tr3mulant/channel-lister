@@ -23,5 +23,4 @@ class EbayStoreCategoryHtml extends Component
     {
         return view('channel-lister::components.custom.category-search.ebay-store-category-html');
     }
-
 }

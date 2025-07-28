@@ -1,10 +1,11 @@
 <?php
 
 use IGE\ChannelLister\Http\Controllers\ChannelListerController;
-use IGE\ChannelLister\Http\Controllers\ChannelListerFieldController;  
+use IGE\ChannelLister\Http\Controllers\ChannelListerFieldController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/channel-lister', [ChannelListerController::class, 'index'])->name('channel-lister');
+
 Route::resource('/channel-lister-fields', ChannelListerFieldController::class)
     ->names([
         'index' => 'channel-lister-fields.index',

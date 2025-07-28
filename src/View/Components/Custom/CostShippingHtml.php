@@ -12,7 +12,6 @@ use Illuminate\View\Component;
  */
 class CostShippingHtml extends Component
 {
-
     public function __construct(public ChannelListerField $params)
     {
         //
@@ -21,13 +20,13 @@ class CostShippingHtml extends Component
     public function render()
     {
         $element_name = $this->params->field_name;
-		$required = empty($this->params->required) ? '' : 'required';
-		$label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
-		$name = $this->params->field_name;
-		$id = $name . '-id';
-		$tooltip = $this->params->tooltip;
-		$placeholder = $this->params->example;
-		$maps_to_text = 'Maps To: <code>' . $this->params->field_name . '</code>';
+        $required = empty($this->params->required) ? '' : 'required';
+        $label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
+        $name = $this->params->field_name;
+        $id = $name.'-id';
+        $tooltip = $this->params->tooltip;
+        $placeholder = $this->params->example;
+        $maps_to_text = 'Maps To: <code>'.$this->params->field_name.'</code>';
 
         return view('channel-lister::components.custom.cost-shipping-html', data: [
             'element_name' => $element_name,
@@ -39,5 +38,4 @@ class CostShippingHtml extends Component
             'maps_to_text' => $maps_to_text,
         ]);
     }
-
 }

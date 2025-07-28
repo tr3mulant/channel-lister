@@ -12,7 +12,6 @@ use Illuminate\View\Component;
  */
 class DecimalFormInput extends Component
 {
-
     public function __construct(public ChannelListerField $params)
     {
         //
@@ -21,14 +20,14 @@ class DecimalFormInput extends Component
     public function render()
     {
         $element_name = $this->params->field_name;
-		$required = empty($this->params->required) ? '' : 'required';
-		$label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
-		$name = $this->params->field_name;
-		$id = $name . '-id';
-		$tooltip = $this->params->tooltip;
-		$placeholder = $this->params->example;
-		$step_size = is_numeric(trim($this->params->input_type_aux)) ? $this->params->input_type_aux : '0.001';
-		$maps_to_text = 'Maps To: <code>' . $this->params->field_name . '</code>';
+        $required = empty($this->params->required) ? '' : 'required';
+        $label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
+        $name = $this->params->field_name;
+        $id = $name.'-id';
+        $tooltip = $this->params->tooltip;
+        $placeholder = $this->params->example;
+        $step_size = is_numeric(trim($this->params->input_type_aux ?? '')) ? $this->params->input_type_aux : '0.001';
+        $maps_to_text = 'Maps To: <code>'.$this->params->field_name.'</code>';
 
         return view('channel-lister::components.decimal-form-input', data: [
             'params' => $this->params,
@@ -42,5 +41,4 @@ class DecimalFormInput extends Component
             'maps_to_text' => $maps_to_text,
         ]);
     }
-
 }

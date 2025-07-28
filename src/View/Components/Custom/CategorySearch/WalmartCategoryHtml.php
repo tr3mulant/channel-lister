@@ -23,5 +23,4 @@ class WalmartCategoryHtml extends Component
     {
         return view('channel-lister::components.custom.category-search.walmart-category-html');
     }
-
 }

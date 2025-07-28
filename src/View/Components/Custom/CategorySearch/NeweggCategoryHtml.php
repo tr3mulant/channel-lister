@@ -12,7 +12,6 @@ use Illuminate\View\Component;
  */
 class NeweggCategoryHtml extends Component
 {
-    
     public string $apiUrl = 'api/ChannelLister/getNeweggCategoryOptions/';
 
     public function __construct(public ChannelListerField $params)

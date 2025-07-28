@@ -13,9 +13,7 @@ use Illuminate\View\Component;
  */
 class WishBrandDirectoryInput extends Component
 {
-
     const TABLE_WISH_BRAND_DIRECTORY = 'wish_brand_directory';
-
 
     public function __construct(public ChannelListerField $params)
     {
@@ -24,16 +22,16 @@ class WishBrandDirectoryInput extends Component
 
     public function render()
     {
-
-        $brand_data = WishBrandDirectory::select('brand_id', 'brand_name')
+        $brand_data = WishBrandDirectory::query()
+            ->select('brand_id', 'brand_name')
             ->orderBy('brand_name')
             ->pluck('brand_id', 'brand_name')
             ->toArray();
-		$params['input_type_aux'] = $brand_data;
+
+        $params['input_type_aux'] = $brand_data;
 
         return view('channel-lister::components.custom.wish-brand-directory-input', data: [
             'input_type_aux' => $params['input_type_aux'],
         ]);
     }
-
 }

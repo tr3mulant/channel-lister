@@ -12,7 +12,6 @@ use Illuminate\View\Component;
  */
 class CloneSiteTags extends Component
 {
-
     public function __construct(public ChannelListerField $params)
     {
         //
@@ -21,19 +20,19 @@ class CloneSiteTags extends Component
     public function render()
     {
 
-        //TODO make sure syntax is correct
+        // TODO make sure syntax is correct
         $element_name = $this->params->field_name;
-		$required = empty($this->params->required) ? '' : 'required';
-		$label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
-		$id = $this->params->field_name . '-id';
-		$tooltip = $this->params->tooltip;
-		$placeholder = $this->params->example;
-		$maps_to_text = 'Maps To: <code>' . $this->params->field_name . '</code>';
-		$marketplace = $this->params->marketplace;
-		$tags = json_decode($this->params->input_type_aux, true);
-		if (is_null($tags)) {
-			throw new \RuntimeException("Unable to decode json in input_type_aux field");
-		}
+        $required = empty($this->params->required) ? '' : 'required';
+        $label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
+        $id = $this->params->field_name.'-id';
+        $tooltip = $this->params->tooltip;
+        $placeholder = $this->params->example;
+        $maps_to_text = 'Maps To: <code>'.$this->params->field_name.'</code>';
+        $marketplace = $this->params->marketplace;
+        $tags = json_decode($this->params->input_type_aux, true);
+        if (is_null($tags)) {
+            throw new \RuntimeException('Unable to decode json in input_type_aux field');
+        }
 
         return view('channel-lister::components.clone-site-tags', data: [
             'params' => $this->params,
@@ -48,5 +47,4 @@ class CloneSiteTags extends Component
             'tags' => $tags,
         ]);
     }
-
 }

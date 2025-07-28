@@ -23,5 +23,4 @@ class AmazonItemTypeHtml extends Component
     {
         return view('channel-lister::components.custom.category-search.amazon-item-type-html');
     }
-
 }

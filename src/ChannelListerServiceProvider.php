@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace IGE\ChannelLister;
 
 use IGE\ChannelLister\Console\InstallCommand;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,6 +25,7 @@ class ChannelListerServiceProvider extends ServiceProvider
 
         $this->registerRoutes();
         $this->registerResources();
+        $this->registerBladeComponents();
 
         /**
          * @var array<string, string> $middleware
@@ -50,11 +52,25 @@ class ChannelListerServiceProvider extends ServiceProvider
         ], function (): void {
             $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         });
+
+        Route::group([
+            'domain' => config('channel-lister.domain', null),
+            'namespace' => 'App\Http\Controllers\Api',
+            'prefix' => config('channel-lister.api_path'),
+            'middleware' => 'api',
+        ], function (): void {
+            $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+        });
     }
 
     protected function registerResources(): void
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'channel-lister');
+    }
+
+    protected function registerBladeComponents(): void
+    {
+        Blade::componentNamespace('IGE\\ChannelLister\\View\\Components', 'channel-lister');
     }
 
     protected function registerCommands(): void

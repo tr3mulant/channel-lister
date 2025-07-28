@@ -12,21 +12,16 @@ use Illuminate\View\Component;
  */
 class WriteSkuBundleComponentInputRow extends Component
 {
-    public bool $isFirst;
-
-    public function __construct(public ChannelListerField $params, bool $isFirst = false)
-    {
-        $this->isFirst = $isFirst;
-    }
+    public function __construct(public ChannelListerField $params, public bool $isFirst = false) {}
 
     public function render()
     {
 
         $id = '';
-		$title = 'Remove Bundle Component Row';
-		$class = 'remove-row btn btn-primary btn-md';
-		$value = 'Remove Row';
-		$icon_class = 'glyphicon glyphicon-minus-sign';
+        $title = 'Remove Bundle Component Row';
+        $class = 'remove-row btn btn-primary btn-md';
+        $value = 'Remove Row';
+        $icon_class = 'glyphicon glyphicon-minus-sign';
 
         if ($this->isFirst) {
             $id = 'add-component-button';
@@ -44,5 +39,4 @@ class WriteSkuBundleComponentInputRow extends Component
             'icon_class' => $icon_class,
         ]);
     }
-
 }

@@ -12,7 +12,6 @@ use Illuminate\View\Component;
  */
 class SkuBundleHtml extends Component
 {
-
     public function __construct(public ChannelListerField $params)
     {
         //
@@ -21,15 +20,15 @@ class SkuBundleHtml extends Component
     public function render()
     {
 
-        $id = $this->params->field_name . '-id';
-		$element_name = $this->params->field_name;
-		$label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
-		$required = empty($this->params->required) ? '' : 'required';
-		$label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
-		$tooltip = $this->params->tooltip;
-		$pattern = empty($this->params->input_type_aux) ? '' : "pattern='{$this->params->input_type_aux}'";
-		$placeholder = $this->params->example;
-		$maps_to_text = 'Maps To: <code>' . $this->params->field_name . '</code>';
+        $id = $this->params->field_name.'-id';
+        $element_name = $this->params->field_name;
+        $label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
+        $required = empty($this->params->required) ? '' : 'required';
+        $label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
+        $tooltip = $this->params->tooltip;
+        $pattern = empty($this->params->input_type_aux) ? '' : "pattern='{$this->params->input_type_aux}'";
+        $placeholder = $this->params->example;
+        $maps_to_text = 'Maps To: <code>'.$this->params->field_name.'</code>';
 
         return view('channel-lister::components.custom.sku-bundle-html', data: [
             'id' => $id,
@@ -42,5 +41,4 @@ class SkuBundleHtml extends Component
             'maps_to_text' => $maps_to_text,
         ]);
     }
-
 }

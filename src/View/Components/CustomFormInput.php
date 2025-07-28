@@ -12,7 +12,6 @@ use Illuminate\View\Component;
  */
 class CustomFormInput extends Component
 {
-
     public function __construct(public ChannelListerField $params)
     {
         //
@@ -21,13 +20,12 @@ class CustomFormInput extends Component
     public function render()
     {
 
-        //HUGE switch case statement incoming:
-        //TODO making customComponents for each of the switch case statement arguments 
-        
+        // HUGE switch case statement incoming:
+        // TODO making customComponents for each of the switch case statement arguments
+
         return view('channel-lister::components.checkbox-form-input', data: [
             'params' => $this->params,
 
         ]);
     }
-
 }

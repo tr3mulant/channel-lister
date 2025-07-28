@@ -2,7 +2,6 @@
 
 namespace IGE\ChannelLister\Models;
 
-use Exception;
 use IGE\ChannelLister\Database\Factories\ChannelListerFieldFactory;
 use IGE\ChannelLister\Enums\InputType;
 use IGE\ChannelLister\Enums\Type;
@@ -136,71 +135,33 @@ class ChannelListerField extends Model
         return $this->type === Type::CHANNEL_ADVISOR;
     }
 
-    public function render(): Htmlable {
-        if (!isset($params['type'])) {
-			throw new \RuntimeException("Params missing required field 'type'");
-		}
-		try {
-			switch ($params['input_type']) {
-				case 'alert':
-					$html = $this->buildAlertMessage($params);
-					break;
+    public function render(): Htmlable
+    {
+        if (! isset($params['type'])) {
+            throw new \RuntimeException("Params missing required field 'type'");
+        }
+        try {
+            $html = match ($params['input_type']) {
+                'alert' => $this->buildAlertMessage($params),
+                'checkbox' => $this->buildCheckboxFormInput($params),
+                'clonesite-tags' => $this->buildCloneSiteTagsHtml($params),
+                'clonesite-cats' => $this->buildCloneSiteCategoryHtml($params),
+                'commaseparated' => $this->buildCommaSeparatedFormInput($params),
+                'currency' => $this->buildCurrencyFormInput($params),
+                'custom' => $this->buildCustomFormInput($params),
+                'decimal' => $this->buildDecimalFormInput($params),
+                'integer' => $this->buildIntegerFormInput($params),
+                'select' => $this->buildSelectFormInput($params),
+                'text' => $this->buildTextFormInput($params),
+                'textarea' => $this->buildTextareaFormInput($params),
+                'url' => $this->buildUrlFormInput($params),
+                default => throw new \RuntimeException("Unrecognized input_type: '{$params['input_type']}'"),
+            };
+        } catch (\Exception $e) {
+            $html = $this->exceptionToAlert($e);
+        }
 
-				case 'checkbox':
-					$html = $this->buildCheckboxFormInput($params);
-					break;
-
-				case 'clonesite-tags':
-					$html = $this->buildCloneSiteTagsHtml($params);
-					break;
-
-				case 'clonesite-cats':
-					$html = $this->buildCloneSiteCategoryHtml($params);
-					break;
-
-				case 'commaseparated':
-					$html = $this->buildCommaSeparatedFormInput($params);
-					break;
-
-				case 'currency':
-					$html = $this->buildCurrencyFormInput($params);
-					break;
-
-				case 'custom':
-					$html = $this->buildCustomFormInput($params);
-					break;
-
-				case 'decimal':
-					$html = $this->buildDecimalFormInput($params);
-					break;
-
-				case 'integer':
-					$html = $this->buildIntegerFormInput($params);
-					break;
-
-				case 'select':
-					$html = $this->buildSelectFormInput($params);
-					break;
-
-				case 'text':
-					$html = $this->buildTextFormInput($params);
-					break;
-
-				case 'textarea':
-					$html = $this->buildTextareaFormInput($params);
-					break;
-
-				case 'url':
-					$html = $this->buildUrlFormInput($params);
-					break;
-
-				default:
-					throw new \RuntimeException("Unrecognized input_type: '{$params['input_type']}'");
-			}
-		} catch (\Exception $e) {
-			$html = $this->exceptionToAlert($e);
-		}
-		return $html;
+        return $html;
     }
 
     /**

@@ -12,7 +12,6 @@ use Illuminate\View\Component;
  */
 class CustomFormInput extends Component
 {
-
     public function __construct(public ChannelListerField $params)
     {
         //
@@ -22,12 +21,12 @@ class CustomFormInput extends Component
     {
 
         $element_name = $this->params->field_name;
-		$label_text = empty($this->params->display_name) ? 'UPC' : $this->params->display_name;
-		$tooltip = empty($this->params->tooltip) ? 'UPC must be different for every listing.' : $this->params->tooltip;
-		$required = empty($this->params->required) ? '' : 'required';
-		$platform = $this->params->marketplace;
-		$maps_to_text = 'Maps To: <code>' . $this->params->field_name . '</code>';
-		$asr_upc_prefixes = config('channel-lister.upc_prefixes', []);
+        $label_text = empty($this->params->display_name) ? 'UPC' : $this->params->display_name;
+        $tooltip = empty($this->params->tooltip) ? 'UPC must be different for every listing.' : $this->params->tooltip;
+        $required = empty($this->params->required) ? '' : 'required';
+        $platform = $this->params->marketplace;
+        $maps_to_text = 'Maps To: <code>'.$this->params->field_name.'</code>';
+        $asr_upc_prefixes = config('channel-lister.upc_prefixes', []);
 
         return view('channel-lister::components.custom.custom-upc-html', data: [
             'params' => $this->params,
@@ -40,5 +39,4 @@ class CustomFormInput extends Component
             'asr_upc_prefixes' => $asr_upc_prefixes,
         ]);
     }
-
 }

@@ -5,7 +5,6 @@ namespace Workbench\Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Workbench\Database\Factories\UserFactory;
-use Workbench\Database\Seeders\ChannelListerFieldSeeder;
 
 class DatabaseSeeder extends Seeder
 {

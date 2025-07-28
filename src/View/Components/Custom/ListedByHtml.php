@@ -12,7 +12,6 @@ use Illuminate\View\Component;
  */
 class ListedByHtml extends Component
 {
-
     public function __construct(public ChannelListerField $params)
     {
         //
@@ -20,15 +19,15 @@ class ListedByHtml extends Component
 
     public function render()
     {
-		$element_name = $this->params->field_name;
-		$pattern = empty($this->params->input_type_aux) ? '' : "pattern='{$this->params->input_type_aux}'";
-		$required = empty($this->params->required) ? '' : 'required';
-		$label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
-		$id = $this->params->field_name . '-id';
-		$tooltip = $this->params->tooltip;
-		$placeholder = $this->params->example;
-		$maps_to_text = 'Maps To: <code>' . $this->params->field_name . '</code>';
-		$ml_user = $_SERVER['REMOTE_USER'] ?? '';
+        $element_name = $this->params->field_name;
+        $pattern = empty($this->params->input_type_aux) ? '' : "pattern='{$this->params->input_type_aux}'";
+        $required = empty($this->params->required) ? '' : 'required';
+        $label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
+        $id = $this->params->field_name.'-id';
+        $tooltip = $this->params->tooltip;
+        $placeholder = $this->params->example;
+        $maps_to_text = 'Maps To: <code>'.$this->params->field_name.'</code>';
+        $ml_user = $_SERVER['REMOTE_USER'] ?? '';
 
         return view('channel-lister::components.custom.listed-by-html', data: [
             'element_name' => $element_name,
@@ -42,5 +41,4 @@ class ListedByHtml extends Component
             'ml_user' => $ml_user,
         ]);
     }
-
 }

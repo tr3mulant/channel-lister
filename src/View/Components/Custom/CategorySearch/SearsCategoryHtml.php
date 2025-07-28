@@ -23,5 +23,4 @@ class SearsCategoryHtml extends Component
     {
         return view('channel-lister::components.custom.category-search.sears-category-html');
     }
-
 }

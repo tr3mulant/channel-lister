@@ -2,7 +2,6 @@
 
 namespace Workbench\Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -26,7 +25,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^[^®^™*_]{10,80}$',
                 'required' => 1,
                 'grouping' => 'Titles and Media',
-                'type' => 'channeladvisor'
+                'type' => 'channeladvisor',
             ],
             [
                 'id' => 2,
@@ -40,7 +39,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^(4SN|26C|ABC|AKZ|ALI|ALT|AQM|BHN|BRO|CRC|CST|DAH|DLT|DLX|DOY|EVR|EVT|FLL|FUR|GRS|GWT|HAF|HDD|HGR|HRN|HWC|HWK|IGE|INC|JPI|KOL|KTY|LST|MAX|MCN|MSB|NPT|OMY|PGM|PIX|PRF|SHM|SON|SVT|TTW|TWL|UPD|WTB|XGI|ZKT)-[A-Z\\-0-9]{5,40}$',
                 'required' => 1,
                 'grouping' => 'Titles and Media',
-                'type' => 'channeladvisor'
+                'type' => 'channeladvisor',
             ],
             [
                 'id' => 3,
@@ -54,7 +53,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Titles and Media',
-                'type' => 'channeladvisor'
+                'type' => 'channeladvisor',
             ],
             [
                 'id' => 4,
@@ -68,7 +67,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 5,
@@ -82,7 +81,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 6,
@@ -96,7 +95,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^https://.+',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 7,
@@ -110,7 +109,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 8,
@@ -124,7 +123,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^https://.+',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 9,
@@ -138,7 +137,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 10,
@@ -152,7 +151,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^https://.+',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 11,
@@ -166,7 +165,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 12,
@@ -180,7 +179,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^https://.+',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 13,
@@ -194,7 +193,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 14,
@@ -208,7 +207,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^https://.+',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 15,
@@ -222,7 +221,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 16,
@@ -236,7 +235,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^https://.+',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 17,
@@ -250,7 +249,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 18,
@@ -264,7 +263,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^https://.+',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 19,
@@ -278,7 +277,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 20,
@@ -292,7 +291,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^https://.+',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 21,
@@ -306,7 +305,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 22,
@@ -320,7 +319,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^https://.+',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 23,
@@ -334,7 +333,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 24,
@@ -348,7 +347,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^https://.+',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 25,
@@ -362,7 +361,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 26,
@@ -376,7 +375,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^https://.+',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 27,
@@ -390,7 +389,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 28,
@@ -404,7 +403,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^https://.+',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 29,
@@ -418,7 +417,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 30,
@@ -432,7 +431,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^https://.+',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 31,
@@ -446,7 +445,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 32,
@@ -462,7 +461,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^[0-9]+$|^[a-zA-Z> &]+$',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 33,
@@ -476,7 +475,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => 'ASR Federal||ASR Outdoor||ASR Tactical||Kidplokio||Brandon Dallas||Creative Covers||Disney||Disney Co.||EverTek||Fisher Price||Flatline Ops||Garret||Gear Aid||Heininger||Hitchmate||Hornungs||KidPlay Products||Kipsun Destination Lifestyle||Mattel||McNett||Mitsuba||Nickelodeon||Peppa Pig||PJ Masks||Think Tank Technology||Universal||Universal Hobby||Universal Outdoor||Universal Tool||Zak Tool||__OTHER__',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'channeladvisor'
+                'type' => 'channeladvisor',
             ],
             [
                 'id' => 34,
@@ -490,7 +489,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'channeladvisor'
+                'type' => 'channeladvisor',
             ],
             [
                 'id' => 35,
@@ -504,7 +503,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^[0-9]{12,13}$',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 36,
@@ -518,7 +517,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^[0-9]{12,13}$',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'channeladvisor'
+                'type' => 'channeladvisor',
             ],
             [
                 'id' => 37,
@@ -532,7 +531,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => 'standard||bundle||child||parent',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'channeladvisor'
+                'type' => 'channeladvisor',
             ],
             [
                 'id' => 38,
@@ -546,7 +545,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^([A-Z\\-0-9]{5,40})=\\d+(,([A-Z\\-0-9]{5,40})=\\d+)*$',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'channeladvisor'
+                'type' => 'channeladvisor',
             ],
             [
                 'id' => 39,
@@ -560,7 +559,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => 'Character||Color||color-size||Pack Size||Size||Style',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'channeladvisor'
+                'type' => 'channeladvisor',
             ],
             [
                 'id' => 40,
@@ -574,7 +573,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^[A-Z\\-0-9]{5,40}$|^Parent$',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'channeladvisor'
+                'type' => 'channeladvisor',
             ],
             [
                 'id' => 41,
@@ -588,7 +587,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'channeladvisor'
+                'type' => 'channeladvisor',
             ],
             [
                 'id' => 42,
@@ -602,7 +601,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'channeladvisor'
+                'type' => 'channeladvisor',
             ],
             [
                 'id' => 43,
@@ -616,7 +615,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 44,
@@ -630,7 +629,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'channeladvisor'
+                'type' => 'channeladvisor',
             ],
             [
                 'id' => 45,
@@ -644,7 +643,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 46,
@@ -658,7 +657,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => 'Automotive & Garage Accessories||Badges, Wallets, & Accessories||Camping, Hiking, & Outdoor Gear Repair||Clothing||Craft, Jeweler, & Hobby Tools||Electronics & Gadget Accessories||Fishing||Gold Panning||Handcuff Keys & Escape Tools||Health & Personal Care||Home, Kitchen, & Garden||Hunting & Gun Accessories||Knives, Blades, & Personal Security||Prank, Spy, & Novelty||Safety, Survival, & Emergency||School & Office Supplies||Scuba & Dive Gear Accessories||Sports & Fitness||Toys & Games||Travel||Misc||',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 47,
@@ -672,7 +671,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => 'China==China||United States==United States||Italy==Italy||Afghanistan==Afghanistan||Albania==Albania||Algeria==Algeria||American Samoa==American Samoa||Andorra==Andorra||Angola==Angola||Anguilla==Anguilla||Antarctica==Antarctica||Antigua and Barbuda==Antigua and Barbuda||Argentina==Argentina||Armenia==Armenia||Aruba==Aruba||Australia==Australia||Austria==Austria||Azerbaijan==Azerbaijan||Bahamas==Bahamas||Bahrain==Bahrain||Bangladesh==Bangladesh||Barbados==Barbados||Belarus==Belarus||Belgium==Belgium||Belize==Belize||Benin==Benin||Bermuda==Bermuda||Bhutan==Bhutan||Bolivia==Bolivia||Bonaire==Bonaire||Bosnia and Herzegovina==Bosnia and Herzegovina||Botswana==Botswana||Bouvet Island==Bouvet Island||Brazil==Brazil||British Indian Ocean Territory==British Indian Ocean Territory||Brunei Darussalam==Brunei Darussalam||Bulgaria==Bulgaria||Burkina Faso==Burkina Faso||Burundi==Burundi||Cambodia==Cambodia||Cameroon==Cameroon||Canada==Canada||Cape Verde==Cape Verde||Cayman Islands==Cayman Islands||Central African Republic==Central African Republic||Chad==Chad||Chile==Chile||Christmas Island==Christmas Island||Cocos Islands==Cocos (Keeling) Islands||Colombia==Colombia||Comoros==Comoros||Congo==Congo||Democratic Republic of the Congo==Democratic Republic of the Congo||Cook Islands==Cook Islands||Costa Rica==Costa Rica||Croatia==Croatia||Cuba==Cuba||Curacao==Curacao||Cyprus==Cyprus||Czech Republic==Czech Republic||Cote d\'Ivoire==Cote d\'Ivoire||Denmark==Denmark||Djibouti==Djibouti||Dominica==Dominica||Dominican Republic==Dominican Republic||Ecuador==Ecuador||Egypt==Egypt||El Salvador==El Salvador||Equatorial Guinea==Equatorial Guinea||Eritrea==Eritrea||Estonia==Estonia||Ethiopia==Ethiopia||Falkland Islands==Falkland Islands (Malvinas)||Faroe Islands==Faroe Islands||Fiji==Fiji||Finland==Finland||France==France||French Guiana==French Guiana||French Polynesia==French Polynesia||French Southern Territories==French Southern Territories||Gabon==Gabon||Gambia==Gambia||Georgia==Georgia||Germany==Germany||Ghana==Ghana||Gibraltar==Gibraltar||Greece==Greece||Greenland==Greenland||Grenada==Grenada||Guadeloupe==Guadeloupe||Guam==Guam||Guatemala==Guatemala||Guernsey==Guernsey||Guinea==Guinea||Guinea-Bissau==Guinea-Bissau||Guyana==Guyana||Haiti==Haiti||Heard Island and McDonald Mcdonald Islands==Heard Island and McDonald Mcdonald Islands||Holy See==Holy See (Vatican City State)||Honduras==Honduras||Hong Kong==Hong Kong||Hungary==Hungary||Iceland==Iceland||India==India||Indonesia==Indonesia||Islamic Republic of Iran==Iran, Islamic Republic of||Iraq==Iraq||Ireland==Ireland||Isle of Man==Isle of Man||Israel==Israel||Jamaica==Jamaica||Japan==Japan||Jersey==Jersey||Jordan==Jordan||Kazakhstan==Kazakhstan||Kenya==Kenya||Kiribati==Kiribati||Democratic People\'s Republic of Korea==Korea, Democratic People\'s Republic of||Republic of Korea==Korea, Republic of||Kuwait==Kuwait||Kyrgyzstan==Kyrgyzstan||Lao People\'s Democratic Republic==Lao People\'s Democratic Republic||Latvia==Latvia||Lebanon==Lebanon||Lesotho==Lesotho||Liberia==Liberia||Libya==Libya||Liechtenstein==Liechtenstein||Lithuania==Lithuania||Luxembourg==Luxembourg||Macao==Macao||the Former Yugoslav Republic of Macedonia==Macedonia, the Former Yugoslav Republic of||Madagascar==Madagascar||Malawi==Malawi||Malaysia==Malaysia||Maldives==Maldives||Mali==Mali||Malta==Malta||Marshall Islands==Marshall Islands||Martinique==Martinique||Mauritania==Mauritania||Mauritius==Mauritius||Mayotte==Mayotte||Mexico==Mexico||Federated States of Micronesia==Micronesia, Federated States of||Republic of Moldova==Moldova, Republic of||Monaco==Monaco||Mongolia==Mongolia||Montenegro==Montenegro||Montserrat==Montserrat||Morocco==Morocco||Mozambique==Mozambique||Myanmar==Myanmar||Namibia==Namibia||Nauru==Nauru||Nepal==Nepal||Netherlands==Netherlands||New Caledonia==New Caledonia||New Zealand==New Zealand||Nicaragua==Nicaragua||Niger==Niger||Nigeria==Nigeria||Niue==Niue||Norfolk Island==Norfolk Island||Northern Mariana Islands==Northern Mariana Islands||Norway==Norway||Oman==Oman||Pakistan==Pakistan||Palau==Palau||State of Palestine==Palestine, State of||Panama==Panama||Papua New Guinea==Papua New Guinea||Paraguay==Paraguay||Peru==Peru||Philippines==Philippines||Pitcairn==Pitcairn||Poland==Poland||Portugal==Portugal||Puerto Rico==Puerto Rico||Qatar==Qatar||Romania==Romania||Russian Federation==Russian Federation||Rwanda==Rwanda||Reunion==Reunion||Saint Barthelemy==Saint Barthelemy||Saint Helena==Saint Helena||Saint Kitts and Nevis==Saint Kitts and Nevis||Saint Lucia==Saint Lucia||Saint Martin==Saint Martin (French part)||Saint Pierre and Miquelon==Saint Pierre and Miquelon||Saint Vincent and the Grenadines==Saint Vincent and the Grenadines||Samoa==Samoa||San Marino==San Marino||Sao Tome and Principe==Sao Tome and Principe||Saudi Arabia==Saudi Arabia||Senegal==Senegal||Serbia==Serbia||Seychelles==Seychelles||Sierra Leone==Sierra Leone||Singapore==Singapore||Sint Maarten==Sint Maarten (Dutch part)||Slovakia==Slovakia||Slovenia==Slovenia||Solomon Islands==Solomon Islands||Somalia==Somalia||South Africa==South Africa||South Georgia and the South Sandwich Islands==South Georgia and the South Sandwich Islands||South Sudan==South Sudan||Spain==Spain||Sri Lanka==Sri Lanka||Sudan==Sudan||Suriname==Suriname||Svalbard and Jan Mayen==Svalbard and Jan Mayen||Swaziland==Swaziland||Sweden==Sweden||Switzerland==Switzerland||Syrian Arab Republic==Syrian Arab Republic||Taiwan==Taiwan, Province of China||Tajikistan==Tajikistan||United Republic of Tanzania==United Republic of Tanzania||Thailand==Thailand||Timor-Leste==Timor-Leste||Togo==Togo||Tokelau==Tokelau||Tonga==Tonga||Trinidad and Tobago==Trinidad and Tobago||Tunisia==Tunisia||Turkey==Turkey||Turkmenistan==Turkmenistan||Turks and Caicos Islands==Turks and Caicos Islands||Tuvalu==Tuvalu||Uganda==Uganda||Ukraine==Ukraine||United Arab Emirates==United Arab Emirates||United Kingdom==United Kingdom||United States Minor Outlying Islands==United States Minor Outlying Islands||Uruguay==Uruguay||Uzbekistan==Uzbekistan||Vanuatu==Vanuatu||Venezuela==Venezuela||Viet Nam==Viet Nam||British Virgin Islands==British Virgin Islands||US Virgin Islands==US Virgin Islands||Wallis and Futuna==Wallis and Futuna||Western Sahara==Western Sahara||Yemen==Yemen||Zambia==Zambia||Zimbabwe==Zimbabwe',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 48,
@@ -686,7 +685,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^[A-Z]{2}$',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 49,
@@ -700,7 +699,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '^[A-Z]{3}$',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 50,
@@ -714,7 +713,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 51,
@@ -728,7 +727,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 52,
@@ -742,7 +741,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 53,
@@ -756,7 +755,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 54,
@@ -770,7 +769,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 55,
@@ -784,7 +783,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'channeladvisor'
+                'type' => 'channeladvisor',
             ],
             [
                 'id' => 56,
@@ -798,7 +797,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'channeladvisor'
+                'type' => 'channeladvisor',
             ],
             [
                 'id' => 57,
@@ -812,7 +811,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'channeladvisor'
+                'type' => 'channeladvisor',
             ],
             [
                 'id' => 58,
@@ -826,7 +825,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'channeladvisor'
+                'type' => 'channeladvisor',
             ],
             [
                 'id' => 59,
@@ -840,7 +839,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'channeladvisor'
+                'type' => 'channeladvisor',
             ],
             [
                 'id' => 60,
@@ -856,7 +855,7 @@ shipping, if available.',
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Shipping',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 61,
@@ -870,7 +869,7 @@ shipping, if available.',
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Shipping',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 62,
@@ -884,7 +883,7 @@ shipping, if available.',
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Shipping',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 63,
@@ -898,7 +897,7 @@ shipping, if available.',
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Shipping',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 64,
@@ -912,7 +911,7 @@ shipping, if available.',
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Shipping',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 65,
@@ -926,7 +925,7 @@ shipping, if available.',
                 'input_type_aux' => 'polymailer||expressenvelope||box||other',
                 'required' => 1,
                 'grouping' => 'Shipping',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 66,
@@ -940,7 +939,7 @@ shipping, if available.',
                 'input_type_aux' => 'checked',
                 'required' => 1,
                 'grouping' => 'Shipping',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 67,
@@ -954,7 +953,7 @@ shipping, if available.',
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Shipping',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 68,
@@ -968,7 +967,7 @@ shipping, if available.',
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Shipping',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 69,
@@ -982,7 +981,7 @@ shipping, if available.',
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Shipping',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 70,
@@ -996,7 +995,7 @@ shipping, if available.',
                 'input_type_aux' => 'unrestricted==Unrestricted||street_only_contiguous==No PO Boxes, No Territories/Protectorates, Contiguous States Only||us_only==PO Boxes, Territories/Protectorates, All 50 States',
                 'required' => 1,
                 'grouping' => 'Shipping',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 71,
@@ -1010,7 +1009,7 @@ shipping, if available.',
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Listing Description',
-                'type' => 'channeladvisor'
+                'type' => 'channeladvisor',
             ],
             [
                 'id' => 72,
@@ -1026,7 +1025,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Listing Description',
-                'type' => 'channeladvisor'
+                'type' => 'channeladvisor',
             ],
             [
                 'id' => 73,
@@ -1040,7 +1039,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Listing Description',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 74,
@@ -1054,7 +1053,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Listing Description',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 75,
@@ -1068,7 +1067,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Listing Description',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 76,
@@ -1082,7 +1081,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Listing Description',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 77,
@@ -1096,7 +1095,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Listing Description',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 78,
@@ -1110,7 +1109,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 79,
@@ -1124,7 +1123,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 80,
@@ -1138,7 +1137,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 81,
@@ -1152,7 +1151,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 82,
@@ -1166,7 +1165,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 83,
@@ -1180,7 +1179,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 84,
@@ -1194,7 +1193,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 85,
@@ -1208,7 +1207,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 86,
@@ -1222,7 +1221,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 87,
@@ -1236,7 +1235,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 88,
@@ -1250,7 +1249,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 89,
@@ -1264,7 +1263,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 90,
@@ -1278,7 +1277,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 91,
@@ -1292,7 +1291,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 92,
@@ -1306,7 +1305,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 93,
@@ -1320,7 +1319,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 94,
@@ -1334,7 +1333,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 95,
@@ -1348,7 +1347,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 96,
@@ -1362,7 +1361,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 97,
@@ -1376,7 +1375,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 98,
@@ -1390,7 +1389,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 99,
@@ -1404,7 +1403,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 100,
@@ -1418,7 +1417,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 101,
@@ -1432,7 +1431,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 102,
@@ -1446,7 +1445,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 103,
@@ -1460,7 +1459,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 104,
@@ -1474,7 +1473,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 105,
@@ -1488,7 +1487,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 106,
@@ -1502,7 +1501,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 107,
@@ -1516,7 +1515,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 108,
@@ -1530,7 +1529,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 109,
@@ -1544,7 +1543,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 110,
@@ -1558,7 +1557,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^https://.+',
                 'required' => 1,
                 'grouping' => 'Compliance',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 111,
@@ -1572,7 +1571,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => null,
                 'required' => 1,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 112,
@@ -1586,7 +1585,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 113,
@@ -1600,7 +1599,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => null,
                 'required' => 1,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 114,
@@ -1614,7 +1613,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 115,
@@ -1628,7 +1627,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '||Oversize Item Shipping Template (NO Intl)||Continental US Ground Only (HazMat)||Oversize Intl (NO AK/HI)',
                 'required' => 0,
                 'grouping' => 'Shipping',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 116,
@@ -1642,7 +1641,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => 'Automotive||Baby||Beauty||Camera and Photo||Clothing||Computers||Health and Personal Care||Home and Garden||Home Improvement||Jewelry and Watches||Lab Supplies||Lighting||Miscellaneous||Office Products||Other Industrials||Pet Supplies||Shoes, Handbags and Eyewear||Sports and Outdoors||Tools and Hardware||Toys and Games',
                 'required' => 1,
                 'grouping' => 'Category',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 117,
@@ -1656,7 +1655,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^[\\w\\\'\\-\\.\\,\\ ]{1,50}',
                 'required' => 1,
                 'grouping' => 'Category',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 118,
@@ -1670,7 +1669,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^[\\w ]{1,250}$',
                 'required' => 1,
                 'grouping' => 'Category',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 119,
@@ -1684,7 +1683,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '([.\\-a-zA-Z0-9 ]+,){3}[.\\-a-zA-Z0-9 ]+',
                 'required' => 1,
                 'grouping' => 'Category',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 120,
@@ -1698,7 +1697,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Category',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 121,
@@ -1712,7 +1711,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Category',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 122,
@@ -1726,7 +1725,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => 'mens||womens||boys||girls||unisex',
                 'required' => 1,
                 'grouping' => 'Category',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 123,
@@ -1740,7 +1739,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Category',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 124,
@@ -1754,7 +1753,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^[^®^™*_]{10,60}$',
                 'required' => 1,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 125,
@@ -1768,7 +1767,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 126,
@@ -1782,7 +1781,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 127,
@@ -1796,7 +1795,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^([a-zA-Z0-9-\'. ]+)((,)[a-zA-Z0-9-\'. ]+){2,9}',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 128,
@@ -1810,7 +1809,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => 'automotive/auto-accessories||automotive/bike-racks||automotive/emergency||automotive/garage-auto-storage-accessories||automotive/other||automotive/truck-equipment||gadgets/diversion-safes||gadgets/electronics/lights||gadgets/electronics/other||gadgets/novelties||gadgets/pranks-revenge/chemical-warfare||gadgets/pranks-revenge/electronic-warfare||gadgets/spy-gadgets||home-garden/craft-hobby/other||home-garden/holiday-decor||home-garden/cleaning-organization||home-garden/craft-hobby/everything-dremel||home-garden/craft-hobby/hobby-knives-and-accessories||home-garden/craft-hobby/magnifiers||home-garden/craft-hobby/metalworking||home-garden/craft-hobby/other||home-garden/craft-hobby/precision-tools||home-garden/holiday-decor||home-garden/kitchen-bbq||home-garden/other||home-garden/other||home-garden/patio-umbrellas||home-garden/personal-care||kids-toys&games/pretend-play||kids-toys-games/art-supplies||kids-toys-games/dress-up||kids-toys-games/games-puzzles||kids-toys-games/licensed-luxury-kids-battery-ride-on-cars||kids-toys-games/lunch-sets||kids-toys-games/musical-instruments||kids-toys-games/other||kids-toys-games/pretend-play||kids-toys-games/toddler-early-childhood||kids-toys-games/toys||sporting-good/golf||sporting-goods/camping-outdoors||sporting-goods/camping-outdoors/insect-mosquito-control||sporting-goods/emergency-preparedness||sporting-goods/fitness-weight-loss||sporting-goods/gear-repair-maintenance||sporting-goods/gold-panning||sporting-goods/golf-head-covers||sporting-goods/golf-head-covers||sporting-goods/hunting-fishing||sporting-goods/knives-blades/multi-tools||sporting-goods/knives-blades/outdoor-survival||sporting-goods/knives-blades/pocket-knives||sporting-goods/knives-blades/sharpeners||sporting-goods/knives-blades/swords-daggers||sporting-goods/lights-lanterns/flashlights||sporting-goods/lights-lanterns/flashlights||sporting-goods/lights-lanterns/headlamps||sporting-goods/lights-lanterns/lanterns||sporting-goods/lights-lanterns/multi-function||sporting-goods/personal-care||sporting-goods/prepper-survival||sporting-goods/scuba-diving||sporting-goods/survival-rope-cord||sporting-goods/tactical-law-enforcement/shooting-accessories||sporting-goods/tactical-law-enforcement/handcuffs-keys||sporting-goods/tactical-law-enforcement/locksmith-tools||sporting-goods/tactical-law-enforcement/metal-detectors||sporting-goods/tactical-law-enforcement/other||sporting-goods/tactical-law-enforcement/security-self-defense/property-security||sporting-goods/tactical-law-enforcement/security-self-defense/self-defense||sporting-goods/tactical-law-enforcement/shooting-accessories||sporting-goods/tools||sporting-goods/water-treatment||tools-hardware/drill-bits-accessories||tools-hardware/files-sharpeners||tools-hardware/picks-hooks-chisels||tools-hardware/rotary-tools||tools-hardware/woodworking||tools-hardware/wrenches-screwdrivers||travel/accessories||travel/mugs-utensils||travel/pet-products||travel/security',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 129,
@@ -1824,7 +1823,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 130,
@@ -1838,7 +1837,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 131,
@@ -1852,7 +1851,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '30 Day Money Back Return||No returns accepted',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 132,
@@ -1866,7 +1865,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => 'Under 1lb||Under 1lb Restricted International||Under 1lb Domestic Only||1lb to 4.4lb||1lb to 4.4lb Restricted International||1lb to 4.4lb Domestic Only||4.4lb+||4.4lb+ Restricted International||4.4lb+ Domestic Only||FedEx 2Day||FedEx 2Day Restricted International||FedEx 2Day Domestic Only',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 133,
@@ -1880,7 +1879,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 134,
@@ -1894,7 +1893,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 135,
@@ -1908,7 +1907,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 136,
@@ -1922,7 +1921,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^[^®^™*_]{10,140}$',
                 'required' => 1,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 137,
@@ -1936,7 +1935,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 138,
@@ -1950,7 +1949,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^([a-zA-Z0-9 \\-\\\'\\_]{1,20})((,)[a-zA-Z0-9 \\-\\\'\\_]{1,20}){0,12}',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 139,
@@ -1964,7 +1963,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '68887562==supplies/knitting||68910338==supplies/knitting/pattern||68910384==supplies/knitting/knitting_needles||69173833==supplies/knitting/yarn||69173855==supplies/knitting/stitch_markers||69173925==supplies/knitting/organizer||68887752==supplies/scrapbooking||68910102==supplies/scrapbooking/tag||68910138==supplies/scrapbooking/journaling_spot||68910162==supplies/scrapbooking/die_cut||69173677==supplies/scrapbooking/rubber_stamp||69173697==supplies/scrapbooking/paper||69173727==supplies/scrapbooking/digital_collage_sheet||68888142==supplies/cabochon||68888310==supplies/fabric||68908134==supplies/fabric/handmade||68908154==supplies/fabric/kawaii||68908172==supplies/fabric/silk||68908548==supplies/fabric/fat_quarter||68909204==supplies/fabric/amy_butler||68909396==supplies/fabric/animal||68909578==supplies/fabric/commercial||69171729==supplies/fabric/yardage||69171745==supplies/fabric/floral||69171761==supplies/fabric/screenprinted||69172099==supplies/fabric/cotton||69173115==supplies/fabric/bird||69150513==supplies/pattern||68910152==supplies/pattern/shirt||68910294==supplies/pattern/sewing||68910304==supplies/pattern/amigurumi||68910312==supplies/pattern/baby||68910326==supplies/pattern/children||68910398==supplies/pattern/commercial||68910416==supplies/pattern/lingerie||68910430==supplies/pattern/men||68910436==supplies/pattern/poncho||68910446==supplies/pattern/hat||68910458==supplies/pattern/dress||68910472==supplies/pattern/handmade||69173711==supplies/pattern/toy||69173723==supplies/pattern/women||69173827==supplies/pattern/scarf||69173845==supplies/pattern/boy||69173939==supplies/pattern/costume||69173951==supplies/pattern/knitting||69173963==supplies/pattern/pants||69173969==supplies/pattern/jacket||69173985==supplies/pattern/crochet||69174001==supplies/pattern/girl||69150619==supplies/yarn||68910114==supplies/yarn/alpaca||68910122==supplies/yarn/cotton||68910174==supplies/yarn/hand_dyed||68910270==supplies/yarn/handspun||68910278==supplies/yarn/silk||69173683==supplies/yarn/bamboo||69173741==supplies/yarn/hand_painted||69173779==supplies/yarn/merino||69173797==supplies/yarn/organic||69173813==supplies/yarn/wool||69151163==supplies/commercial||68908560==supplies/commercial/mosaic||68908568==supplies/commercial/needle||68908648==supplies/commercial/pattern||68908672==supplies/commercial/fabric||68908710==supplies/commercial/chain||68908898==supplies/commercial/cord||68909042==supplies/commercial/polymer_clay||68909780==supplies/commercial/wire||68909974==supplies/commercial/sewing||68910078==supplies/commercial/trim||68910486==supplies/commercial/button||68912700==supplies/commercial/bead||69172131==supplies/commercial/knitting||69172163==supplies/commercial/paper||69172175==supplies/commercial/findings||69172207==supplies/commercial/clay||69172393==supplies/commercial/collage||69172563==supplies/commercial/doll_parts||69172725==supplies/commercial/scrapbooking||69172909==supplies/commercial/yarn||69173315==supplies/commercial/wool||69173499==supplies/commercial/spinning||69173649==supplies/commercial/tool||69173663==supplies/commercial/vintage||69174013==supplies/commercial/cabochon||69176333==supplies/commercial/book||69151235==supplies/button||68912690==supplies/button/plastic||68912708==supplies/button/metal||68912742==supplies/button/ceramic||68912752==supplies/button/glass||69176311==supplies/button/shank||69176323==supplies/button/shell||69176343==supplies/button/handmade||69176365==supplies/button/commercial||69151267==supplies/handmade||68908108==supplies/handmade/bead||68908112==supplies/handmade/fabric||68908126==supplies/handmade/applique||68908328==supplies/handmade/knitting||68908484==supplies/handmade/polymer_clay||68908500==supplies/handmade/scrapbooking||68908510==supplies/handmade/pattern||68908524==supplies/handmade/knitting_needles||68908538==supplies/handmade/needles||68910090==supplies/handmade/spinning||68910362==supplies/handmade/tutorial||69171705==supplies/handmade/button||69171715==supplies/handmade/cabochon||69171721==supplies/handmade/findings||69171831==supplies/handmade/kit||69172007==supplies/handmade/quilting||69172033==supplies/handmade/roving||69172057==supplies/handmade/sewing||68908508==supplies/handmade/pincushion||69172067==supplies/handmade/mosaic||69172087==supplies/handmade/needle||69172095==supplies/handmade/paper||69173669==supplies/handmade/tool||69173905==supplies/handmade/wool||69173915==supplies/handmade/yarn||69151309==supplies/bead||68912280==supplies/bead/gemstone||68912476==supplies/bead/plastic||68912616==supplies/bead/ceramic||68912680==supplies/bead/semiprecious_stone||68912718==supplies/bead/wood||69175915==supplies/bead/glass||69176111==supplies/bead/metal||69176225==supplies/bead/polymer_clay||69176299==supplies/bead/precious_stone||69176349==supplies/bead/vintage',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 140,
@@ -1978,7 +1977,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Listing Description',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 143,
@@ -1992,7 +1991,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 144,
@@ -2006,7 +2005,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Listing Description',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 145,
@@ -2020,7 +2019,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 146,
@@ -2034,7 +2033,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 147,
@@ -2048,7 +2047,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 149,
@@ -2062,7 +2061,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^[^®^™*_]{10,128}$',
                 'required' => 1,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 150,
@@ -2076,7 +2075,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 151,
@@ -2090,7 +2089,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 152,
@@ -2104,7 +2103,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 153,
@@ -2118,7 +2117,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => 'Black||Blue||Brown||Green||Grey||Metallic||Multi||Orange||Pink||Purple||Red||Tan||White||Yellow',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 154,
@@ -2132,7 +2131,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^[\\w -\'.]{10,110}$',
                 'required' => 1,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 155,
@@ -2146,7 +2145,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 156,
@@ -2160,7 +2159,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 158,
@@ -2174,7 +2173,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Category',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 159,
@@ -2188,7 +2187,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 161,
@@ -2202,7 +2201,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 162,
@@ -2216,7 +2215,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^[^®^™*_]{10,128}$',
                 'required' => 1,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 163,
@@ -2230,7 +2229,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 164,
@@ -2244,7 +2243,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 165,
@@ -2258,7 +2257,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^([a-zA-Z0-9 _\\-\'.]+)((,|, )([a-zA-Z0-9 _\\-\'.]+)){0,9}',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 166,
@@ -2272,7 +2271,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 167,
@@ -2286,7 +2285,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 169,
@@ -2300,7 +2299,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => 'danger',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 170,
@@ -2314,7 +2313,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => 'danger',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 171,
@@ -2328,7 +2327,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => 'danger',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 173,
@@ -2342,7 +2341,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^([0-9a-zA-Z]){24}$',
                 'required' => 0,
                 'grouping' => 'Listing Description',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 174,
@@ -2356,7 +2355,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Listing Description',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 175,
@@ -2370,7 +2369,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 176,
@@ -2384,7 +2383,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 177,
@@ -2398,7 +2397,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 178,
@@ -2412,7 +2411,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 179,
@@ -2426,7 +2425,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 180,
@@ -2440,7 +2439,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => 'epa_establishment_number||epa_registration_number',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 181,
@@ -2454,7 +2453,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => 'fifra_not_considered_pesticide||fifra_registration_exempt||fifra_registration_required',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 182,
@@ -2468,7 +2467,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 183,
@@ -2482,7 +2481,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => 'Default Shipping Template||LESS THAN 1 POUND||1 TO 5 POUND PRIORITY||UPS GROUND 5 POUND PLUS||FREE 2 DAY||OVERSIZE',
                 'required' => 1,
                 'grouping' => 'Shipping',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 184,
@@ -2496,7 +2495,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Listing Description',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 185,
@@ -2510,7 +2509,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^[^®^™*_]{10,80}$',
                 'required' => 1,
                 'grouping' => 'Listing Description',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 186,
@@ -2524,7 +2523,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '0==False||1==True',
                 'required' => 1,
                 'grouping' => 'Titles and Media',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 187,
@@ -2538,7 +2537,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Category',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 188,
@@ -2552,7 +2551,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 189,
@@ -2566,7 +2565,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => 'count==Count||foot==Foot||sq ft==Sq Ft||ounce==Ounce||fl oz==Fl Oz',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 190,
@@ -2580,7 +2579,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 191,
@@ -2594,7 +2593,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => 'male==Male||female==Female||unisex==Unisex',
                 'required' => 1,
                 'grouping' => 'Category',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 192,
@@ -2608,7 +2607,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => 'adult==Adult||big_kid==Big Kid||little_kid==Little Kid||infant==Infant||toddler==Toddler',
                 'required' => 1,
                 'grouping' => 'Category',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 193,
@@ -2622,7 +2621,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 194,
@@ -2636,7 +2635,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '1073110421==Domestic Standard Free Shipping (1073110421)||139525351082==Gold Panning Kits 5+ LBS (139525351082)||1176787206==Item Weight >4 (1176787206)||1176784922==Item Weight <1 (1176784922)||1176525797==Item Weight 1 - 1.9 (1176525797)||1176786178==Item Weight 2 - 2.9 (1176786178)||1176526927==Item Weight 3 - 3.9 (1176526927)||131771783763==Oversize and No International (131771783763)',
                 'required' => 0,
                 'grouping' => 'Details and Stats',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 195,
@@ -2650,7 +2649,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => 'Imported||Made in the USA||Made in the USA and Imported||Made in the USA or Imported',
                 'required' => 1,
                 'grouping' => 'Category',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 196,
@@ -2664,7 +2663,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '',
                 'required' => 1,
                 'grouping' => 'Other Fields',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 204,
@@ -2678,7 +2677,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^.{1,80}',
                 'required' => 0,
                 'grouping' => 'Listing Description',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 205,
@@ -2692,7 +2691,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^.{1,80}',
                 'required' => 0,
                 'grouping' => 'Listing Description',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 206,
@@ -2706,7 +2705,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^.{1,80}',
                 'required' => 0,
                 'grouping' => 'Listing Description',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 207,
@@ -2720,7 +2719,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^.{1,80}',
                 'required' => 0,
                 'grouping' => 'Listing Description',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             [
                 'id' => 208,
@@ -2734,7 +2733,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'input_type_aux' => '^.{1,80}',
                 'required' => 0,
                 'grouping' => 'Listing Description',
-                'type' => 'custom'
+                'type' => 'custom',
             ],
             // [
             //     'id' => 209,
