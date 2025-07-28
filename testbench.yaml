@@ -2,7 +2,6 @@ laravel: "@testbench"
 
 providers:
   - IGE\ChannelLister\ChannelListerServiceProvider
-  - Workbench\App\Providers\ChannelListerServiceProvider
 
 migrations:
   - workbench/database/migrations
@@ -32,6 +31,8 @@ workbench:
     - create-sqlite-db
     - db-wipe
     - migrate-fresh
+    - view-clear
+    - asset-clear
   assets:
     - laravel-assets
   sync:
