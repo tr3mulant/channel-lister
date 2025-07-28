@@ -186,13 +186,13 @@ function mapNpiResponseToFormFields(data) {
         }
         $.ajax({
           type: "POST",
-          url: "api/ChannelLister/getImageMapperModal",
+          url: "api/channel-lister/getImageMapperModal",
           data: {
             images: images,
           },
           dataType: "json",
         })
-          .success(function (response) {
+          .done(function (response) {
             var modal = $(response.data);
             modal.modal();
             modal.find("button.close").click(function () {
@@ -200,7 +200,7 @@ function mapNpiResponseToFormFields(data) {
               window.setTimeout(() => modal.delay(2000).remove(), 1000);
             });
           })
-          .error(function (response) {
+          .fail(function (response) {
             console.log(response);
             alert(response.responseText);
           });
@@ -247,7 +247,7 @@ function fillUPC(platform) {
 }
 
 function getAndSetProductTypeOptions(category) {
-  return $.getJSON("api/ChannelLister/getAmazonProductTypeOptions/" + category)
+  return $.getJSON("api/channel-lister/getAmazonProductTypeOptions/" + category)
     .done(function (response) {
       $("#product_type_amazon-id").html(response.data);
       if (category == "Clothing") {
@@ -272,8 +272,8 @@ function getAndSetProductTypeOptions(category) {
  */
 function setProductTypeOptions(category) {
   if (typeof category == "string") {
-    $.getJSON("api/ChannelLister/getAmazonProductTypeOptions/" + category)
-      .success(function (response) {
+    $.getJSON("api/channel-lister/getAmazonProductTypeOptions/" + category)
+      .done(function (response) {
         $("#product_type_amazon-id").html(response.data);
         if (category == "Clothing") {
           $("#product_type_amazon-id").removeProp("required");
@@ -284,7 +284,7 @@ function setProductTypeOptions(category) {
           .selectpicker("destroy")
           .selectpicker({ liveSearch: true });
       })
-      .error(function (response) {
+      .fail(function (response) {
         $("#product_type_amazon-id").html(
           "<option>Unable to get options for" + category + "</option>"
         );
@@ -364,7 +364,7 @@ function updateShipCost() {
     // gets shipping rate and service from api
     $.ajax({
       type: "POST",
-      url: "api/ChannelLister/calculateShippingCost",
+      url: "api/channel-lister/calculateShippingCost",
       data: {
         weight: weight,
         length: length,
@@ -494,7 +494,7 @@ function addCamlUpdate(e, dt, node, config) {
     });
     $.ajax({
       type: "POST",
-      url: "api/ChannelLister/addChannelListerFields",
+      url: "api/channel-lister/addChannelListerFields",
       data: form_info,
       dataType: "json",
     })
@@ -574,7 +574,7 @@ function removeCamlUpdate(e, dt, node, config) {
   if (confirm(`Would you like to remove field: ${field_name}?`)) {
     $.ajax({
       type: "POST",
-      url: "api/ChannelLister/removeChannelListerFields",
+      url: "api/channel-lister/removeChannelListerFields",
       data: data,
       dataType: "json",
     })
@@ -604,7 +604,7 @@ function reorderCamlUpdate(e, dt, node, config) {
   (function () {
     $.ajax({
       type: "GET",
-      url: "api/ChannelLister/getChannelListerFieldNames",
+      url: "api/channel-lister/getChannelListerFieldNames",
       dataType: "json",
     })
       .done(function (response) {
@@ -629,7 +629,7 @@ function reorderCamlUpdate(e, dt, node, config) {
     });
     $.ajax({
       type: "POST",
-      url: "api/ChannelLister/reorderChannelListerFields",
+      url: "api/channel-lister/reorderChannelListerFields",
       data: form_info,
       dataType: "json",
     })
@@ -986,7 +986,7 @@ function restoreDraft(e, dt, type, indexes) {
 function getCamlDraft(data) {
   return $.ajax({
     type: "POST",
-    url: "api/ChannelLister/getCamlDraft",
+    url: "api/channel-lister/getCamlDraft",
     data: data,
     dataType: "json",
   }).fail(function (response) {
@@ -1000,7 +1000,7 @@ function deleteDraft(e, dt, type, indexes) {
   let rowData = dt.row({ selected: true }).data();
   $.ajax({
     type: "POST",
-    url: "api/ChannelLister/deleteCamlDraft",
+    url: "api/channel-lister/deleteCamlDraft",
     data: { id: rowData.DT_RowId },
     dataType: "json",
   })
@@ -1023,7 +1023,7 @@ function deleteDraft(e, dt, type, indexes) {
 
 function getChannelListerFieldsMarketplaceMap() {
   return $.ajax({
-    url: "api/ChannelLister/getChannelListerFieldsMarketplaceMap",
+    url: "api/channel-lister/getChannelListerFieldsMarketplaceMap",
     type: "GET",
     dataType: "json",
   }).fail(function (error) {
@@ -1194,7 +1194,7 @@ function handleSelectFillForDraftRestore(element, v) {
 
 function getAmazonProductTypeFromAmazonCategory(category) {
   return $.getJSON(
-    "api/ChannelLister/getAmazonProductTypeRequiredFields/" + category
+    "api/channel-lister/getAmazonProductTypeRequiredFields/" + category
   )
     .done(function (response) {
       var html = response.data;
@@ -1223,7 +1223,7 @@ function saveCamlDraft(formData) {
   return new Promise((resolve, reject) => {
     $.ajax({
       type: "POST",
-      url: "api/ChannelLister/saveCamlDraft",
+      url: "api/channel-lister/saveCamlDraft",
       data: { form: formData },
       dataType: "json",
     })
@@ -1564,7 +1564,7 @@ $(document).ready(function () {
       event.preventDefault();
       $.ajax({
         method: "POST",
-        url: "api/ChannelLister/submitProductData",
+        url: "api/channel-lister/submitProductData",
         data: $(form)
           .serialize()
           .replace(/(^|&)drafts-[a-zA-Z0-9\-\_]+=\d+(&|$)/, ""), //ditch the stupid drafts table named fields
@@ -1592,7 +1592,7 @@ $(document).ready(function () {
 
   $.ajax({
     type: "GET",
-    url: "api/Modal/buildModalView",
+    url: "api/channel-lister/build-modal-view",
     dataType: "json",
   }).done(function (response) {
     window.modal = response.data;
@@ -1695,8 +1695,8 @@ $(document).ready(function () {
       .find("i.glyphicon-remove")
       .hide();
 
-    $.getJSON("api/ChannelLister/getFormDataByPlatform/" + v.id)
-      .success(function (d) {
+    $.getJSON("api/channel-lister/get-form-data-by-platform/" + v.id)
+      .done(function (d) {
         d = d.data;
         $("#" + v.id).append(d);
         closePlatformTab(v.id);
@@ -1729,7 +1729,7 @@ $(document).ready(function () {
         );
         runTabInitFunctions(v.id);
       })
-      .error(function (d) {
+      .fail(function (d) {
         console.error("Failed getting lister HTML", v.id, d);
         $("#li" + v.id).hide();
         ddadd.hide();
@@ -1754,8 +1754,8 @@ $(document).ready(function () {
       .find("input[type='file']")[0].id;
     let url =
       uploadBtnId === "upload-btn"
-        ? "api/ChannelLister/updateChannelListerFieldsFromCsv"
-        : "api/ChannelLister/reorderChannelListerFieldsFromCsv";
+        ? "api/channel-lister/updateChannelListerFieldsFromCsv"
+        : "api/channel-lister/reorderChannelListerFieldsFromCsv";
     const msg =
       "Updating via csv will can delete fields from the CAML.\nWould you like to proceed?";
     if ($(`#${fileId}`).val() && confirm(msg)) {
@@ -1816,13 +1816,13 @@ $(document).ready(function () {
     $("#fill_flag_button").prop("disabled", true);
     $("#npi_product_select").html("").selectpicker("destroy");
     if (typeof selection === "string" && selection.length > 0) {
-      $.getJSON("api/ChannelLister/getNpiOptions/" + selection)
-        .success(function (response) {
+      $.getJSON("api/channel-lister/getNpiOptions/" + selection)
+        .done(function (response) {
           var html = response.data;
           $("#npi_product_select").html(html).selectpicker();
           $("#fill_flag_button").prop("disabled", false);
         })
-        .error(function (response) {
+        .fail(function (response) {
           console.log(response);
           alert(response.responseText);
         });
@@ -1833,8 +1833,8 @@ $(document).ready(function () {
   $("#fill_flag_button").on("click", function () {
     var dows_id = $("#npi_product_select").val();
     $("#fill_flag_button").nextAll("p.help-block:first").html("");
-    $.getJSON("api/ChannelLister/getNpiValues/" + dows_id)
-      .success(function (response) {
+    $.getJSON("api/channel-lister/getNpiValues/" + dows_id)
+      .done(function (response) {
         if (response.status != "success") {
           var message = getBootstrapError(response.message);
           $("#fill_flag_button").nextAll("p.help-block:first").html(message);
@@ -1842,7 +1842,7 @@ $(document).ready(function () {
         }
         mapNpiResponseToFormFields(response.data);
       })
-      .error(function (response) {
+      .fail(function (response) {
         console.log(response);
         alert(response.responseText);
       });
@@ -1857,12 +1857,12 @@ $(document).ready(function () {
   // 	$('#fill_draft_button').prop('disabled',true);
   // 	$('#draft_product_select').html('').selectpicker('destroy');
   // 	if (typeof selection === "string" && selection.length > 0) {
-  // 		$.getJSON('api/ChannelLister/getDraftOptions/'+selection)
-  // 			.success(function(response){
+  // 		$.getJSON('api/channel-lister/getDraftOptions/'+selection)
+  // 			.done(function(response){
   // 				var html = response.data;
   // 				$('#draft_product_select').html(html).selectpicker();
   // 				$('#fill_draft_button').prop('disabled',false);
-  // 			}).error(function(response){
+  // 			}).fail(function(response){
   // 				console.log(response);
   // 				alert(response.responseText);
   // 			});
@@ -1948,21 +1948,21 @@ $(document).ready(function () {
       $("#country_of_origin_3_digit-id").val("");
       return;
     }
-    $.getJSON("api/ChannelLister/getCountryCodeOptions/" + country + "/2")
-      .success(function (response) {
+    $.getJSON("api/channel-lister/getCountryCodeOptions/" + country + "/2")
+      .done(function (response) {
         var digit2 = response.data;
         $("#country_of_origin_2_digit-id").val(digit2.trim());
       })
-      .error(function (response) {
+      .fail(function (response) {
         console.log(response);
         alert(response.responseText);
       });
-    $.getJSON("api/ChannelLister/getCountryCodeOptions/" + country + "/3")
-      .success(function (response) {
+    $.getJSON("api/channel-lister/getCountryCodeOptions/" + country + "/3")
+      .done(function (response) {
         var digit3 = response.data;
         $("#country_of_origin_3_digit-id").val(digit3.trim());
       })
-      .error(function (response) {
+      .fail(function (response) {
         console.log(response);
         alert(response.responseText);
       });
@@ -1974,9 +1974,9 @@ $(document).ready(function () {
     $("#product_type_amazon-required").remove();
     if (typeof selected_cat === "string" && selected_cat.length > 0) {
       $.getJSON(
-        "api/ChannelLister/getAmazonProductTypeRequiredFields/" + selected_cat
+        "api/channel-lister/getAmazonProductTypeRequiredFields/" + selected_cat
       )
-        .success(function (response) {
+        .done(function (response) {
           var html = response.data;
           if (html !== "") {
             $("#amazon_category-id")
@@ -1988,7 +1988,7 @@ $(document).ready(function () {
               );
           }
         })
-        .error(function (response) {
+        .fail(function (response) {
           console.log(response);
           alert(response.responseText);
         });
@@ -2003,7 +2003,7 @@ $(document).ready(function () {
 		// console.log("item_type_amazon = ", item_type);
 		$.ajax({
 			method   : 'GET',
-			url      : 'api/ChannelLister/getAmazonCategoryFromItemType/' + item_type,
+			url      : 'api/channel-lister/getAmazonCategoryFromItemType/' + item_type,
 			dataType : 'json',
 		}).done(function(response) {
 			let category = response.data;
@@ -2104,7 +2104,7 @@ $(document).ready(function () {
 
   //this handles adding more bundle rows
   $("#add-component-button").on("click", function () {
-    $.getJSON("api/ChannelLister/getBundleComponentLine")
+    $.getJSON("api/channel-lister/getBundleComponentLine")
       .done(function (response) {
         if (response.status == "success") {
           $("#bundle-components-div").append(response.data);
@@ -2331,7 +2331,7 @@ $(document).ready(function () {
     if (ebayCatVarExclusions === null) {
       $.ajax({
         method: "POST",
-        url: "api/ChannelLister/getEbayCategoryVariationExclusions",
+        url: "api/channel-lister/getEbayCategoryVariationExclusions",
         dataType: "json",
       })
         .success(function (response) {
