@@ -12,7 +12,7 @@ use Illuminate\View\Component;
  */
 class SelectFormInput extends Component
 {
-    public function __construct(public ChannelListerField $params)
+    public function __construct(public ChannelListerField $params, public string $classStrDefault = 'form-control')
     {
         //
     }
@@ -69,8 +69,16 @@ class SelectFormInput extends Component
      *
      * @return string[]
      */
-    protected function explodeOndoubleBar(?string $input_aux): array
+    protected function explodeOndoubleBar(null|array|string $input_aux): array
     {
+        if (is_null($input_aux)) {
+            return [];
+        }
+
+        if (is_array($input_aux)) {
+            return $input_aux;
+        }
+
         return explode('||', $input_aux ?? '');
     }
 

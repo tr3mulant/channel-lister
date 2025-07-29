@@ -16,7 +16,7 @@ class Panel extends Component
 
     public string $id = '';
 
-    public int $idCount = 0;
+    public int $id_count = 0;
 
     public int $last_id = 0;
 
@@ -28,9 +28,9 @@ class Panel extends Component
      *
      * @param  Collection<TKey, TModel>  $fields
      */
-    public function __construct(public Collection $fields, public string $grouping_name, ?string $title = null, ?string $content = null, ?string $class = null, public int $panel_num = 0, ?string $id = null, ?int $idCount = null, public bool $wide = false, public bool $start_collapsed = true, public bool $inverted = false)
+    public function __construct(public Collection $fields, public string $grouping_name, ?string $title = null, ?string $content = null, ?string $class = null, public int $panel_num = 0, ?string $id = null, ?int $id_count = null, public bool $wide = false, public bool $start_collapsed = true, public bool $inverted = false)
     {
-        $this->class .= ' panel_'.$this->grouping_name;
+        $this->class .= ' panel_'.str_replace(' ', '_', strtolower($this->grouping_name));
         if ($this->wide) {
             $this->class .= ' panel_wide';
         }
@@ -49,7 +49,7 @@ class Panel extends Component
         if ($this->wide) {
             $this->class .= ' panel_wide';
         }
-        $this->idCount = $idCount ?? $this->last_id++;
+        $this->id_count = $id_count ?? $this->last_id++;
         if ($id !== null) {
             $this->id = $id;
         }
@@ -57,6 +57,6 @@ class Panel extends Component
 
     public function render()
     {
-        return view('channel-lister::panel');
+        return view('channel-lister::components.panel');
     }
 }

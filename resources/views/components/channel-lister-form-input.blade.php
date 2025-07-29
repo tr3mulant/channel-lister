@@ -1,64 +1,58 @@
-{{-- resources/views/components/channel-lister-form-input.blade.php --}}
-@php
-    // Validate required 'type' parameter
-    if (!isset($params->type)) {
-        throw new RuntimeException("Params missing required field 'type'");
-    }
-@endphp
 @switch($params->input_type)
-    @case('alert')
-        <x-channel-lister::alert-message />
+    @case(\IGE\ChannelLister\Enums\InputType::ALERT)
+        <x-channel-lister::alert-message :params="$params" :class-str-default="$classStrDefault" />
     @break
 
-    @case('checkbox')
-        <x-channel-lister::checkbox-form-input />
+    @case(\IGE\ChannelLister\Enums\InputType::CHECKBOX)
+        <x-channel-lister::checkbox-form-input :params="$params" :class-str-default="$classStrDefault" />
     @break
 
-    @case('clonesite-tags')
-        <x-channel-lister::clone-site-tags />
+    @case(\IGE\ChannelLister\Enums\InputType::CLONESITE_CATS)
+        <x-channel-lister::clone-site-category :params="$params" :class-str-default="$classStrDefault" />
     @break
 
-    @case('clonesite-cats')
-        <x-channel-lister::clone-site-category />
+    @case(\IGE\ChannelLister\Enums\InputType::CLONESITE_TAGS)
+        <x-channel-lister::clone-site-tags :params="$params" :class-str-default="$classStrDefault" />
     @break
 
-    @case('commaseparated')
-        <x-channel-lister::comma-separated-form />
+    @case(\IGE\ChannelLister\Enums\InputType::COMMA_SEPARATED)
+        <x-channel-lister::comma-separated-form :params="$params" :class-str-default="$classStrDefault" />
     @break
 
-    @case('currency')
-        <x-channel-lister::currency-form-input />
+    @case(\IGE\ChannelLister\Enums\InputType::CURRENCY)
+        <x-channel-lister::currency-form-input :params="$params" :class-str-default="$classStrDefault" />
     @break
 
-    @case('custom')
-        <x-channel-lister::custom-form-input />
+    @case(\IGE\ChannelLister\Enums\InputType::CUSTOM)
+        <x-channel-lister::custom.form-input :params="$params" :class-str-default="$classStrDefault" />
     @break
 
-    @case('decimal')
-        <x-channel-lister::decimal-form-input />
+    @case(\IGE\ChannelLister\Enums\InputType::DECIMAL)
+        <x-channel-lister::decimal-form-input :params="$params" :class-str-default="$classStrDefault" />
     @break
 
-    @case('integer')
-        <x-channel-lister::integer-form-input />
+    @case(\IGE\ChannelLister\Enums\InputType::INTEGER)
+        <x-channel-lister::integer-form-input :params="$params" :class-str-default="$classStrDefault" />
     @break
 
-    @case('select')
-        <x-channel-lister::select-form-input />
+    @case(\IGE\ChannelLister\Enums\InputType::SELECT)
+        <x-channel-lister::select-form-input :params="$params" :class-str-default="$classStrDefault" />
     @break
 
-    @case('text')
-        <x-channel-lister::text-form-input />
+    @case(\IGE\ChannelLister\Enums\InputType::TEXT)
+        <x-channel-lister::text-form-input :params="$params" :class-str-default="$classStrDefault" />
     @break
 
-    @case('textarea')
-        <x-channel-lister::textarea-form-input />
+    @case(\IGE\ChannelLister\Enums\InputType::TEXTAREA)
+        <x-channel-lister::textarea-form-input :params="$params" :class-str-default="$classStrDefault" />
     @break
 
-    @case('url')
-        <x-channel-lister::url-form-input />
+    @case(\IGE\ChannelLister\Enums\InputType::URL)
+        <x-channel-lister::url-form-input :params="$params" :class-str-default="$classStrDefault" />
     @break
 
     @default
+        @dump($params->toArray())
         <div class="alert alert-danger">
             <strong>Error:</strong> Unrecognized input_type: '{{ $params->input_type }}'
         </div>

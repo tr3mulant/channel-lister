@@ -12,15 +12,13 @@ use Illuminate\View\Component;
  */
 class CheckboxFormInput extends Component
 {
-    public function __construct(public ChannelListerField $params)
+    public function __construct(public ChannelListerField $params, public string $classStrDefault)
     {
         //
     }
 
     public function render()
     {
-
-        // TODO make sure syntax is correct
         $element_name = $this->params->field_name;
         $required = empty($this->params->required) ? '' : 'required';
         $label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
@@ -32,7 +30,6 @@ class CheckboxFormInput extends Component
         $maps_to_text = 'Maps To: <code>'.$this->params->field_name.'</code>';
 
         return view('channel-lister::components.checkbox-form-input', data: [
-            'params' => $this->params,
             'element_name' => $element_name,
             'required' => $required,
             'label_text' => $label_text,

@@ -28,16 +28,33 @@ class ChannelListerController extends Controller
         $fields = ChannelListerField::query()
             ->where('marketplace', $platform)
             ->orderBy('ordering')
-            ->get();
+            ->get()
+            ->groupBy('grouping');
 
-        return response()->json([
-            'data' => Blade::renderComponent(new Panel(
-                fields: $fields,
-                grouping_name: 'default',
-                panel_num: 1,
+        $data = '';
+        $panel_num = 0;
+        foreach ($fields as $grouping => $groupFields) {
+            $data .= Blade::renderComponent(new Panel(
+                fields: $groupFields,
+                grouping_name: $grouping,
+                title: $grouping,
+                panel_num: $panel_num,
+                id_count: $panel_num,
                 wide: false,
-                start_collapsed: true
-            )),
-        ]);
+                start_collapsed: false
+            ));
+            $panel_num++;
+        }
+
+        return response()->json(['data' => $data]);
+        // return response()->json([
+        //     'data' => Blade::renderComponent(new Panel(
+        //         fields: $fields,
+        //         grouping_name: 'default',
+        //         panel_num: 1,
+        //         wide: false,
+        //         start_collapsed: true
+        //     )),
+        // ]);
     }
 }

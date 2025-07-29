@@ -8,6 +8,7 @@ enum InputType: string
     case CHECKBOX = 'checkbox';
     case CLONESITE_CATS = 'clonesite-cats';
     case CLONESITE_TAGS = 'clonesite-tags';
+    case COMMA_SEPARATED = 'comma-separated';
     case CURRENCY = 'currency';
     case CUSTOM = 'custom';
     case DECIMAL = 'decimal';

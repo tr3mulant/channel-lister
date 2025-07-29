@@ -51,7 +51,7 @@ class AmazonSpecialRefinementsHtml extends Component
         }
         $checkbox_count = 1;
 
-        return view('channel-lister::components.custom.amazon-special-refinements-html', data: [
+        return view('channel-lister::components.custom.amazon-special-refinements', data: [
             'element_name' => $element_name,
             'options' => $options,
             'required' => $required,

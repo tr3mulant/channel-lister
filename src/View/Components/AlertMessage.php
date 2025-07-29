@@ -14,7 +14,7 @@ class AlertMessage extends Component
 {
     const VALID_ALERT_TYPES = ['success', 'info', 'warning', 'danger'];
 
-    public function __construct(public ChannelListerField $params)
+    public function __construct(public ChannelListerField $params, public string $classStrDefault = 'form-control')
     {
         //
     }

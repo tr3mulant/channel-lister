@@ -1,1 +1,1 @@
-<x-select-form-input params= {{ $params }} />
+<x-channel-lister::select-form-input :params="$params" />

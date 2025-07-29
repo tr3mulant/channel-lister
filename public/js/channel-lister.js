@@ -128,89 +128,89 @@ function getBootstrapError(message) {
  * Takes the api response from ASDF and maps them to form fields
  * Passes images to api request to build image mapping modal
  */
-function mapNpiResponseToFormFields(data) {
-  var images = [];
-  var supplier_name = "";
-  var supplier_id = "";
-  var supplier_title = "";
-  var brand = "";
-  var upc_real = "";
-  var seller_cost = "";
-  var location = "";
-  var ship_weight = "";
-  var ship_length = "";
-  var ship_height = "";
-  var ship_width = "";
-  var ship_packaging = "";
+// function mapNpiResponseToFormFields(data) {
+//   var images = [];
+//   var supplier_name = "";
+//   var supplier_id = "";
+//   var supplier_title = "";
+//   var brand = "";
+//   var upc_real = "";
+//   var seller_cost = "";
+//   var location = "";
+//   var ship_weight = "";
+//   var ship_length = "";
+//   var ship_height = "";
+//   var ship_width = "";
+//   var ship_packaging = "";
 
-  supplier_name = data.data.supplier;
-  supplier_id = data.data.supplierID;
-  supplier_title = data.data.title;
-  brand = data.data.brand;
-  upc_real = data.data.upc_real;
-  seller_cost = data.data.seller_cost;
-  location = data.data.location;
-  ship_weight = data.data.ship_weight;
-  ship_length = data.data.ship_length;
-  ship_height = data.data.ship_height;
-  ship_width = data.data.ship_width;
-  ship_packaging = data.data.ship_packaging;
+//   supplier_name = data.data.supplier;
+//   supplier_id = data.data.supplierID;
+//   supplier_title = data.data.title;
+//   brand = data.data.brand;
+//   upc_real = data.data.upc_real;
+//   seller_cost = data.data.seller_cost;
+//   location = data.data.location;
+//   ship_weight = data.data.ship_weight;
+//   ship_length = data.data.ship_length;
+//   ship_height = data.data.ship_height;
+//   ship_width = data.data.ship_width;
+//   ship_packaging = data.data.ship_packaging;
 
-  $('[id="Supplier Code-id"] option')
-    .filter(function () {
-      return $(this).html() == supplier_name;
-    })
-    .prop("selected", true)
-    .trigger("change");
-  $("#supplier_code-id").val(supplier_id);
-  $("#Item-id").val(supplier_title);
-  $('[id="Warehouse Location-id"]').val(data.data.location);
-  $('[id="Total Quantity-id').val(data.data.in_house_quantity);
-  if (Number(data.data.seller_cost) != 0) {
-    $('[id="Seller Cost-id"]').val(Number(data.data.seller_cost));
-  }
-  $("#Brand-id").val(brand);
-  $("#upc_real").val(upc_real);
-  $("#ship_weight-id").val(ship_weight);
-  $("#ship_length-id").val(ship_length);
-  $("#ship_height-id").val(ship_height);
-  $("#ship_width-id").val(ship_width);
-  $("select[id=ship_packaging-id]").val(ship_packaging.toLowerCase());
-  $("select[id=ship_packaging-id]").change();
+//   $('[id="Supplier Code-id"] option')
+//     .filter(function () {
+//       return $(this).html() == supplier_name;
+//     })
+//     .prop("selected", true)
+//     .trigger("change");
+//   $("#supplier_code-id").val(supplier_id);
+//   $("#Item-id").val(supplier_title);
+//   $('[id="Warehouse Location-id"]').val(data.data.location);
+//   $('[id="Total Quantity-id').val(data.data.in_house_quantity);
+//   if (Number(data.data.seller_cost) != 0) {
+//     $('[id="Seller Cost-id"]').val(Number(data.data.seller_cost));
+//   }
+//   $("#Brand-id").val(brand);
+//   $("#upc_real").val(upc_real);
+//   $("#ship_weight-id").val(ship_weight);
+//   $("#ship_length-id").val(ship_length);
+//   $("#ship_height-id").val(ship_height);
+//   $("#ship_width-id").val(ship_width);
+//   $("select[id=ship_packaging-id]").val(ship_packaging.toLowerCase());
+//   $("select[id=ship_packaging-id]").change();
 
-  $.getJSON("api/NewProductInterface/getImages", { id: data.data.id }).done(
-    function (response) {
-      if (response.status == "success") {
-        for (var i = 0; i < response.data.length; i++) {
-          images.push(response.data[i].data.url);
-        }
-        $.ajax({
-          type: "POST",
-          url: "api/channel-lister/getImageMapperModal",
-          data: {
-            images: images,
-          },
-          dataType: "json",
-        })
-          .done(function (response) {
-            var modal = $(response.data);
-            modal.modal();
-            modal.find("button.close").click(function () {
-              modal.modal("hide");
-              window.setTimeout(() => modal.delay(2000).remove(), 1000);
-            });
-          })
-          .fail(function (response) {
-            console.log(response);
-            alert(response.responseText);
-          });
-      } else {
-        console.log(response);
-        alert(response.responseText);
-      }
-    }
-  );
-}
+//   $.getJSON("api/NewProductInterface/getImages", { id: data.data.id }).done(
+//     function (response) {
+//       if (response.status == "success") {
+//         for (var i = 0; i < response.data.length; i++) {
+//           images.push(response.data[i].data.url);
+//         }
+//         $.ajax({
+//           type: "POST",
+//           url: "api/channel-lister/getImageMapperModal",
+//           data: {
+//             images: images,
+//           },
+//           dataType: "json",
+//         })
+//           .done(function (response) {
+//             var modal = $(response.data);
+//             modal.modal();
+//             modal.find("button.close").click(function () {
+//               modal.modal("hide");
+//               window.setTimeout(() => modal.delay(2000).remove(), 1000);
+//             });
+//           })
+//           .fail(function (response) {
+//             console.log(response);
+//             alert(response.responseText);
+//           });
+//       } else {
+//         console.log(response);
+//         alert(response.responseText);
+//       }
+//     }
+//   );
+// }
 
 /**
  * Puts the starting UPC value into the upc_seed input based on the selected dropdown value
@@ -865,161 +865,161 @@ function runTabInitFunctions(platform) {
 /**
  * The CAML Draft Table object
  */
-function CamlDraftTable() {
-  let me = this;
-  me.tableId = "drafts-fill-table";
-  me.api = null;
-  me.columns = null;
+// function CamlDraftTable() {
+//   let me = this;
+//   me.tableId = "drafts-fill-table";
+//   me.api = null;
+//   me.columns = null;
 
-  me.init = function () {
-    $.ajax({
-      type: "GET",
-      url: "api/Datatable/product_listings/channel_lister_drafts",
-      data: { action: "heading" },
-      dataType: "json",
-    })
-      .done(function (data) {
-        me.columns = data;
-        me.addColumnRenders();
-        me.addColumnDefs();
-        me.display();
-        me.api = $("#" + me.tableId).DataTable();
-      })
-      .fail(function (error) {
-        alert("Failed to get headings");
-        console.log("err", error);
-      });
+//   me.init = function () {
+//     $.ajax({
+//       type: "GET",
+//       url: "api/Datatable/product_listings/channel_lister_drafts",
+//       data: { action: "heading" },
+//       dataType: "json",
+//     })
+//       .done(function (data) {
+//         me.columns = data;
+//         me.addColumnRenders();
+//         me.addColumnDefs();
+//         me.display();
+//         me.api = $("#" + me.tableId).DataTable();
+//       })
+//       .fail(function (error) {
+//         alert("Failed to get headings");
+//         console.log("err", error);
+//       });
 
-    $("#" + me.tableId + "-panel").one("shown.bs.collapse", function () {
-      $("#" + me.tableId)
-        .DataTable()
-        .columns.adjust();
-    });
-  };
+//     $("#" + me.tableId + "-panel").one("shown.bs.collapse", function () {
+//       $("#" + me.tableId)
+//         .DataTable()
+//         .columns.adjust();
+//     });
+//   };
 
-  me.addColumnRenders = function () {
-    let i = me.columns.indexOfPropertyValue("data", "form_data");
-    me.columns[i].render = function (data, type, row, meta) {
-      return type === "display" && data.length > 50
-        ? data.substr(0, 50) + "..."
-        : data;
-    };
-    i = me.columns.indexOfPropertyValue("data", "last_save");
-    me.columns[i].render = function (data, type, row, meta) {
-      return moment(data).format("lll");
-    };
-  };
+//   me.addColumnRenders = function () {
+//     let i = me.columns.indexOfPropertyValue("data", "form_data");
+//     me.columns[i].render = function (data, type, row, meta) {
+//       return type === "display" && data.length > 50
+//         ? data.substr(0, 50) + "..."
+//         : data;
+//     };
+//     i = me.columns.indexOfPropertyValue("data", "last_save");
+//     me.columns[i].render = function (data, type, row, meta) {
+//       return moment(data).format("lll");
+//     };
+//   };
 
-  me.addColumnDefs = function () {
-    me.columns[
-      me.columns.indexOfPropertyValue("data", "auction_title")
-    ].className = "dt-min-w-25";
-  };
+//   me.addColumnDefs = function () {
+//     me.columns[
+//       me.columns.indexOfPropertyValue("data", "auction_title")
+//     ].className = "dt-min-w-25";
+//   };
 
-  me.display = function () {
-    let lastSaveIdx = me.columns.indexOfPropertyValue("data", "last_save");
-    return $("#" + me.tableId).DataTableExtended({
-      pageLength: 10,
-      lengthMenu: [10, 20, 50],
-      processing: true,
-      serverSide: true,
-      paging: true,
-      ordering: true,
-      order: [lastSaveIdx, "desc"],
-      scrollX: true,
-      ajax: {
-        url: "api/Datatable/product_listings/channel_lister_drafts",
-        type: "POST",
-      },
-      select: { toggleable: false },
-      columns: me.columns,
-      search: { regex: false },
-      searchByColumn: true,
-      downloadCSV: { addCols: ["id"] },
-      buttons: ["restoreDraft", "deleteDraft"],
-      dom: "lBftipr",
-    });
-  };
-}
+//   me.display = function () {
+//     let lastSaveIdx = me.columns.indexOfPropertyValue("data", "last_save");
+//     return $("#" + me.tableId).DataTableExtended({
+//       pageLength: 10,
+//       lengthMenu: [10, 20, 50],
+//       processing: true,
+//       serverSide: true,
+//       paging: true,
+//       ordering: true,
+//       order: [lastSaveIdx, "desc"],
+//       scrollX: true,
+//       ajax: {
+//         url: "api/Datatable/product_listings/channel_lister_drafts",
+//         type: "POST",
+//       },
+//       select: { toggleable: false },
+//       columns: me.columns,
+//       search: { regex: false },
+//       searchByColumn: true,
+//       downloadCSV: { addCols: ["id"] },
+//       buttons: ["restoreDraft", "deleteDraft"],
+//       dom: "lBftipr",
+//     });
+//   };
+// }
 
 //custom buttons for drafts fill table
-$.fn.dataTable.ext.buttons.restoreDraft = {
-  text: "Restore Draft",
-  titleAttr:
-    "Restore Draft - Click to recover your saved product draft for the CAML",
-  enabled: true,
-  extend: "selectedSingle",
-  name: "restoreDraft",
-  className: "restore-draft",
-  action: restoreDraft,
-};
+// $.fn.dataTable.ext.buttons.restoreDraft = {
+//   text: "Restore Draft",
+//   titleAttr:
+//     "Restore Draft - Click to recover your saved product draft for the CAML",
+//   enabled: true,
+//   extend: "selectedSingle",
+//   name: "restoreDraft",
+//   className: "restore-draft",
+//   action: restoreDraft,
+// };
 
-$.fn.dataTable.ext.buttons.deleteDraft = {
-  text: "Delete Draft",
-  titleAttr: "Delete Draft - Click to delete a previously saved draft",
-  enabled: true,
-  extend: "selectedSingle",
-  name: "deleteDraft",
-  className: "delete-draft",
-  action: deleteDraft,
-};
+// $.fn.dataTable.ext.buttons.deleteDraft = {
+//   text: "Delete Draft",
+//   titleAttr: "Delete Draft - Click to delete a previously saved draft",
+//   enabled: true,
+//   extend: "selectedSingle",
+//   name: "deleteDraft",
+//   className: "delete-draft",
+//   action: deleteDraft,
+// };
 
-function restoreDraft(e, dt, type, indexes) {
-  dt.button([".restore-draft"]).processing(true);
-  let rowData = dt.row({ selected: true }).data();
-  getCamlDraft({ id: rowData.DT_RowId }).then(function (response) {
-    if (response.status === "success") {
-      let formData = JSON.parse(response.data);
-      getChannelListerFieldsMarketplaceMap().then(function (data) {
-        let channelListerFields = data.data;
-        processFormDataForDraftRestore(formData, channelListerFields);
-        dt.button([".restore-draft"]).processing(false);
-      });
-    } else {
-      alert("Something went wrong. Check console for details.");
-      console.log(response);
-      dt.button([".restore-draft"]).processing(false);
-    }
-  });
-}
+// function restoreDraft(e, dt, type, indexes) {
+//   dt.button([".restore-draft"]).processing(true);
+//   let rowData = dt.row({ selected: true }).data();
+//   getCamlDraft({ id: rowData.DT_RowId }).then(function (response) {
+//     if (response.status === "success") {
+//       let formData = JSON.parse(response.data);
+//       getChannelListerFieldsMarketplaceMap().then(function (data) {
+//         let channelListerFields = data.data;
+//         processFormDataForDraftRestore(formData, channelListerFields);
+//         dt.button([".restore-draft"]).processing(false);
+//       });
+//     } else {
+//       alert("Something went wrong. Check console for details.");
+//       console.log(response);
+//       dt.button([".restore-draft"]).processing(false);
+//     }
+//   });
+// }
 
-function getCamlDraft(data) {
-  return $.ajax({
-    type: "POST",
-    url: "api/channel-lister/getCamlDraft",
-    data: data,
-    dataType: "json",
-  }).fail(function (response) {
-    alert("Something went wrong. Check console for details.");
-    console.log(response);
-  });
-}
+// function getCamlDraft(data) {
+//   return $.ajax({
+//     type: "POST",
+//     url: "api/channel-lister/getCamlDraft",
+//     data: data,
+//     dataType: "json",
+//   }).fail(function (response) {
+//     alert("Something went wrong. Check console for details.");
+//     console.log(response);
+//   });
+// }
 
-function deleteDraft(e, dt, type, indexes) {
-  dt.button([".delete-draft"]).processing(true);
-  let rowData = dt.row({ selected: true }).data();
-  $.ajax({
-    type: "POST",
-    url: "api/channel-lister/deleteCamlDraft",
-    data: { id: rowData.DT_RowId },
-    dataType: "json",
-  })
-    .done(function (response) {
-      if (response.status === "success") {
-        dt.draw(false);
-      } else {
-        alert("Something went wrong. Check console for details.");
-        console.log(response);
-      }
-    })
-    .fail(function (response) {
-      alert("Something went wrong. Check console for details.");
-      console.log(response);
-    })
-    .always(function () {
-      dt.button([".delete-draft"]).processing(false);
-    });
-}
+// function deleteDraft(e, dt, type, indexes) {
+//   dt.button([".delete-draft"]).processing(true);
+//   let rowData = dt.row({ selected: true }).data();
+//   $.ajax({
+//     type: "POST",
+//     url: "api/channel-lister/deleteCamlDraft",
+//     data: { id: rowData.DT_RowId },
+//     dataType: "json",
+//   })
+//     .done(function (response) {
+//       if (response.status === "success") {
+//         dt.draw(false);
+//       } else {
+//         alert("Something went wrong. Check console for details.");
+//         console.log(response);
+//       }
+//     })
+//     .fail(function (response) {
+//       alert("Something went wrong. Check console for details.");
+//       console.log(response);
+//     })
+//     .always(function () {
+//       dt.button([".delete-draft"]).processing(false);
+//     });
+// }
 
 function getChannelListerFieldsMarketplaceMap() {
   return $.ajax({
@@ -1032,165 +1032,165 @@ function getChannelListerFieldsMarketplaceMap() {
   });
 }
 
-async function processFormDataForDraftRestore(
-  formData,
-  channelListerFields,
-  retries = 0
-) {
-  if (retries > 9) {
-    console.log("too many retries");
-    console.log(formData);
-    return;
-  }
-  let activeMarketplaces = [];
-  let leftOvers = {};
-  let dropdownMenu = $("#dropdown");
-  let marketplace = null;
-  for (const name in formData) {
-    marketplace = channelListerFields[name];
-    if (
-      marketplace !== undefined &&
-      !activeMarketplaces.includes(marketplace)
-    ) {
-      activeMarketplaces.push(marketplace);
-      dropdownMenu
-        .find("[data-list-id='" + marketplace + "']")
-        .trigger("click");
-    }
-    let value = formData[name];
-    console.log(`starting processing for ${name}`);
-    await processFormElementForDraftRestore(name, value, marketplace).catch(
-      (err) => {
-        leftOvers[err.data.name] = err.data.value;
-      }
-    );
-    console.log("finished processing for " + name);
-  }
-  if (Object.keys(leftOvers).length) {
-    setTimeout(
-      () =>
-        processFormDataForDraftRestore(
-          leftOvers,
-          channelListerFields,
-          ++retries
-        ),
-      500
-    );
-  }
-}
+// async function processFormDataForDraftRestore(
+//   formData,
+//   channelListerFields,
+//   retries = 0
+// ) {
+//   if (retries > 9) {
+//     console.log("too many retries");
+//     console.log(formData);
+//     return;
+//   }
+//   let activeMarketplaces = [];
+//   let leftOvers = {};
+//   let dropdownMenu = $("#dropdown");
+//   let marketplace = null;
+//   for (const name in formData) {
+//     marketplace = channelListerFields[name];
+//     if (
+//       marketplace !== undefined &&
+//       !activeMarketplaces.includes(marketplace)
+//     ) {
+//       activeMarketplaces.push(marketplace);
+//       dropdownMenu
+//         .find("[data-list-id='" + marketplace + "']")
+//         .trigger("click");
+//     }
+//     let value = formData[name];
+//     console.log(`starting processing for ${name}`);
+//     await processFormElementForDraftRestore(name, value, marketplace).catch(
+//       (err) => {
+//         leftOvers[err.data.name] = err.data.value;
+//       }
+//     );
+//     console.log("finished processing for " + name);
+//   }
+//   if (Object.keys(leftOvers).length) {
+//     setTimeout(
+//       () =>
+//         processFormDataForDraftRestore(
+//           leftOvers,
+//           channelListerFields,
+//           ++retries
+//         ),
+//       500
+//     );
+//   }
+// }
 
-function processFormElementForDraftRestore(name, value, marketplace) {
-  let searchName = null;
-  let searchValue = null;
-  return new Promise(async (resolve, reject) => {
-    let v = value;
-    if (typeof value === "string" && value === "") {
-      return resolve(console.log(`skipping ${name} because it's empty`)); //lets skip empty strings
-    }
-    let hasSearchBox = false;
-    if (typeof value === "object" && value !== null) {
-      hasSearchBox = true;
-      v = value.name;
-      searchName = value.search_name;
-      searchValue = value.search_value;
-    }
-    let element = $(`[name='${name}']`);
-    if (!element.length) {
-      let rejectObj = {
-        data: {
-          name: name,
-          value: value,
-        },
-        status: "fail",
-        message: "element not found",
-      };
-      return reject(rejectObj);
-    }
-    switch (element[0].nodeName.toLowerCase()) {
-      case "input":
-        await handleInputFillForDraftRestore(
-          element,
-          v,
-          searchName,
-          searchValue,
-          marketplace
-        ).catch((err) => {
-          console.log("handleInputFillForDraftRestore error:", err);
-        });
-      case "select":
-        await handleSelectFillForDraftRestore(element, v).catch((err) => {
-          console.log("handleSelectFillForDraftRestore error:", err);
-        });
-      default:
-        element.val(v).change();
-        return resolve();
-    }
-  });
-}
+// function processFormElementForDraftRestore(name, value, marketplace) {
+//   let searchName = null;
+//   let searchValue = null;
+//   return new Promise(async (resolve, reject) => {
+//     let v = value;
+//     if (typeof value === "string" && value === "") {
+//       return resolve(console.log(`skipping ${name} because it's empty`)); //lets skip empty strings
+//     }
+//     let hasSearchBox = false;
+//     if (typeof value === "object" && value !== null) {
+//       hasSearchBox = true;
+//       v = value.name;
+//       searchName = value.search_name;
+//       searchValue = value.search_value;
+//     }
+//     let element = $(`[name='${name}']`);
+//     if (!element.length) {
+//       let rejectObj = {
+//         data: {
+//           name: name,
+//           value: value,
+//         },
+//         status: "fail",
+//         message: "element not found",
+//       };
+//       return reject(rejectObj);
+//     }
+//     switch (element[0].nodeName.toLowerCase()) {
+//       case "input":
+//         await handleInputFillForDraftRestore(
+//           element,
+//           v,
+//           searchName,
+//           searchValue,
+//           marketplace
+//         ).catch((err) => {
+//           console.log("handleInputFillForDraftRestore error:", err);
+//         });
+//       case "select":
+//         await handleSelectFillForDraftRestore(element, v).catch((err) => {
+//           console.log("handleSelectFillForDraftRestore error:", err);
+//         });
+//       default:
+//         element.val(v).change();
+//         return resolve();
+//     }
+//   });
+// }
 
-function handleInputFillForDraftRestore(
-  element,
-  v,
-  searchName,
-  searchValue,
-  marketplace
-) {
-  return new Promise((resolve, reject) => {
-    element.val(v).change();
-    let type = element.attr("type");
-    if (type === "checkbox" && v === "on") {
-      element.attr("checked", "");
-    }
-    if (searchName !== null && searchValue !== null) {
-      $(`[id='${searchName}']`).val(searchValue).change();
-      switch (marketplace) {
-        case "amazon":
-          console.log("getAmazonAttributeInput", searchValue);
-          return getAmazonAttributeInput(searchValue).then(resolve());
-        case "sears":
-          return getSearsAttributeInput(v).then(resolve());
-        case "walmart":
-          let subcat = v;
-          let parts = searchValue.split("|");
-          if (parts.length > 1) {
-            let subcat = parts[1];
-          }
-          return getWalmartAttributeInput(v, subcat).then(resolve());
-        default:
-          return resolve();
-      }
-    } else {
-      return resolve();
-    }
-  });
-}
+// function handleInputFillForDraftRestore(
+//   element,
+//   v,
+//   searchName,
+//   searchValue,
+//   marketplace
+// ) {
+//   return new Promise((resolve, reject) => {
+//     element.val(v).change();
+//     let type = element.attr("type");
+//     if (type === "checkbox" && v === "on") {
+//       element.attr("checked", "");
+//     }
+//     if (searchName !== null && searchValue !== null) {
+//       $(`[id='${searchName}']`).val(searchValue).change();
+//       switch (marketplace) {
+//         case "amazon":
+//           console.log("getAmazonAttributeInput", searchValue);
+//           return getAmazonAttributeInput(searchValue).then(resolve());
+//         case "sears":
+//           return getSearsAttributeInput(v).then(resolve());
+//         case "walmart":
+//           let subcat = v;
+//           let parts = searchValue.split("|");
+//           if (parts.length > 1) {
+//             let subcat = parts[1];
+//           }
+//           return getWalmartAttributeInput(v, subcat).then(resolve());
+//         default:
+//           return resolve();
+//       }
+//     } else {
+//       return resolve();
+//     }
+//   });
+// }
 
-function handleSelectFillForDraftRestore(element, v) {
-  return new Promise(async (resolve, reject) => {
-    let name = element.attr("name");
-    if (name === "amazon_category") {
-      element.val(v);
-      await getAndSetProductTypeOptions(v)
-        .then(getAmazonProductTypeFromAmazonCategory(v))
-        .then(resolve());
-    } else {
-      element.val(v).change();
-    }
-    element.selectpicker("refresh");
-    if (element.val() !== v) {
-      let rejectObj = {
-        data: {
-          name: name,
-          value: v,
-        },
-        status: "fail",
-        message: "element value not set properly",
-      };
-      reject(rejectObj);
-    }
-    resolve();
-  });
-}
+// function handleSelectFillForDraftRestore(element, v) {
+//   return new Promise(async (resolve, reject) => {
+//     let name = element.attr("name");
+//     if (name === "amazon_category") {
+//       element.val(v);
+//       await getAndSetProductTypeOptions(v)
+//         .then(getAmazonProductTypeFromAmazonCategory(v))
+//         .then(resolve());
+//     } else {
+//       element.val(v).change();
+//     }
+//     element.selectpicker("refresh");
+//     if (element.val() !== v) {
+//       let rejectObj = {
+//         data: {
+//           name: name,
+//           value: v,
+//         },
+//         status: "fail",
+//         message: "element value not set properly",
+//       };
+//       reject(rejectObj);
+//     }
+//     resolve();
+//   });
+// }
 
 function getAmazonProductTypeFromAmazonCategory(category) {
   return $.getJSON(
@@ -1219,25 +1219,25 @@ function getAmazonProductTypeFromAmazonCategory(category) {
     });
 }
 
-function saveCamlDraft(formData) {
-  return new Promise((resolve, reject) => {
-    $.ajax({
-      type: "POST",
-      url: "api/channel-lister/saveCamlDraft",
-      data: { form: formData },
-      dataType: "json",
-    })
-      .done(function (response) {
-        if (response.status !== "success") {
-          return reject(response);
-        }
-        return resolve(response);
-      })
-      .fail(function (response) {
-        return reject(response);
-      });
-  });
-}
+// function saveCamlDraft(formData) {
+//   return new Promise((resolve, reject) => {
+//     $.ajax({
+//       type: "POST",
+//       url: "api/channel-lister/saveCamlDraft",
+//       data: { form: formData },
+//       dataType: "json",
+//     })
+//       .done(function (response) {
+//         if (response.status !== "success") {
+//           return reject(response);
+//         }
+//         return resolve(response);
+//       })
+//       .fail(function (response) {
+//         return reject(response);
+//       });
+//   });
+// }
 
 function replaceFields(html, fieldsToRemove, id, targetId, removedFields) {
   let removedVals = [];
@@ -1590,63 +1590,63 @@ $(document).ready(function () {
     focusInvalid: false,
   });
 
-  $.ajax({
-    type: "GET",
-    url: "api/channel-lister/build-modal-view",
-    dataType: "json",
-  }).done(function (response) {
-    window.modal = response.data;
-    var caml_draft_table = new CamlDraftTable();
-    caml_draft_table.init();
-    var caml_update_table = new CAMLUpdateTable();
-    caml_update_table.init().then(function () {
-      $("body").tooltip({
-        selector: '[data-toggle="tooltip"]',
-      });
-    });
-  });
+  //   $.ajax({
+  //     type: "GET",
+  //     url: "api/channel-lister/build-modal-view",
+  //     dataType: "json",
+  //   }).done(function (response) {
+  //     window.modal = response.data;
+  //     var caml_draft_table = new CamlDraftTable();
+  //     caml_draft_table.init();
+  //     var caml_update_table = new CAMLUpdateTable();
+  //     caml_update_table.init().then(function () {
+  //       $("body").tooltip({
+  //         selector: '[data-toggle="tooltip"]',
+  //       });
+  //     });
+  //   });
 
-  $("#save-draft-btn").click(function (e) {
-    let me = $(this);
-    let ogMsg = me.text();
-    me.text("Saving Draft...");
-    me.prop("disabled", true);
-    console.log("disabled button");
-    // let formData = $('#user_input').serializeArray();
-    // formData.shift();//kill the CamlDraftFillTable 1st element that makes its way into the form data
-    let formData = $("#user_input :not([name^='drafts-'])").serializeArray(); //grab all form elements other that stuff starting with drafts in the name prop
+  //   $("#save-draft-btn").click(function (e) {
+  //     let me = $(this);
+  //     let ogMsg = me.text();
+  //     me.text("Saving Draft...");
+  //     me.prop("disabled", true);
+  //     console.log("disabled button");
+  //     // let formData = $('#user_input').serializeArray();
+  //     // formData.shift();//kill the CamlDraftFillTable 1st element that makes its way into the form data
+  //     let formData = $("#user_input :not([name^='drafts-'])").serializeArray(); //grab all form elements other that stuff starting with drafts in the name prop
 
-    //should iterate over the form list and graph any field-searchbox inputs for the search boxes
-    formData.forEach(function (v, n, form) {
-      if (v.value === "") {
-        return;
-      }
-      let property = v.name + "-searchbox";
-      console.log("searching for searchbox " + property);
-      let element = $("[id='" + property + "']");
-      if (element.length) {
-        console.log("found a searchbox for " + v.name);
-        v.search_name = property;
-        v.search_value = element.val().trim();
-        console.log("v after", v);
-      }
-    });
-    console.log("formData after", formData);
+  //     //should iterate over the form list and graph any field-searchbox inputs for the search boxes
+  //     formData.forEach(function (v, n, form) {
+  //       if (v.value === "") {
+  //         return;
+  //       }
+  //       let property = v.name + "-searchbox";
+  //       console.log("searching for searchbox " + property);
+  //       let element = $("[id='" + property + "']");
+  //       if (element.length) {
+  //         console.log("found a searchbox for " + v.name);
+  //         v.search_name = property;
+  //         v.search_value = element.val().trim();
+  //         console.log("v after", v);
+  //       }
+  //     });
+  //     console.log("formData after", formData);
 
-    saveCamlDraft(formData)
-      .then((data) => {
-        $("#drafts-fill-table").DataTable().draw(false);
-      })
-      .catch((error) => {
-        alert("Something went wrong. Check console for details.");
-        console.log(error);
-      })
-      .finally(() => {
-        console.log("enabled button");
-        me.text(ogMsg);
-        me.prop("disabled", false);
-      });
-  });
+  //     saveCamlDraft(formData)
+  //       .then((data) => {
+  //         $("#drafts-fill-table").DataTable().draw(false);
+  //       })
+  //       .catch((error) => {
+  //         alert("Something went wrong. Check console for details.");
+  //         console.log(error);
+  //       })
+  //       .finally(() => {
+  //         console.log("enabled button");
+  //         me.text(ogMsg);
+  //         me.prop("disabled", false);
+  //       });
+  //   });
 
   randomizeEasterEgg();
   var pageLoad = [$.Deferred(), 0];
@@ -1808,45 +1808,45 @@ $(document).ready(function () {
   }
 
   // Disables the Fill from NPI Data button
-  $("#fill_flag_button").prop("disabled", true);
+  //   $("#fill_flag_button").prop("disabled", true);
 
   // Gets NPI options based on selected flag type
-  $("#npi_select").on("change", function () {
-    var selection = $(this).val();
-    $("#fill_flag_button").prop("disabled", true);
-    $("#npi_product_select").html("").selectpicker("destroy");
-    if (typeof selection === "string" && selection.length > 0) {
-      $.getJSON("api/channel-lister/getNpiOptions/" + selection)
-        .done(function (response) {
-          var html = response.data;
-          $("#npi_product_select").html(html).selectpicker();
-          $("#fill_flag_button").prop("disabled", false);
-        })
-        .fail(function (response) {
-          console.log(response);
-          alert(response.responseText);
-        });
-    }
-  });
+  //   $("#npi_select").on("change", function () {
+  //     var selection = $(this).val();
+  //     $("#fill_flag_button").prop("disabled", true);
+  //     $("#npi_product_select").html("").selectpicker("destroy");
+  //     if (typeof selection === "string" && selection.length > 0) {
+  //       $.getJSON("api/channel-lister/getNpiOptions/" + selection)
+  //         .done(function (response) {
+  //           var html = response.data;
+  //           $("#npi_product_select").html(html).selectpicker();
+  //           $("#fill_flag_button").prop("disabled", false);
+  //         })
+  //         .fail(function (response) {
+  //           console.log(response);
+  //           alert(response.responseText);
+  //         });
+  //     }
+  //   });
 
   // Gets data for selected NPI product, brings up mapping modal
-  $("#fill_flag_button").on("click", function () {
-    var dows_id = $("#npi_product_select").val();
-    $("#fill_flag_button").nextAll("p.help-block:first").html("");
-    $.getJSON("api/channel-lister/getNpiValues/" + dows_id)
-      .done(function (response) {
-        if (response.status != "success") {
-          var message = getBootstrapError(response.message);
-          $("#fill_flag_button").nextAll("p.help-block:first").html(message);
-          return;
-        }
-        mapNpiResponseToFormFields(response.data);
-      })
-      .fail(function (response) {
-        console.log(response);
-        alert(response.responseText);
-      });
-  });
+  //   $("#fill_flag_button").on("click", function () {
+  //     var dows_id = $("#npi_product_select").val();
+  //     $("#fill_flag_button").nextAll("p.help-block:first").html("");
+  //     $.getJSON("api/channel-lister/getNpiValues/" + dows_id)
+  //       .done(function (response) {
+  //         if (response.status != "success") {
+  //           var message = getBootstrapError(response.message);
+  //           $("#fill_flag_button").nextAll("p.help-block:first").html(message);
+  //           return;
+  //         }
+  //         mapNpiResponseToFormFields(response.data);
+  //       })
+  //       .fail(function (response) {
+  //         console.log(response);
+  //         alert(response.responseText);
+  //       });
+  //   });
 
   // Disables the Fill from Draft Data button
   // $('#fill_draft_button').prop('disabled',true);

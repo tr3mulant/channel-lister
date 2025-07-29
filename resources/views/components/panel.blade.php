@@ -1,6 +1,6 @@
 @if ($inverted)
     <div class="{{ $class }} panel-default" id="{{ $id }}">
-        <div id="panel-content-{{ $id_count }}" class="panel-collapse collapse {{ $start_collapsed ? '' : 'in' }}">
+        <div @class(['panel-collapse collapse', 'show' => !$start_collapsed]) id="panel-content-{{ $id_count }}">
             <div class="panel-body">{{ $content }}</div>
         </div>
         <div class="panel-heading sticky-top" data-toggle="collapse" href="#panel-content-{{ $id_count }}">
@@ -16,8 +16,7 @@
                 <a>{{ $title }}</a>
             </h4>
         </div>
-        <div id="panel-content-{{ $id_count }}"
-            class="panel-collapse collapse {{ $start_collapsed ? '' : 'in' }}">
+        <div @class(['panel-collapse collapse', 'show' => !$start_collapsed]) id="panel-content-{{ $id_count }}">
             <div class="panel-body">
 
                 @foreach ($fields as $groups => $field)

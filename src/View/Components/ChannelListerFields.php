@@ -7,7 +7,7 @@ use Illuminate\View\Component;
 
 class ChannelListerFields extends Component
 {
-    public function __construct(public string $marketplace, public string $class_str_default = 'channel-lister-fields')
+    public function __construct(public string $marketplace, public string $classStrDefault = 'form-control')
     {
         //
     }

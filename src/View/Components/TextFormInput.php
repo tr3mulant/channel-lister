@@ -10,16 +10,20 @@ use Illuminate\View\Component;
  * I don't expect to keep this either as we should expect to extract the view components that exist
  * in v/ChannelLister into their own component classes and associated views.
  */
-class TextFormInputFormInput extends Component
+class TextFormInput extends Component
 {
-    public function __construct(public ChannelListerField $params)
+    public function __construct(public ChannelListerField $params, public string $classStrDefault)
     {
         //
     }
 
     public function render()
     {
+        return view('channel-lister::components.text-form-input', data: $this->getOptions());
+    }
 
+    protected function getOptions(): array
+    {
         $element_name = $this->params->field_name;
         $element_name_override = '';
         if (property_exists($this->params, 'field_name_override') && $this->params->field_name_override !== null && ! empty($this->params->field_name_override)) {
@@ -44,8 +48,7 @@ class TextFormInputFormInput extends Component
         $max_len = $this->getMaxLengthFromRegex($pattern);
         $max_len_str = $max_len === null || $max_len === '' || $max_len === '0' ? '' : "maxlength='$max_len'";
 
-        return view('channel-lister::components.text-form-input', data: [
-            'params' => $this->params,
+        return [
             'element_name' => $element_name,
             'element_name_override' => $element_name_override,
             'pattern' => $pattern,
@@ -57,7 +60,7 @@ class TextFormInputFormInput extends Component
             'placeholder' => $placeholder,
             'max_len_str' => $max_len_str,
             'maps_to_text' => $maps_to_text,
-        ]);
+        ];
     }
 
     /**

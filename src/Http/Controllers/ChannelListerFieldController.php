@@ -7,6 +7,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 
 class ChannelListerFieldController extends Controller
 {
@@ -33,7 +34,24 @@ class ChannelListerFieldController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        return redirect()->route('channel-lister-field.index');
+        $validated = $request->validate([
+            'ordering' => 'required|integer|min:1',
+            'field_name' => 'required|string|max:255',
+            'display_name' => 'nullable|string|max:255',
+            'tooltip' => 'nullable|string|max:1000',
+            'example' => 'nullable|string|max:255',
+            'marketplace' => 'required|string|max:100',
+            'input_type' => 'required|string|max:50',
+            'input_type_aux' => 'nullable|string|max:1000',
+            'required' => 'boolean',
+            'grouping' => 'required|string|max:100',
+            'type' => 'required|string|max:50',
+        ]);
+
+        $field = DB::transaction(fn () => ChannelListerField::create($validated));
+
+        return redirect()->route('channel-lister-field.index')
+            ->with('success', 'Channel Lister Field created successfully.');
     }
 
     /**
@@ -61,7 +79,26 @@ class ChannelListerFieldController extends Controller
      */
     public function update(Request $request, string|int $id): RedirectResponse
     {
-        return redirect()->route('channel-lister-field.index');
+        $field = ChannelListerField::query()->findOrFail($id);
+
+        $validated = $request->validate([
+            'ordering' => 'required|integer|min:1',
+            'field_name' => 'required|string|max:255',
+            'display_name' => 'nullable|string|max:255',
+            'tooltip' => 'nullable|string|max:1000',
+            'example' => 'nullable|string|max:255',
+            'marketplace' => 'required|string|max:100',
+            'input_type' => 'required|string|max:50',
+            'input_type_aux' => 'nullable|string|max:1000',
+            'required' => 'boolean',
+            'grouping' => 'required|string|max:100',
+            'type' => 'required|string|max:50',
+        ]);
+
+        DB::transaction(fn () => $field->update($validated));
+
+        return redirect()->route('channel-lister-field.index')
+            ->with('success', 'Channel Lister Field updated successfully.');
     }
 
     /**
@@ -69,6 +106,11 @@ class ChannelListerFieldController extends Controller
      */
     public function destroy(string|int $id): RedirectResponse
     {
-        return redirect()->route('channel-lister-field.index');
+        $field = ChannelListerField::query()->findOrFail($id);
+
+        DB::transaction(fn () => $field->delete());
+
+        return redirect()->route('channel-lister-field.index')
+            ->with('success', 'Channel Lister Field deleted successfully.');
     }
 }

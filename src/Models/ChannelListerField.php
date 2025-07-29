@@ -171,12 +171,16 @@ class ChannelListerField extends Model
     protected function inputTypeAux(): Attribute
     {
         return Attribute::make(
-            get: function (string $value): array {
-                if ($value === '' || $value === '0') {
-                    return [];
+            get: function (?string $value): null|string|array {
+                if ($value === null || $value === '' || $value === '0') {
+                    return null;
                 }
 
-                return explode('||', $value);
+                if (str_contains($value, '||')) {
+                    return explode('||', $value);
+                }
+
+                return $value;
             },
             set: fn (string|array $value): string => is_array($value) ? implode('||', $value) : $value
         );

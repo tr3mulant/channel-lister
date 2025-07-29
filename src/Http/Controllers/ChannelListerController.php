@@ -17,6 +17,16 @@ class ChannelListerController extends Controller
 {
     public function index(Request $request): View
     {
+        // $platform = 'common';
+        // /** @var Collection<string, ChannelListerField> $fields */
+        // $fields = ChannelListerField::query()
+        //     ->where('marketplace', $platform)
+        //     ->orderBy('ordering')
+        //     ->get()
+        //     ->groupBy('grouping');
+
+        // dd($fields->toArray());
+
         /** @var string[]|string $disabledMarketplaces */
         $disabledMarketplaces = config('channel-lister.marketplaces.disabled', []);
 
@@ -27,6 +37,7 @@ class ChannelListerController extends Controller
         /** @var string[] $marketplaces */
         $marketplaces = ChannelListerField::query()
             ->select('marketplace')
+            ->groupBy('marketplace')
             ->whereNotIn('marketplace', $disabledMarketplaces)
             ->pluck('marketplace')
             ->sort()

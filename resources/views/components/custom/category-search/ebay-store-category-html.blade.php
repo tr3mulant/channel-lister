@@ -1,1 +1,0 @@
-<x-generic-cat-search params={{ $params }} api-url={{ $apiUrl }} />

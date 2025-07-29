@@ -12,7 +12,7 @@ use Illuminate\View\Component;
  */
 class CloneSiteCategory extends Component
 {
-    public function __construct(public ChannelListerField $params)
+    public function __construct(public ChannelListerField $params, public string $classStrDefault = 'form-control')
     {
         //
     }
@@ -28,7 +28,7 @@ class CloneSiteCategory extends Component
         $tooltip = $this->params->tooltip;
         $placeholder = $this->params->example;
         $maps_to_text = 'Maps To: <code>'.$this->params->field_name.'</code>';
-        $categories = $this->explodeOndoubleBar($this->params->input_type_aux);
+        $categories = $this->params->input_type_aux;
         natcasesort($categories);
         $category_str = '';
         foreach ($categories as $category) {
@@ -40,18 +40,28 @@ class CloneSiteCategory extends Component
         // dive into this function and put html into a view component as well as assign variables like above
         // return $this->buildSelectFormInput($params);
 
-        return view('channel-lister::components.clone-site-category', data: [
-            'params' => $this->params,
-            'element_name' => $element_name,
-            'required' => $required,
-            'label_text' => $label_text,
-            'id' => $id,
-            'tooltip' => $tooltip,
-            'placeholder' => $placeholder,
-            'maps_to_text' => $maps_to_text,
-            'categories' => $categories,
-            'category_str' => $category_str,
-        ]);
+        $this->params->setAttribute('element_name', $element_name)
+            ->setAttribute('required', $required)
+            ->setAttribute('label_text', $label_text)
+            ->setAttribute('id', $id)
+            ->setAttribute('tooltip', $tooltip)
+            ->setAttribute('placeholder', $placeholder)
+            ->setAttribute('maps_to_text', $maps_to_text)
+            ->setAttribute('categories', $categories)
+            ->setAttribute('category_str', $category_str);
+
+        return view('channel-lister::components.clone-site-category');
+        // return view('channel-lister::components.clone-site-category', data: [
+        //     'element_name' => $element_name,
+        //     'required' => $required,
+        //     'label_text' => $label_text,
+        //     'id' => $id,
+        //     'tooltip' => $tooltip,
+        //     'placeholder' => $placeholder,
+        //     'maps_to_text' => $maps_to_text,
+        //     'categories' => $categories,
+        //     'category_str' => $category_str,
+        // ]);
     }
 
     /**

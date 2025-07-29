@@ -12,7 +12,7 @@ use Illuminate\View\Component;
  */
 class DecimalFormInput extends Component
 {
-    public function __construct(public ChannelListerField $params)
+    public function __construct(public ChannelListerField $params, public string $classStrDefault)
     {
         //
     }
