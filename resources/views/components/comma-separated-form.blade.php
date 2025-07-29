@@ -1,22 +1,21 @@
-<div class="form-group <{{ $required }}">
+<div class="form-group {{ $required }}">
     <label class="control-label" for="{{ $id }}">{{ $label_text }}</label>
     <input type="text" name="{{ $element_name }}" class="{{ $classStrDefault }}" id="{{ $id }}"
         placeholder="{{ $placeholder }}" {{ $required }}>
     <div class="comma-sep-options">
-        <?php
-        foreach ($display_names as $option_val => $option_name) {
-            $checkbox_id = $element_name . $label_text . "-checkbox$checkbox_count";
-            $checkbox_count++;
-            ?>
-        <div class="checkbox-inline">
-            <label for="{{ $checkbox_id }}" class="checkbox-inline">
-                <input id="{{ $checkbox_id }}" value="{{ $option_val }}" type="checkbox">{{ $option_name }}
-            </label>
-        </div>
-        <?php
-        }
-        ?>
+        @php $checkbox_count = 0; @endphp
+        @foreach ($display_names as $option_val => $option_name)
+            @php
+                $checkbox_id = $element_name . $label_text . "-checkbox" . $checkbox_count;
+                $checkbox_count++;
+            @endphp
+            <div class="checkbox-inline">
+                <label for="{{ $checkbox_id }}" class="checkbox-inline">
+                    <input id="{{ $checkbox_id }}" value="{{ $option_val }}" type="checkbox">{{ $option_name }}
+                </label>
+            </div>
+        @endforeach
     </div>
-    <p class="help-block"><?= $tooltip ?></p>
-    <p class="help-block"><?= $maps_to_text ?></p>
+    <p class="help-block">{!! $tooltip !!}</p>
+    <p class="help-block">{!! $maps_to_text !!}</p>
 </div>

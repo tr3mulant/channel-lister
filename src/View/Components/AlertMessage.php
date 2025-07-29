@@ -37,7 +37,6 @@ class AlertMessage extends Component
 
         //
         return view('channel-lister::components.alert-message', data: [
-            'params' => $this->params,
             'alert_type' => $alert_type,
             'name' => $name,
             'message' => $message,

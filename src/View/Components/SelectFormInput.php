@@ -51,7 +51,9 @@ class SelectFormInput extends Component
             $select_type = 'editable-select';
         }
 
+        //
         return [
+            'params' => $this->params,
             'element_name' => $element_name,
             'options' => $options,
             'required' => $required,
