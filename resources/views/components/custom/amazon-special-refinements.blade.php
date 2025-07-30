@@ -1,4 +1,4 @@
-<div class="form-control {{ $required }}">
+<div class="form-group {{ $required }}">
     <label class="col-form-label" for="{{ $id }}">{{ $label_text }}</label>
     <small>Limit: {{ $limit }}</small>
     <input type="text" name="{{ $element_name }}" data-limit="{{ $limit }}" class="{{ $classStrDefault }}"

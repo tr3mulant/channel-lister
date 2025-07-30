@@ -7,7 +7,7 @@ use Illuminate\View\Component;
 
 class FormInput extends Component
 {
-    public function __construct(public ChannelListerField $params, public string $classStrDefault = 'form-control')
+    public function __construct(public ChannelListerField $params, public string $classStrDefault = 'form-group')
     {
         //
     }

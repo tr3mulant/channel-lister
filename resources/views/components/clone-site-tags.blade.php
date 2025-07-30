@@ -1,4 +1,4 @@
-<div class="form-control {{ $required }}">
+<div class="form-group {{ $required }}">
     <label class="col-form-label" for="{{ $id }}">{{ $label_text }}</label>
     <input name="{{ $element_name }}" id="{{ $id }}" class="{{ $classStrDefault }}" type="text"
         {{ $required }} <p class="form-text">{!! $tooltip !!}</p>
@@ -13,7 +13,7 @@
             @if ($count % 3 == 0)
                 <div class="row">
             @endif
-            <div class="clonesite_tags col-sm-4" data-group="{{ $group }}">{{ $tag_name }}
+            <div class="clonesite_tags col-md-4" data-group="{{ $group }}">{{ $tag_name }}
                 <div class="clonesite_tags_inner" style="display: none;">
                     @foreach ($sub_tags as $sub_tag)
                         <span class="clonesite_tag" data-input-id="{{ $id }}">{{ $sub_tag }}</span>

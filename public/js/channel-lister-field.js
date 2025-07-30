@@ -201,7 +201,7 @@ function addCamlUpdate(e, dt, node, config) {
     form
       .find('[name="location"]')
       .append(
-        `<p class="help-block">Selecting 'After' will place the new field AFTER ${field_name} in table</p>`
+        `<p class="form-text">Selecting 'After' will place the new field AFTER ${field_name} in table</p>`
       );
 
     let modal = $(window.modal);

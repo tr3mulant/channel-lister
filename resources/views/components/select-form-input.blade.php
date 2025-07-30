@@ -1,4 +1,4 @@
-<div class="form-control {{ $required }}">
+<div class="form-group {{ $required }}">
     <label class="col-form-label" for="{{ $id }}">{{ $label_text }}</label>
     <select name="{{ $element_name }}" class="{{ $classStrDefault }} {{ $select_type }}" data-size="10"
         data-live-search="{{ $select_search }}" id="{{ $id }}" placeholder="{{ $placeholder }}" {{ $required }}

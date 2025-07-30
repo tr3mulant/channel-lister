@@ -31,6 +31,17 @@ class ChannelListerController extends Controller
             ->get()
             ->groupBy('grouping');
 
+        // $key = array_key_first($fields->toArray());
+        // $firstGroup = $fields->get($key);
+        // $firstGroup = collect([$firstGroup->first()]);
+        // $fields->put($key, $firstGroup);
+        // foreach ($fields as $grouping => $groupFields) {
+        //     if ($grouping !== $key) {
+        //         $fields->pull($grouping);
+        //     }
+        // }
+
+
         $data = '';
         $panel_num = 0;
         foreach ($fields as $grouping => $groupFields) {

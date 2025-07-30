@@ -1,4 +1,4 @@
-<div class="form-control {{ $required }}">
+<div class="form-group {{ $required }}">
     <label class="col-form-label" for="{{ $id }}">{{ $label_text }}</label>
     <textarea name="{{ $element_name }}" class="{{ $classStrDefault }} col-xs-2" id="{{ $id }}"
         placeholder="{{ $placeholder }}" {{ $required }}></textarea>

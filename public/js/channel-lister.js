@@ -51,10 +51,11 @@ function showPlatformTab(platform, allowRemoval) {
 function gotoPlatformTab(platform) {
   // console.log('goto '+platform);
   showPlatformTab(platform);
-  $(".tab-pane").removeClass("active");
+  $(".tab-pane").removeClass("active show");
   $(".nav > li").removeClass("active");
-  $("#" + platform).addClass("active");
-  $("#li" + platform).addClass("active");
+  $(`#${platform}`).addClass("show active");
+  $(`#li${platform}`).addClass("active");
+  $(`#li${platform} > a`).addClass("active");
 }
 
 /**
@@ -96,7 +97,7 @@ function getOpenPlataformTabs() {
 function toggleDisableFormElementsByPlatform(platform, is_disabled) {
   //console.log(platform);
   //console.log(is_disabled);
-  $("#" + platform + " .form-control").attr("disabled", is_disabled);
+  $("#" + platform + " .form-group").attr("disabled", is_disabled);
   $("#" + platform + " .select-picker")
     .selectpicker("destroy")
     .selectpicker();
@@ -470,7 +471,7 @@ function isValidUrl(url) {
 function runTabInitFunctions(platform) {
   $("#" + platform + " .select-picker").selectpicker();
   $("#" + platform + " .editable-select").editableSelect();
-  $("#" + platform + " input.form-control[maxlength]").maxlength({
+  $("#" + platform + " input.form-group[maxlength]").maxlength({
     alwaysShow: true,
   });
 }
@@ -868,7 +869,7 @@ function replaceFields(html, fieldsToRemove, id, targetId, removedFields) {
       obj.value = ele.val();
       removedVals.push(obj);
       console.log("found the element to remove", ele);
-      removedFields[v] = ele.closest("div[class^='form-control'");
+      removedFields[v] = ele.closest("div[class^='form-group'");
       removedFields[v].remove();
     });
   } else {
@@ -903,7 +904,7 @@ function replaceFields(html, fieldsToRemove, id, targetId, removedFields) {
         fieldsToRemove.indexOf(k) === undefined
       ) {
         console.log("removing if already on dom");
-        $(`[name=${k}]`).closest("div[class^='form-control'").remove();
+        $(`[name=${k}]`).closest("div[class^='form-group'").remove();
         console.log("adding back to the dom", k);
         $(`#${id}`).append(removedFields[k]);
         delete removedFields.k;
@@ -1182,7 +1183,8 @@ $(document).ready(function () {
         url: "api/channel-lister/submitProductData",
         data: $(form)
           .serialize()
-          .replace(/(^|&)drafts-[a-zA-Z0-9\-\_]+=\d+(&|$)/, ""), //ditch the stupid drafts table named fields
+          //.replace(/(^|&)drafts-[a-zA-Z0-9\-\_]+=\d+(&|$)/, ""), //ditch the stupid drafts table named fields
+          .replace(/(^|&)drafts-[a-zA-Z0-9_-]+=\d+(&|$)/, ""), 
       })
         .success(function (response) {
           let r = JSON.parse(response);
@@ -1273,21 +1275,40 @@ $(document).ready(function () {
   //add each platform tab
   $.each(platforms, function (k, v) {
     $(v.id).prop("disabled", true);
-    var ddadd = $("#dropdownadd").append(
-      format('<li><a data-list-id="{}" href="#">{}</a></li>', v.id, v.name)
-    );
-    $("#dropdown").before(
+  var ddadd = $("#dropdownadd").append(
       format(
-        '<li id="li{}" style="display: none;"><a href="#{}" class="platform" data-toggle="tab"><span>{}</span><i class="glyphicon glyphicon-ban-circle"></i><i class="glyphicon glyphicon-upload"></i><i class="glyphicon glyphicon-remove"></i></a></li>',
+        `<li>
+            <a class="dropdown-item" data-list-id="{}" href="#">{}</a>
+        </li>`,
+        v.id,
+        v.name
+      )
+    );
+$("#dropdown").before(
+      format(
+        `<li id="li{}" class="nav-item" style="display: none;" role="presentation">
+            <a href="#{}" class="nav-link platform" data-toggle="tab" data-target="#{}" role="tab" aria-controls="{}" aria-expanded="false">
+                <span>{}</span>
+                <i class="glyphicon glyphicon-ban-circle"></i>
+                <i class="glyphicon glyphicon-upload"></i>
+                <i class="glyphicon glyphicon-remove"></i>
+            </a>
+        </li>`,
+        v.id,
+        v.id,
         v.id,
         v.id,
         v.name
       )
     );
     $("#pantab").append(
-      format('<div class="tab-pane platform-container" id="{}"></div>', v.id)
+      format(
+        `<div class="tab-pane fade platform-container" id="{}" role="tabpanel" aria-labelledby="li{}">
+        </div>`,
+        v.id,
+        v.id
+      )
     );
-
     $("#li" + v.id)
       .find("i.glyphicon-remove")
       .click(function (e) {
@@ -1332,12 +1353,12 @@ $(document).ready(function () {
             ) {
               glyphUp.hide();
               glyphBan.show();
-              //console.log($("#"+v.id+" .form-control"));
-              $("#" + v.id + " .form-control").attr("disabled", true);
+              //console.log($("#"+v.id+" .form-group"));
+              $("#" + v.id + " .form-group").attr("disabled", true);
             } else {
               glyphUp.show();
               glyphBan.hide();
-              $("#" + v.id + " .form-control").attr("disabled", false);
+              $("#" + v.id + " .form-group").attr("disabled", false);
             }
             $("[id='action_select_" + v.id + "']").attr("disabled", false);
           }
@@ -1365,7 +1386,7 @@ $(document).ready(function () {
   $("#upload-btn,#reorder-upload-btn").on("click", function (e) {
     uploadBtnId = e.target.id;
     let fileId = $(this)
-      .closest("div.form-control")
+      .closest("div.form-group")
       .find("input[type='file']")[0].id;
     let url =
       uploadBtnId === "upload-btn"
@@ -1640,12 +1661,12 @@ $(document).ready(function () {
         .closest("div.comma-sep-options")
         .find('input[type="checkbox"]:checked').length;
       var limit = $(this)
-        .closest("div.form-control")
+        .closest("div.form-group")
         .find('input[type="text"]')
         .data("limit");
       if (checked_count <= limit) {
         var input = $(this)
-          .closest("div.form-control")
+          .closest("div.form-group")
           .find('input[type="text"]');
         var values = $(this)
           .closest("div.comma-sep-options")

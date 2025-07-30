@@ -12,7 +12,7 @@ use Illuminate\View\Component;
  */
 class Label extends Component
 {
-    public function __construct(public ChannelListerField $params, public string $classStrDefault = 'form-control')
+    public function __construct(public ChannelListerField $params, public string $classStrDefault = 'form-group')
     {
         //
     }

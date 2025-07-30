@@ -1,7 +1,7 @@
-<div class="form-control">
+<div class="form-group">
     <label class="col-form-label" for="tbSearch">{{ $label_text }}</label>
     <div id="dows_category_holder">
-        <input id="tbSearch" value="" class="form-control" type="text" placeholder="Search...">
+        <input id="tbSearch" value="" class="form-group" type="text" placeholder="Search...">
         <script>
             $("#tbSearch").keyup(function() {
                 var query = $("#tbSearch").val();

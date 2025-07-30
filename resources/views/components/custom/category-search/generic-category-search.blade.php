@@ -1,9 +1,9 @@
-<div class="form-control {{ $required }}">
+<div class="form-group {{ $required }}">
     <div class=""> {{-- was form-horizontal--}}
         <label class="col-form-label">{{ $label_text }}</label>
     </div>
     <div class="col-sm-4">
-        <input type="text" class="form-control" id="{{ $element_name }}-searchbox" placeholder="Search...">
+        <input type="text" class="form-group" id="{{ $element_name }}-searchbox" placeholder="Search...">
     </div>
     <div class="col-sm-8">
         <div class="row">

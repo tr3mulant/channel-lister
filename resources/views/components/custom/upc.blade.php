@@ -1,22 +1,22 @@
-<div class="form-control {{ $required }}">
-    <div class="form-horizontal">
+<div class="form-group {{ $required }}">
+    <div class="">
         <label class="col-form-label">{{ $label_text }}</label>
     </div>
-    <div class="col-sm-4">
+    <div class="col-md-4">
         <input type="text" name="{{ $element_name }}" {{ $required }} pattern="^[0-9]{12,13}$" maxlength="13"
-            class="form-control upc_field" id="{{ $platform }}_upc">
+            class="form-group upc_field" id="{{ $platform }}_upc">
         <p class="form-text">{!! $tooltip !!}</p>
         <p class="form-text">{!! $maps_to_text !!}</p>
     </div>
 
-    <div class="col-sm-8">
+    <div class="col-md-8">
         <div class="row">
-            <div class="col-md-3 .text-center"><input class="btn btn-primary fill_upc"
+            <div class="col-lg-3 .text-center"><input class="btn btn-primary fill_upc"
                     data-platform="{{ $platform }}" type="button" value="Make UPC starting with:"></div>
-            <div class="col-md-3"><input type="text" class="form-control" id="{{ $platform }}_upc_seed"
+            <div class="col-lg-3"><input type="text" class="form-group" id="{{ $platform }}_upc_seed"
                     placeholder="Nothing" pattern="^\d{0,11}$"></div>
-            <div class="col-md-6">
-                <select id='{{ $platform }}_upc_start_selction' class="form-control manufacturer_code_select"
+            <div class="col-lg-6">
+                <select id='{{ $platform }}_upc_start_selction' class="form-group manufacturer_code_select"
                     data-platform="{{ $platform }}">
                     <option value="" selected="">Manufacturer Code</option>
 

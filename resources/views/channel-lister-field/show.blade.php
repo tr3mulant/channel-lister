@@ -1,7 +1,7 @@
 <x-channel-lister::layout>
     <div class="container">
-        <div class="row">
-            <div class="col-md-12">
+        <div class=row>
+            <div class="col-lg-12">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h1>Channel Lister Field Details</h1>
                     <div>
@@ -22,8 +22,8 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
+                        <div class=row>
+                            <div class="col-lg-6">
                                 <h5>Field Information</h5>
                                 <table class="table table-bordered">
                                     <tr>
@@ -60,7 +60,7 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-lg-6">
                                 <h5>Field Configuration</h5>
                                 <table class="table table-bordered">
                                     <tr>
@@ -100,24 +100,24 @@
                         </div>
 
                         @if ($field->default_value || $field->field_value || $field->extra_json)
-                            <div class="row mt-4">
-                                <div class="col-md-12">
+                            <div class=row mt-4">
+                                <div class="col-lg-12">
                                     <h5>Additional Information</h5>
-                                    <div class="row">
+                                    <div class=row>
                                         @if ($field->default_value)
-                                            <div class="col-md-4">
+                                            <div class="col-lg-4">
                                                 <strong>Default Value:</strong>
                                                 <pre class="mt-2 p-2 bg-light">{{ $field->default_value }}</pre>
                                             </div>
                                         @endif
                                         @if ($field->field_value)
-                                            <div class="col-md-4">
+                                            <div class="col-lg-4">
                                                 <strong>Field Value:</strong>
                                                 <pre class="mt-2 p-2 bg-light">{{ $field->field_value }}</pre>
                                             </div>
                                         @endif
                                         @if ($field->extra_json)
-                                            <div class="col-md-4">
+                                            <div class="col-lg-4">
                                                 <strong>Extra JSON:</strong>
                                                 <pre class="mt-2 p-2 bg-light">{{ json_encode(json_decode($field->extra_json), JSON_PRETTY_PRINT) }}</pre>
                                             </div>
@@ -128,7 +128,7 @@
                         @endif
 
                         <div class="row mt-4">
-                            <div class="col-md-12">
+                            <div class="col-lg-12">
                                 <div class="d-flex justify-content-between">
                                     <a href="{{ route('channel-lister-field.index') }}" class="btn btn-secondary">
                                         ← Back to List
