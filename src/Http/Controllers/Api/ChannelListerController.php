@@ -34,6 +34,7 @@ class ChannelListerController extends Controller
         $data = '';
         $panel_num = 0;
         foreach ($fields as $grouping => $groupFields) {
+            /** @var \Illuminate\Support\Collection<int|string, \IGE\ChannelLister\Models\ChannelListerField> $groupFields */
             $data .= Blade::renderComponent(new Panel(
                 fields: $groupFields,
                 grouping_name: $grouping,
@@ -49,3 +50,4 @@ class ChannelListerController extends Controller
         return response()->json(['data' => $data]);
     }
 }
+// ]);

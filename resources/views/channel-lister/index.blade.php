@@ -29,7 +29,7 @@
 
                 </div>
             </div>
-            <div class="form-group row" id="buttons_div"
+            <div class="form-control row" id="buttons_div"
                 style="display: flex; align-items: center; justify-content: center;">
                 <div class="col-sm-3">
                     <input class="btn btn-primary" id='submit_button' value="Submit" type="submit">

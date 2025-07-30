@@ -1,6 +1,6 @@
-<div class="form-group {{ $required }}">
-    <div class="form-horizontal">
-        <label class="control-label">{{ $label_text }}</label>
+<div class="form-control {{ $required }}">
+    <div class=""> {{-- was form-horizontal--}}
+        <label class="col-form-label">{{ $label_text }}</label>
     </div>
     <div class="col-sm-4">
         <input type="text" class="form-control" id="{{ $element_name }}-searchbox" placeholder="Search...">
@@ -9,7 +9,7 @@
         <div class="row">
             <input type="text" name="{{ $element_name }}" class="{{ $classStrDefault }}" id="{{ $id }}"
                 placeholder="{{ $placeholder }}" {{ $required }}>
-            <p class="help-block">{!! $maps_to_text !!}</p>
+            <p class="form-text">{!! $maps_to_text !!}</p>
         </div>
     </div>
     <script>
@@ -129,4 +129,4 @@
     <div id="{{ $element_name }}-matches" class="cat_results_wrapper">
     </div>
 </div>
-<p class="help-block">{!! $tooltip !!}</p>
+<p class="form-text">{!! $tooltip !!}</p>

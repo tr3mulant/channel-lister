@@ -521,7 +521,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'ordering' => 35,
                 'field_name' => 'google_product_category',
                 'display_name' => 'Google Category',
-                'tooltip' => '<p class="help-block">
+                'tooltip' => '<p class="form-text">
         Search <a href="https://www.google.com/basepages/producttype/taxonomy-with-ids.en-US.txt" target="_blank">Google Categories</a>. <a href="https://support.google.com/merchants/answer/1705911?hl=en" target="_blank">Google Taxonomy Documentation</a>.<br>Use either the number OR the text, not both.
 </p>',
                 'example' => 'Sporting Goods > Outdoor Recreation > Camping & Hiking > Mosquito Nets & Insect Screens',

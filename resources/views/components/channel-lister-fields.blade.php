@@ -1,12 +1,12 @@
 @if ($marketplace !== 'common')
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">
                 <a data-toggle="collapse" href="#collapse{{ $marketplace }}{{ 0 }}">Action</a>
             </h4>
         </div>
         <div id="collapse{{ $marketplace }}{{ 0 }}" class="panel-collapse collapse in">
-            <div class="panel-body">
+            <div class="card-body">
                 <select class="marketplace_actions {{ $classStrDefault }}" id="action_select_{{ $marketplace }}">
                     <option value="">List</option>
                     <option value="DO NOT LIST - {{ $marketplace_name }}">Mark as Do Not List</option>
@@ -17,7 +17,7 @@
     </div>
 @endif
 @foreach ($fields as $grouping_name => $fields)
-    <div class="panel-group">
+    <div class="">
         <x-channel-lister::panel :fields="$fields" :grouping_name="$grouping_name" :panel_num="$loop->index + 1" />
     </div>
 @endforeach

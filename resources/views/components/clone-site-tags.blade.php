@@ -1,8 +1,8 @@
-<div class="form-group {{ $required }}">
-    <label class="control-label" for="{{ $id }}">{{ $label_text }}</label>
+<div class="form-control {{ $required }}">
+    <label class="col-form-label" for="{{ $id }}">{{ $label_text }}</label>
     <input name="{{ $element_name }}" id="{{ $id }}" class="{{ $classStrDefault }}" type="text"
-        {{ $required }} <p class="help-block">{!! $tooltip !!}</p>
-    <p class="help-block">{!! $maps_to_text !!}</p>
+        {{ $required }} <p class="form-text">{!! $tooltip !!}</p>
+    <p class="form-text">{!! $maps_to_text !!}</p>
     <div class="container">
         @php $count = 0; @endphp
         @foreach ($tags as $tag_name => $sub_tags)

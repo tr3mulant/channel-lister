@@ -1,12 +1,12 @@
-<div class="form-group {{ $required }}">
+<div class="form-control {{ $required }}">
     <div class="form-horizontal">
-        <label class="control-label">{{ $label_text }}</label>
+        <label class="col-form-label">{{ $label_text }}</label>
     </div>
     <div class="col-sm-4">
         <input type="text" name="{{ $element_name }}" {{ $required }} pattern="^[0-9]{12,13}$" maxlength="13"
             class="form-control upc_field" id="{{ $platform }}_upc">
-        <p class="help-block">{!! $tooltip !!}</p>
-        <p class="help-block">{!! $maps_to_text !!}</p>
+        <p class="form-text">{!! $tooltip !!}</p>
+        <p class="form-text">{!! $maps_to_text !!}</p>
     </div>
 
     <div class="col-sm-8">

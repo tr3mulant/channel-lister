@@ -868,7 +868,7 @@ function replaceFields(html, fieldsToRemove, id, targetId, removedFields) {
       obj.value = ele.val();
       removedVals.push(obj);
       console.log("found the element to remove", ele);
-      removedFields[v] = ele.closest("div[class^='form-group'");
+      removedFields[v] = ele.closest("div[class^='form-control'");
       removedFields[v].remove();
     });
   } else {
@@ -903,7 +903,7 @@ function replaceFields(html, fieldsToRemove, id, targetId, removedFields) {
         fieldsToRemove.indexOf(k) === undefined
       ) {
         console.log("removing if already on dom");
-        $(`[name=${k}]`).closest("div[class^='form-group'").remove();
+        $(`[name=${k}]`).closest("div[class^='form-control'").remove();
         console.log("adding back to the dom", k);
         $(`#${id}`).append(removedFields[k]);
         delete removedFields.k;
@@ -1365,7 +1365,7 @@ $(document).ready(function () {
   $("#upload-btn,#reorder-upload-btn").on("click", function (e) {
     uploadBtnId = e.target.id;
     let fileId = $(this)
-      .closest("div.form-group")
+      .closest("div.form-control")
       .find("input[type='file']")[0].id;
     let url =
       uploadBtnId === "upload-btn"
@@ -1640,12 +1640,12 @@ $(document).ready(function () {
         .closest("div.comma-sep-options")
         .find('input[type="checkbox"]:checked').length;
       var limit = $(this)
-        .closest("div.form-group")
+        .closest("div.form-control")
         .find('input[type="text"]')
         .data("limit");
       if (checked_count <= limit) {
         var input = $(this)
-          .closest("div.form-group")
+          .closest("div.form-control")
           .find('input[type="text"]');
         var values = $(this)
           .closest("div.comma-sep-options")

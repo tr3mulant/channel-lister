@@ -1,5 +1,5 @@
-<div class="form-group">
-    <label class="control-label" for="tbSearch">{{ $label_text }}</label>
+<div class="form-control">
+    <label class="col-form-label" for="tbSearch">{{ $label_text }}</label>
     <div id="dows_category_holder">
         <input id="tbSearch" value="" class="form-control" type="text" placeholder="Search...">
         <script>
@@ -27,6 +27,6 @@
             $("#tbSearch").keyup();
         </script>
         <div id="matchesSelect"></div>
-        <p class="help-block">{!! $maps_to_text !!}</p>
+        <p class="form-text">{!! $maps_to_text !!}</p>
     </div>
 </div>
