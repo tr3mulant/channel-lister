@@ -135,6 +135,26 @@ class ChannelListerField extends Model
         return $this->type === Type::CHANNEL_ADVISOR;
     }
 
+    /**
+     * Return the input type auxiliary options.
+     *
+     * @return null|string|array<int,string>
+     */
+    public function getInputTypeAuxOptions(): null|string|array
+    {
+        $input_type_aux = $this->input_type_aux;
+
+        if (! $input_type_aux) {
+            return $input_type_aux;
+        }
+
+        if (str_contains($input_type_aux, '||')) {
+            return explode('||', $input_type_aux);
+        }
+
+        return $input_type_aux;
+    }
+
     // public function render(): Htmlable
     // {
     //     if (! isset($params['type'])) {
@@ -171,18 +191,18 @@ class ChannelListerField extends Model
     protected function inputTypeAux(): Attribute
     {
         return Attribute::make(
-            get: function (?string $value): null|string|array {
-                if ($value === null || $value === '' || $value === '0') {
-                    return null;
-                }
+            // get: function (?string $value): null|string|array {
+            //     if ($value === null || $value === '' || $value === '0') {
+            //         return null;
+            //     }
 
-                if (str_contains($value, '||')) {
-                    return explode('||', $value);
-                }
+            //     if (str_contains($value, '||')) {
+            //         return explode('||', $value);
+            //     }
 
-                return $value;
-            },
-            set: fn (string|array $value): string => is_array($value) ? implode('||', $value) : $value
+            //     return $value;
+            // },
+            set: fn (null|string|array $value): ?string => is_array($value) ? implode('||', $value) : $value
         );
     }
 

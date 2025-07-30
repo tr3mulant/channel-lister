@@ -24,7 +24,7 @@ class ChannelListerController extends Controller
             'platform' => 'required|string|exists:channel_lister_fields,marketplace',
         ]);
 
-        /** @var Collection<string, ChannelListerField> $fields */
+        /** @var Collection<string, Collection<int, ChannelListerField>> $fields */
         $fields = ChannelListerField::query()
             ->where('marketplace', $platform)
             ->orderBy('ordering')
@@ -47,14 +47,5 @@ class ChannelListerController extends Controller
         }
 
         return response()->json(['data' => $data]);
-        // return response()->json([
-        //     'data' => Blade::renderComponent(new Panel(
-        //         fields: $fields,
-        //         grouping_name: 'default',
-        //         panel_num: 1,
-        //         wide: false,
-        //         start_collapsed: true
-        //     )),
-        // ]);
     }
 }

@@ -2,12 +2,16 @@
 
 namespace IGE\ChannelLister\Http\Controllers;
 
+use IGE\ChannelLister\Enums\InputType;
+use IGE\ChannelLister\Enums\Type;
 use IGE\ChannelLister\Models\ChannelListerField;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class ChannelListerFieldController extends Controller
 {
@@ -17,7 +21,7 @@ class ChannelListerFieldController extends Controller
     public function index(): View
     {
         return view('channel-lister::channel-lister-field.index', [
-            'fields' => ChannelListerField::all(),
+            'fields' => ChannelListerField::query()->paginate(15),
         ]);
     }
 
@@ -35,20 +39,20 @@ class ChannelListerFieldController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'ordering' => 'required|integer|min:1',
-            'field_name' => 'required|string|max:255',
-            'display_name' => 'nullable|string|max:255',
-            'tooltip' => 'nullable|string|max:1000',
-            'example' => 'nullable|string|max:255',
-            'marketplace' => 'required|string|max:100',
-            'input_type' => 'required|string|max:50',
-            'input_type_aux' => 'nullable|string|max:1000',
-            'required' => 'boolean',
-            'grouping' => 'required|string|max:100',
-            'type' => 'required|string|max:50',
+            'ordering' => ['required', 'integer', 'min:1'],
+            'field_name' => ['required', 'string', 'max:255', 'unique:IGE\ChannelLister\Models\ChannelListerField,field_name'],
+            'display_name' => ['nullable', 'string', 'max:255'],
+            'tooltip' => ['nullable', 'string', 'max:1000'],
+            'example' => ['nullable', 'string', 'max:255'],
+            'marketplace' => ['required', 'string', 'max:100'],
+            'input_type' => ['required', Rule::enum(InputType::class)],
+            'input_type_aux' => ['nullable', 'string', 'max:1000'],
+            'required' => ['required', 'boolean'],
+            'grouping' => ['required', 'string', 'max:100'],
+            'type' => ['required', Rule::enum(Type::class)],
         ]);
 
-        $field = DB::transaction(fn () => ChannelListerField::create($validated));
+        DB::transaction(fn () => ChannelListerField::query()->create($validated));
 
         return redirect()->route('channel-lister-field.index')
             ->with('success', 'Channel Lister Field created successfully.');
@@ -77,23 +81,30 @@ class ChannelListerFieldController extends Controller
     /**
      * Logic to update an existing channel lister field
      */
-    public function update(Request $request, string|int $id): RedirectResponse
+    public function update(Request $request, string|int $id): Response|RedirectResponse
     {
         $field = ChannelListerField::query()->findOrFail($id);
 
         $validated = $request->validate([
-            'ordering' => 'required|integer|min:1',
-            'field_name' => 'required|string|max:255',
-            'display_name' => 'nullable|string|max:255',
-            'tooltip' => 'nullable|string|max:1000',
-            'example' => 'nullable|string|max:255',
-            'marketplace' => 'required|string|max:100',
-            'input_type' => 'required|string|max:50',
-            'input_type_aux' => 'nullable|string|max:1000',
-            'required' => 'boolean',
-            'grouping' => 'required|string|max:100',
-            'type' => 'required|string|max:50',
+            'field_name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('channel_lister_fields', 'field_name')->ignore($field->id),
+            ],
+            'ordering' => ['required', 'integer', 'min:1'],
+            'display_name' => ['nullable', 'string', 'max:255'],
+            'tooltip' => ['nullable', 'string', 'max:1000'],
+            'example' => ['nullable', 'string', 'max:255'],
+            'marketplace' => ['required', 'string', 'max:100'],
+            'input_type' => ['required', Rule::enum(InputType::class)],
+            'input_type_aux' => ['nullable', 'string', 'max:1000'],
+            'required' => ['required', 'boolean'],
+            'grouping' => ['required', 'string', 'max:100'],
+            'type' => ['required', Rule::enum(Type::class)],
         ]);
+
+        $field = ChannelListerField::query()->findOrFail($id);
 
         DB::transaction(fn () => $field->update($validated));
 

@@ -22,6 +22,11 @@ class TextFormInput extends Component
         return view('channel-lister::components.text-form-input', data: $this->getOptions());
     }
 
+    /**
+     * Return an array of options to be used in the view.
+     *
+     * @return array<string, null|string>
+     */
     protected function getOptions(): array
     {
         $element_name = $this->params->field_name;

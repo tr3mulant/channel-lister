@@ -70,7 +70,7 @@
                                         <select class="form-control @error('input_type') is-invalid @enderror"
                                             id="input_type" name="input_type" required>
                                             <option value="">Select Input Type</option>
-                                            @foreach (\IronGate\ChannelLister\Enums\InputType::cases() as $inputType)
+                                            @foreach (\IGE\ChannelLister\Enums\InputType::cases() as $inputType)
                                                 <option value="{{ $inputType->value }}"
                                                     {{ old('input_type', $field->input_type->value) == $inputType->value ? 'selected' : '' }}>
                                                     {{ ucfirst($inputType->value) }}
@@ -88,7 +88,7 @@
                                         <select class="form-control @error('type') is-invalid @enderror" id="type"
                                             name="type" required>
                                             <option value="">Select Type</option>
-                                            @foreach (\IronGate\ChannelLister\Enums\Type::cases() as $type)
+                                            @foreach (\IGE\ChannelLister\Enums\Type::cases() as $type)
                                                 <option value="{{ $type->value }}"
                                                     {{ old('type', $field->type->value) == $type->value ? 'selected' : '' }}>
                                                     {{ ucfirst($type->value) }}

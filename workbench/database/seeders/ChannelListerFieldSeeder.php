@@ -12,7 +12,14 @@ class ChannelListerFieldSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('channel_lister_fields')->insert([
+        DB::table('channel_lister_fields')->insert($this->data());
+    }
+
+    protected function data(): array
+    {
+        $now = now()->format('Y-m-d H:i:s');
+
+        return [
             [
                 'id' => 1,
                 'ordering' => 1,
@@ -26,6 +33,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Titles and Media',
                 'type' => 'channeladvisor',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 2,
@@ -40,6 +49,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Titles and Media',
                 'type' => 'channeladvisor',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 3,
@@ -54,6 +65,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Titles and Media',
                 'type' => 'channeladvisor',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 4,
@@ -68,6 +81,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 5,
@@ -82,6 +97,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 6,
@@ -96,6 +113,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 7,
@@ -110,6 +129,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 8,
@@ -124,6 +145,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 9,
@@ -138,6 +161,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 10,
@@ -152,6 +177,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 11,
@@ -166,6 +193,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 12,
@@ -180,6 +209,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 13,
@@ -194,6 +225,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 14,
@@ -208,6 +241,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 15,
@@ -222,6 +257,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 16,
@@ -236,6 +273,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 17,
@@ -250,6 +289,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 18,
@@ -264,6 +305,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 19,
@@ -278,6 +321,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 20,
@@ -292,6 +337,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 21,
@@ -306,6 +353,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 22,
@@ -320,6 +369,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 23,
@@ -334,6 +385,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 24,
@@ -348,6 +401,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 25,
@@ -362,6 +417,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 26,
@@ -376,6 +433,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 27,
@@ -390,6 +449,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 28,
@@ -404,6 +465,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 29,
@@ -418,6 +481,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 30,
@@ -432,6 +497,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 31,
@@ -446,6 +513,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 32,
@@ -462,6 +531,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 33,
@@ -476,6 +547,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'channeladvisor',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 34,
@@ -490,6 +563,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'channeladvisor',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 35,
@@ -504,6 +579,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 36,
@@ -518,6 +595,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'channeladvisor',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 37,
@@ -532,6 +611,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'channeladvisor',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 38,
@@ -546,6 +627,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'channeladvisor',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 39,
@@ -560,6 +643,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'channeladvisor',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 40,
@@ -574,6 +659,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'channeladvisor',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 41,
@@ -588,6 +675,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'channeladvisor',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 42,
@@ -602,6 +691,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'channeladvisor',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 43,
@@ -616,6 +707,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 44,
@@ -630,6 +723,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'channeladvisor',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 45,
@@ -644,6 +739,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 46,
@@ -658,6 +755,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 47,
@@ -672,6 +771,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 48,
@@ -686,6 +787,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 49,
@@ -700,6 +803,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 50,
@@ -714,6 +819,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 51,
@@ -728,6 +835,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 52,
@@ -742,6 +851,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 53,
@@ -756,6 +867,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 54,
@@ -770,6 +883,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 55,
@@ -784,6 +899,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'channeladvisor',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 56,
@@ -798,6 +915,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'channeladvisor',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 57,
@@ -812,6 +931,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'channeladvisor',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 58,
@@ -826,6 +947,8 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'channeladvisor',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 59,
@@ -840,14 +963,16 @@ class ChannelListerFieldSeeder extends Seeder
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'channeladvisor',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 60,
                 'ordering' => 63,
                 'field_name' => 'ship_weight',
                 'display_name' => 'Ship Weight (lbs)',
-                'tooltip' => 'The weight of the product when packaged to ship. This is displayed on 
-the product page and used to calculate shipping costs for weight-based 
+                'tooltip' => 'The weight of the product when packaged to ship. This is displayed on
+the product page and used to calculate shipping costs for weight-based
 shipping, if available.',
                 'example' => '3.75',
                 'marketplace' => 'common',
@@ -856,6 +981,8 @@ shipping, if available.',
                 'required' => 1,
                 'grouping' => 'Shipping',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 61,
@@ -870,6 +997,8 @@ shipping, if available.',
                 'required' => 1,
                 'grouping' => 'Shipping',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 62,
@@ -884,6 +1013,8 @@ shipping, if available.',
                 'required' => 1,
                 'grouping' => 'Shipping',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 63,
@@ -898,6 +1029,8 @@ shipping, if available.',
                 'required' => 1,
                 'grouping' => 'Shipping',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 64,
@@ -912,6 +1045,8 @@ shipping, if available.',
                 'required' => 1,
                 'grouping' => 'Shipping',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 65,
@@ -926,6 +1061,8 @@ shipping, if available.',
                 'required' => 1,
                 'grouping' => 'Shipping',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 66,
@@ -940,6 +1077,8 @@ shipping, if available.',
                 'required' => 1,
                 'grouping' => 'Shipping',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 67,
@@ -954,6 +1093,8 @@ shipping, if available.',
                 'required' => 1,
                 'grouping' => 'Shipping',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 68,
@@ -968,6 +1109,8 @@ shipping, if available.',
                 'required' => 1,
                 'grouping' => 'Shipping',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 69,
@@ -982,6 +1125,8 @@ shipping, if available.',
                 'required' => 0,
                 'grouping' => 'Shipping',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 70,
@@ -996,6 +1141,8 @@ shipping, if available.',
                 'required' => 1,
                 'grouping' => 'Shipping',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 71,
@@ -1010,6 +1157,8 @@ shipping, if available.',
                 'required' => 1,
                 'grouping' => 'Listing Description',
                 'type' => 'channeladvisor',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 72,
@@ -1017,7 +1166,7 @@ shipping, if available.',
                 'field_name' => 'Description',
                 'display_name' => 'Full Description',
                 'tooltip' => 'No need to use <code>&lt;p&gt;</code> or <code>&lt;br&gt;</code> tags in the Description',
-                'example' => 'This mosquito net is great for any group outing, or if you just want to make sure you have bug defense at the ready. Keep one with your garden tools, in your tackle box, with picnicking supplies, and in your hiking backpack! Its strong netting ensures defense against annoying mosquitoes. 
+                'example' => 'This mosquito net is great for any group outing, or if you just want to make sure you have bug defense at the ready. Keep one with your garden tools, in your tackle box, with picnicking supplies, and in your hiking backpack! Its strong netting ensures defense against annoying mosquitoes.
 
 Camo fabric and an elastic neck closure make this set great for all occasions. The lightweight construction and camouflage fabric make this a versatile head net ideal for keeping those pesky bugs away from your face.',
                 'marketplace' => 'common',
@@ -1026,6 +1175,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Listing Description',
                 'type' => 'channeladvisor',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 73,
@@ -1040,6 +1191,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Listing Description',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 74,
@@ -1054,6 +1207,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Listing Description',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 75,
@@ -1068,6 +1223,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Listing Description',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 76,
@@ -1082,6 +1239,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Listing Description',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 77,
@@ -1096,6 +1255,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Listing Description',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 78,
@@ -1110,6 +1271,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 79,
@@ -1124,6 +1287,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 80,
@@ -1138,6 +1303,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 81,
@@ -1152,6 +1319,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 82,
@@ -1166,6 +1335,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 83,
@@ -1180,6 +1351,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 84,
@@ -1194,6 +1367,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 85,
@@ -1208,6 +1383,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 86,
@@ -1222,6 +1399,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 87,
@@ -1236,6 +1415,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 88,
@@ -1250,6 +1431,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 89,
@@ -1264,6 +1447,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 90,
@@ -1278,6 +1463,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 91,
@@ -1292,6 +1479,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 92,
@@ -1306,6 +1495,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 93,
@@ -1320,6 +1511,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 94,
@@ -1334,6 +1527,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 95,
@@ -1348,6 +1543,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 96,
@@ -1362,6 +1559,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 97,
@@ -1376,6 +1575,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 98,
@@ -1390,6 +1591,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 99,
@@ -1404,6 +1607,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 100,
@@ -1418,6 +1623,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 101,
@@ -1432,6 +1639,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 102,
@@ -1446,6 +1655,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 103,
@@ -1460,6 +1671,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 104,
@@ -1474,6 +1687,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 105,
@@ -1488,6 +1703,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 106,
@@ -1502,6 +1719,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 107,
@@ -1516,6 +1735,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 108,
@@ -1530,6 +1751,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 109,
@@ -1544,6 +1767,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 110,
@@ -1558,6 +1783,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Compliance',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 111,
@@ -1572,6 +1799,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 112,
@@ -1586,6 +1815,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 113,
@@ -1600,6 +1831,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 114,
@@ -1614,6 +1847,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 115,
@@ -1628,6 +1863,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Shipping',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 116,
@@ -1642,6 +1879,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Category',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 117,
@@ -1656,6 +1895,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Category',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 118,
@@ -1670,6 +1911,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Category',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 119,
@@ -1684,6 +1927,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Category',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 120,
@@ -1698,6 +1943,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Category',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 121,
@@ -1712,6 +1959,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Category',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 122,
@@ -1726,6 +1975,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Category',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 123,
@@ -1740,6 +1991,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Category',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 124,
@@ -1754,6 +2007,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 125,
@@ -1768,6 +2023,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 126,
@@ -1782,6 +2039,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 127,
@@ -1796,6 +2055,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 128,
@@ -1810,6 +2071,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 129,
@@ -1824,6 +2087,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 130,
@@ -1838,6 +2103,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 131,
@@ -1852,6 +2119,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 132,
@@ -1866,6 +2135,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 133,
@@ -1880,6 +2151,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 134,
@@ -1894,6 +2167,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 135,
@@ -1908,6 +2183,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 136,
@@ -1922,6 +2199,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 137,
@@ -1936,6 +2215,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 138,
@@ -1950,6 +2231,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 139,
@@ -1964,6 +2247,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 140,
@@ -1978,6 +2263,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Listing Description',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 143,
@@ -1992,6 +2279,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 144,
@@ -2006,6 +2295,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Listing Description',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 145,
@@ -2020,6 +2311,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 146,
@@ -2034,6 +2327,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 147,
@@ -2048,6 +2343,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 149,
@@ -2062,6 +2359,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 150,
@@ -2076,6 +2375,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 151,
@@ -2090,6 +2391,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 152,
@@ -2104,6 +2407,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 153,
@@ -2118,6 +2423,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 154,
@@ -2132,6 +2439,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 155,
@@ -2146,6 +2455,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 156,
@@ -2160,6 +2471,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 158,
@@ -2174,6 +2487,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Category',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 159,
@@ -2188,6 +2503,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 161,
@@ -2202,6 +2519,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 162,
@@ -2216,6 +2535,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 163,
@@ -2230,6 +2551,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 164,
@@ -2244,6 +2567,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 165,
@@ -2258,6 +2583,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 166,
@@ -2272,6 +2599,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 167,
@@ -2286,6 +2615,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 169,
@@ -2300,6 +2631,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 170,
@@ -2314,6 +2647,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 171,
@@ -2328,6 +2663,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 173,
@@ -2342,6 +2679,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Listing Description',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 174,
@@ -2356,6 +2695,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Listing Description',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 175,
@@ -2370,6 +2711,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 176,
@@ -2384,6 +2727,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 177,
@@ -2398,6 +2743,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 178,
@@ -2412,6 +2759,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 179,
@@ -2426,6 +2775,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 180,
@@ -2440,6 +2791,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 181,
@@ -2454,6 +2807,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 182,
@@ -2468,6 +2823,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 183,
@@ -2482,6 +2839,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Shipping',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 184,
@@ -2496,6 +2855,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Listing Description',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 185,
@@ -2510,6 +2871,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Listing Description',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 186,
@@ -2524,6 +2887,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Titles and Media',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 187,
@@ -2538,6 +2903,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Category',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 188,
@@ -2552,6 +2919,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 189,
@@ -2566,6 +2935,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 190,
@@ -2580,6 +2951,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 191,
@@ -2594,6 +2967,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Category',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 192,
@@ -2608,6 +2983,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Category',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 193,
@@ -2622,6 +2999,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 194,
@@ -2636,6 +3015,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Details and Stats',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 195,
@@ -2650,6 +3031,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Category',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 196,
@@ -2664,6 +3047,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 1,
                 'grouping' => 'Other Fields',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 204,
@@ -2678,6 +3063,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Listing Description',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 205,
@@ -2692,6 +3079,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Listing Description',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 206,
@@ -2706,6 +3095,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Listing Description',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 207,
@@ -2720,6 +3111,8 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Listing Description',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'id' => 208,
@@ -2734,35 +3127,9 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'required' => 0,
                 'grouping' => 'Listing Description',
                 'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
-            // [
-            //     'id' => 209,
-            //     'ordering' => 5,
-            //     'field_name' => 'TEST_field',
-            //     'display_name' => 'Test',
-            //     'tooltip' => 'TEst',
-            //     'example' => NULL,
-            //     'marketplace' => 'common',
-            //     'input_type' => 'text',
-            //     'input_type_aux' => NULL,
-            //     'required' => 1,
-            //     'grouping' => 'Titles and Media',
-            //     'type' => 'custom'
-            // ],
-            // [
-            //     'id' => 211,
-            //     'ordering' => 3,
-            //     'field_name' => 'test_before_inventory_numer',
-            //     'display_name' => 'Test Before Inventory Number',
-            //     'tooltip' => 'TEst',
-            //     'example' => '1073110421',
-            //     'marketplace' => 'common',
-            //     'input_type' => 'text',
-            //     'input_type_aux' => NULL,
-            //     'required' => 1,
-            //     'grouping' => 'Titles and Media',
-            //     'type' => 'custom'
-            // ]
-        ]);
+        ];
     }
 }

@@ -61,7 +61,7 @@
                                         <select class="form-control @error('input_type') is-invalid @enderror"
                                             id="input_type" name="input_type" required>
                                             <option value="">Select Input Type</option>
-                                            @foreach (\IronGate\ChannelLister\Enums\InputType::cases() as $inputType)
+                                            @foreach (\IGE\ChannelLister\Enums\InputType::cases() as $inputType)
                                                 <option value="{{ $inputType->value }}"
                                                     {{ old('input_type') == $inputType->value ? 'selected' : '' }}>
                                                     {{ ucfirst($inputType->value) }}
@@ -79,7 +79,7 @@
                                         <select class="form-control @error('type') is-invalid @enderror" id="type"
                                             name="type" required>
                                             <option value="">Select Type</option>
-                                            @foreach (\IronGate\ChannelLister\Enums\Type::cases() as $type)
+                                            @foreach (\IGE\ChannelLister\Enums\Type::cases() as $type)
                                                 <option value="{{ $type->value }}"
                                                     {{ old('type') == $type->value ? 'selected' : '' }}>
                                                     {{ ucfirst($type->value) }}
@@ -132,25 +132,14 @@
                                     </div>
 
                                     <div class="form-group mb-3">
-                                        <label for="field_group" class="form-label">Field Group</label>
-                                        <input type="text"
-                                            class="form-control @error('field_group') is-invalid @enderror"
-                                            id="field_group" name="field_group" value="{{ old('field_group') }}"
-                                            placeholder="Additional grouping">
-                                        @error('field_group')
+                                        <label for="tooltip" class="form-label">Tooltip</label>
+                                        <textarea class="form-control @error('tooltip') is-invalid @enderror" id="tooltip" name="tooltip"
+                                            placeholder="e.g., Enter the product title">{{ old('tooltip') }}</textarea>
+                                        @error('tooltip')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
-                                    </div>
-
-                                    <div class="form-group mb-3">
-                                        <label for="dependency" class="form-label">Dependency</label>
-                                        <input type="text"
-                                            class="form-control @error('dependency') is-invalid @enderror"
-                                            id="dependency" name="dependency" value="{{ old('dependency') }}"
-                                            placeholder="Field this depends on">
-                                        @error('dependency')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+                                        <small class="form-text text-muted">Provide additional information about the
+                                            field</small>
                                     </div>
                                 </div>
                             </div>

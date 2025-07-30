@@ -29,9 +29,11 @@ class SelectFormInput extends Component
      */
     protected function getOptions(): array
     {
-        // TODO may need to come back and make sure syntax is correct
         $element_name = $this->params->field_name;
-        $options = $this->explodeOndoubleBar($this->params->input_type_aux);
+        $options = $this->params->getInputTypeAuxOptions();
+        if (! is_array($options)) {
+            $options = [];
+        }
         $required = empty($this->params->required) ? '' : 'required';
         $label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
         $id = $this->params->field_name.'-id';
@@ -62,24 +64,6 @@ class SelectFormInput extends Component
             'select_type' => $select_type,
             'select_search' => $select_search,
         ];
-    }
-
-    /**
-     * Explode the input type auxiliary string on double bar (||).
-     *
-     * @return string[]
-     */
-    protected function explodeOndoubleBar(null|array|string $input_aux): array
-    {
-        if (is_null($input_aux)) {
-            return [];
-        }
-
-        if (is_array($input_aux)) {
-            return $input_aux;
-        }
-
-        return explode('||', $input_aux ?? '');
     }
 
     /**

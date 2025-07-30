@@ -21,8 +21,13 @@ class AlertMessage extends Component
 
     public function render()
     {
-        // TODO may need to come back and make sure syntax is correct
-        $alert_type = empty($this->params->input_type_aux) ? 'info' : $this->params->input_type_aux;
+        $alert_type = $this->params->getInputTypeAuxOptions();
+        if ($alert_type === '' || $alert_type === '0' || $alert_type === [] || $alert_type === null) {
+            $alert_type = 'info';
+        } elseif (is_array($alert_type)) {
+            $alert_type = $alert_type[0]; // Assuming the first element is the type
+        }
+        $alert_type = strtolower($alert_type);
         if (! in_array($alert_type, self::VALID_ALERT_TYPES)) {
             throw new \RuntimeException("Invalid alert type '$alert_type' in field 'input_type_aux' must be one of ".implode(', ', self::VALID_ALERT_TYPES));
         }

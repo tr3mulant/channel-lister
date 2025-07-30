@@ -1,3 +1,6 @@
+@push('footer-scripts')
+    <script src="{{ asset('vendor/channel-lister/js/channel-lister-field.js') }}"></script>
+@endpush
 <x-channel-lister::layout>
     <div class="container">
         <div class="row">
@@ -30,6 +33,7 @@
                                             <th>Required</th>
                                             <th>Grouping</th>
                                             <th>Type</th>
+                                            <th>Tool Tip</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -52,6 +56,7 @@
                                                 </td>
                                                 <td>{{ $field->grouping }}</td>
                                                 <td>{{ $field->type->value }}</td>
+                                                <td>{{ $field->tooltip }}</td>
                                                 <td>
                                                     <div class="btn-group" role="group">
                                                         <a href="{{ route('channel-lister-field.show', $field->id) }}"

@@ -19,8 +19,6 @@ class CloneSiteCategory extends Component
 
     public function render()
     {
-
-        // TODO make sure syntax is correct
         $element_name = $this->params->field_name;
         $required = empty($this->params->required) ? '' : 'required';
         $label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
@@ -28,40 +26,29 @@ class CloneSiteCategory extends Component
         $tooltip = $this->params->tooltip;
         $placeholder = $this->params->example;
         $maps_to_text = 'Maps To: <code>'.$this->params->field_name.'</code>';
-        $categories = $this->params->input_type_aux;
-        natcasesort($categories);
+        $categories = $this->params->getInputTypeAuxOptions();
+        if (! is_array($categories)) {
+            $categories = [];
+        }
         $category_str = '';
         foreach ($categories as $category) {
             $category_str .= '||'.$this->writeCategorySlug($category).'=='.htmlentities((string) $category);
         }
-        $params['input_type_aux'] = $category_str;
 
-        // TODO ask Scott how he wants the function in a function formatted in this context
-        // dive into this function and put html into a view component as well as assign variables like above
-        // return $this->buildSelectFormInput($params);
-
-        $this->params->setAttribute('element_name', $element_name)
-            ->setAttribute('required', $required)
-            ->setAttribute('label_text', $label_text)
-            ->setAttribute('id', $id)
-            ->setAttribute('tooltip', $tooltip)
-            ->setAttribute('placeholder', $placeholder)
-            ->setAttribute('maps_to_text', $maps_to_text)
-            ->setAttribute('categories', $categories)
-            ->setAttribute('category_str', $category_str);
+        $this->params->fill([
+            'element_name' => $element_name,
+            'input_type_aux' => $category_str,
+            'required' => $required,
+            'label_text' => $label_text,
+            'id' => $id,
+            'tooltip' => $tooltip,
+            'placeholder' => $placeholder,
+            'maps_to_text' => $maps_to_text,
+            'categories' => $categories,
+            'category_str' => $category_str,
+        ]);
 
         return view('channel-lister::components.clone-site-category');
-        // return view('channel-lister::components.clone-site-category', data: [
-        //     'element_name' => $element_name,
-        //     'required' => $required,
-        //     'label_text' => $label_text,
-        //     'id' => $id,
-        //     'tooltip' => $tooltip,
-        //     'placeholder' => $placeholder,
-        //     'maps_to_text' => $maps_to_text,
-        //     'categories' => $categories,
-        //     'category_str' => $category_str,
-        // ]);
     }
 
     /**

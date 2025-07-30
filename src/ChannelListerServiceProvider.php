@@ -23,15 +23,10 @@ class ChannelListerServiceProvider extends ServiceProvider
             return;
         }
 
+        $this->registerMiddleware();
         $this->registerRoutes();
         $this->registerResources();
         $this->registerBladeComponents();
-
-        /**
-         * @var array<string, string> $middleware
-         */
-        $middleware = config('channel-lister.middleware', []);
-        Route::middlewareGroup('channel-lister', $middleware);
     }
 
     /**
@@ -40,6 +35,15 @@ class ChannelListerServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/channel-lister.php', 'channel-lister');
+    }
+
+    protected function registerMiddleware(): void
+    {
+        /**
+         * @var array<string, string> $middleware
+         */
+        $middleware = config('channel-lister.middleware', []);
+        Route::middlewareGroup('channel-lister', $middleware);
     }
 
     protected function registerRoutes(): void

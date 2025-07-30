@@ -29,9 +29,13 @@ class CloneSiteTags extends Component
         $placeholder = $this->params->example;
         $maps_to_text = 'Maps To: <code>'.$this->params->field_name.'</code>';
         $marketplace = $this->params->marketplace;
-        $tags = json_decode($this->params->input_type_aux ?? '', true);
-        if (is_null($tags)) {
-            throw new \RuntimeException('Unable to decode json in input_type_aux field');
+        $tags = $this->params->input_type_aux;
+        if (empty($tags)) {
+            $tags = [];
+        } elseif (is_string($tags)) {
+            $tags = explode(',', $tags);
+        } elseif (! is_array($tags)) {
+            throw new \RuntimeException('Invalid tags format in input_type_aux field');
         }
 
         return view('channel-lister::components.clone-site-tags', data: [

@@ -80,12 +80,12 @@
                                         <td>{{ $field->grouping ?: 'None' }}</td>
                                     </tr>
                                     <tr>
-                                        <th>Field Group</th>
-                                        <td>{{ $field->field_group ?: 'None' }}</td>
+                                        <th>Tool Tip</th>
+                                        <td>{{ $field->tooltip ?: 'None' }}</td>
                                     </tr>
                                     <tr>
-                                        <th>Dependency</th>
-                                        <td>{{ $field->dependency ?: 'None' }}</td>
+                                        <th>Example</th>
+                                        <td>{{ $field->example ?: 'None' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Created</th>
