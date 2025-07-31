@@ -14,7 +14,7 @@ class ChannelListerFields extends Component
 
     public function render()
     {
-        /** @var Collection<string, Collection<int, ChannelListerField>> $fields */
+        /** @var \Illuminate\Support\Collection<string, \Illuminate\Support\Collection<int, ChannelListerField>> $fields */
         $fields = ChannelListerField::query()
             ->where('marketplace', $this->marketplace)
             ->orderBy('ordering')

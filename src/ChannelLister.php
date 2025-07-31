@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace IGE\ChannelLister;
 
-use IGE\ChannelLister\Models\Upc;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\HtmlString;
 
@@ -35,25 +36,25 @@ class ChannelLister
         }
 
         // check to see if upc is only digits
-        if (! preg_match('/^[0-9]*$/', $upc_start)) {
+        if (in_array(preg_match('/^\d*$/', $upc_start), [0, false], true)) {
             throw new \Exception("'$upc_start' must be only digits");
         }
 
         $upc = $upc_start;
         if (strlen($upc) < 1) {
             do {
-                $upc = rand(1, 8);
+                $upc = random_int(1, 8);
             } while ($upc == 2 || $upc == 3 || $upc == 4 || $upc == 5);
         }
 
         $upc = (string) $upc;
 
         while (strlen($upc) < 11) {
-            $upc .= (string) rand(0, 9);
+            $upc .= (string) random_int(0, 9);
         }
 
-        $checkdigit = 3 * ($upc[0] + $upc[2] + $upc[4] + $upc[6] + $upc[8] + $upc[10]);
-        $checkdigit += ($upc[1] + $upc[3] + $upc[5] + $upc[7] + $upc[9]);
+        $checkdigit = 3 * ((int) $upc[0] + (int) $upc[2] + (int) $upc[4] + (int) $upc[6] + (int) $upc[8] + (int) $upc[10]);
+        $checkdigit += ((int) $upc[1] + (int) $upc[3] + (int) $upc[5] + (int) $upc[7] + (int) $upc[9]);
         $checkdigit = $checkdigit % 10 == 0 ? '0' : (string) (10 - $checkdigit % 10);
 
         return $upc .= $checkdigit;
@@ -62,14 +63,19 @@ class ChannelLister
     /**
      * Get all of the purchased UPC prefixes.
      *
-     * @return string[]
+     * @return array<string>
      */
     public static function getPurchasedUpcPrefixes(): array
     {
-        return collect(config('channel-lister.upc_prefixes', []))
-            ->filter(fn ($prefix) => $prefix['purchased'] ?? false)
-            ->pluck('prefix')
-            ->toArray();
+        /** @var array<array{prefix: string, name: string, purchased?: bool}> $prefixes */
+        $prefixes = config('channel-lister.upc_prefixes', []);
+
+        $purchased = array_filter($prefixes, fn (array $prefix): bool => $prefix['purchased'] ?? false);
+
+        return array_map(
+            fn (array $prefix): string => $prefix['prefix'],
+            $purchased
+        );
     }
 
     /**
@@ -86,16 +92,20 @@ class ChannelLister
      * @param  string  $prefix  The UPC prefix to look up
      * @return string|null The owner name, or null if prefix not found or not purchased
      */
-    public static function getOwnerByPrefix(string $prefix): ?string
+    public static function getNameByPrefix(string $prefix): ?string
     {
-        $prefixConfig = collect(config('channel-lister.upc_prefixes', []))
-            ->firstWhere('prefix', $prefix);
+        /** @var array<array{prefix: string, name: string, purchased?: bool}> $prefixConfig */
+        $prefixConfig = config('channel-lister.upc_prefixes', []);
 
-        if (! $prefixConfig || ! ($prefixConfig['purchased'] ?? false)) {
+        $upcDefinitions = array_filter($prefixConfig, fn (array $upcDefinition): bool => $upcDefinition['prefix'] === $prefix);
+
+        if (empty($upcDefinitions)) {
             return null;
         }
 
-        return $prefixConfig['owner'] ?? 'Unknown Owner';
+        $upcDefinition = array_pop($upcDefinitions);
+
+        return $upcDefinition['name'];
     }
 
     /**
@@ -107,12 +117,12 @@ class ChannelLister
             return false;
         }
 
-        if (! preg_match('/^[0-9]{12}$/', $upc)) {
+        if (in_array(preg_match('/^\d{12}$/', $upc), [0, false], true)) {
             return false;
         }
 
-        $checkdigit = 3 * ($upc[0] + $upc[2] + $upc[4] + $upc[6] + $upc[8] + $upc[10]);
-        $checkdigit += ($upc[1] + $upc[3] + $upc[5] + $upc[7] + $upc[9]);
+        $checkdigit = 3 * ((int) $upc[0] + (int) $upc[2] + (int) $upc[4] + (int) $upc[6] + (int) $upc[8] + (int) $upc[10]);
+        $checkdigit += ((int) $upc[1] + (int) $upc[3] + (int) $upc[5] + (int) $upc[7] + (int) $upc[9]);
         $expectedCheckDigit = $checkdigit % 10 == 0 ? 0 : (10 - $checkdigit % 10);
 
         return (int) $upc[11] === $expectedCheckDigit;

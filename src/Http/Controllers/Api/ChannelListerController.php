@@ -41,7 +41,7 @@ class ChannelListerController extends Controller
                 'data' => ChannelLister::createUpc($prefix),
                 'prefix' => $prefix,
                 'is_purchased' => $isPurchased,
-                'owner' => $isPurchased ? ChannelLister::getOwnerByPrefix($prefix) : null,
+                'name' => $isPurchased ? ChannelLister::getNameByPrefix($prefix) : null,
             ]);
         } catch (\Exception $e) {
             return response()->json([

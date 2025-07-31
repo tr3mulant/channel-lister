@@ -38,7 +38,7 @@ class Panel extends Component
         if ($title !== null) {
             $this->title = $title;
         }
-        $this->title = $title !== null ? $title : $this->groupingName;
+        $this->title = $title ?? $this->groupingName;
         if ($content !== null) {
             $this->content = $content;
         }
