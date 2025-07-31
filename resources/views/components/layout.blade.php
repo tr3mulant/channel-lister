@@ -51,6 +51,38 @@
 
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100">
+        {{-- Navigation --}}
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                <img src="" width="30" height="30" class="d-inline-block align-top" alt="">
+                Channel Lister
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a @class(['nav-link', 'active' => request()->routeIs('channel-lister')]) class="nav-link" href="{{ route('channel-lister') }}">Channel
+                            Lister</a>
+                    </li>
+                    <li class="nav-item">
+                        <a @class([
+                            'nav-link',
+                            'active' => request()->routeIs('channel-lister-field.index'),
+                        ]) class="nav-link"
+                            href="{{ route('channel-lister-field.index') }}">Channel
+                            Lister Fields</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
         <!-- Page Content -->
         <main>

@@ -7,21 +7,26 @@ use Illuminate\View\Component;
 
 class ChannelListerFields extends Component
 {
-    public function __construct(public string $marketplace, public string $classStrDefault = 'form-group')
+    public function __construct(public string $marketplace, public string $classStrDefault = 'panel-group')
     {
         //
     }
 
     public function render()
     {
+        /** @var Collection<string, Collection<int, ChannelListerField>> $fields */
         $fields = ChannelListerField::query()
-            ->where('marketplace', value: $this->marketplace)
+            ->where('marketplace', $this->marketplace)
+            ->orderBy('ordering')
             ->get()
             ->groupBy('grouping');
 
-        $this->mapMarketplaceToName($this->marketplace);
+        $marketplace_name = $this->mapMarketplaceToName($this->marketplace);
 
-        return view('channel-lister::components.channel-lister-fields', ['fields' => $fields]);
+        return view('channel-lister::components.channel-lister-fields', [
+            'fields' => $fields,
+            'marketplace_name' => $marketplace_name,
+        ]);
     }
 
     /**

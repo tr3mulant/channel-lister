@@ -12,13 +12,11 @@ class Panel extends Component
 
     public string $content = 'panel content';
 
-    public string $class = 'panel';
+    public string $class = 'panel panel-default';
 
-    public string $id = '';
+    public int $idCount = 0;
 
-    public int $id_count = 0;
-
-    public int $last_id = 0;
+    public int $lastId = 0;
 
     /**
      * Construct a new Panel component.
@@ -28,18 +26,19 @@ class Panel extends Component
      *
      * @param  Collection<TKey, TModel>  $fields
      */
-    public function __construct(public Collection $fields, public string $grouping_name, ?string $title = null, ?string $content = null, ?string $class = null, public int $panel_num = 0, ?string $id = null, ?int $id_count = null, public bool $wide = false, public bool $start_collapsed = true, public bool $inverted = false)
+    public function __construct(public Collection $fields, public string $groupingName, ?string $title = null, ?string $content = null, ?string $class = null, public int $panelNum = 0, public ?string $panelId = null, ?int $idCount = null, public bool $wide = false, public bool $startCollapsed = true, public bool $inverted = false)
     {
-        $this->class .= ' panel_'.str_replace(' ', '_', strtolower($this->grouping_name));
+        $this->class .= ' panel_'.str_replace(' ', '_', strtolower($this->groupingName));
         if ($this->wide) {
             $this->class .= ' panel_wide';
         }
-        if ($this->start_collapsed) {
+        if ($this->startCollapsed) {
             $this->class .= ' panel_collapsed';
         }
         if ($title !== null) {
             $this->title = $title;
         }
+        $this->title = $title !== null ? $title : $this->groupingName;
         if ($content !== null) {
             $this->content = $content;
         }
@@ -49,10 +48,9 @@ class Panel extends Component
         if ($this->wide) {
             $this->class .= ' panel_wide';
         }
-        $this->id_count = $id_count ?? $this->last_id++;
-        if ($id !== null) {
-            $this->id = $id;
-        }
+        $this->idCount = $idCount ?? $this->lastId++;
+
+        $this->panelId = $panelId ?? 'panel_'.$this->idCount;
     }
 
     public function render()

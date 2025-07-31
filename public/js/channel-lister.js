@@ -28,7 +28,7 @@ function htmlEntities(str) {
  * @param  {bool} [allowRemoval=true] Allow the tab to removed after showing it (ie show the remove button)
  */
 function showPlatformTab(platform, allowRemoval) {
-  // console.log('show '+platform);
+  console.log("show " + platform);
   $("#li" + platform).css("display", "");
   if (typeof allowRemoval === "undefined" || allowRemoval === true) {
     $("#li" + platform)
@@ -49,13 +49,8 @@ function showPlatformTab(platform, allowRemoval) {
  * @param  {string} platform name of the platform tab
  */
 function gotoPlatformTab(platform) {
-  // console.log('goto '+platform);
+  console.log("goto " + platform);
   showPlatformTab(platform);
-  $(".tab-pane").removeClass("active show");
-  $(".nav > li").removeClass("active");
-  $(`#${platform}`).addClass("show active");
-  $(`#li${platform}`).addClass("active");
-  $(`#li${platform} > a`).addClass("active");
 }
 
 /**
@@ -63,7 +58,7 @@ function gotoPlatformTab(platform) {
  * @param  {string} platform name of the platform tab to close
  */
 function closePlatformTab(platform) {
-  // console.log('close '+platform);
+  console.log("close " + platform);
   $("#li" + platform).css("display", "none");
   var emptyPlatformList = $("#dropdown li > a")
     .toArray()
@@ -1184,7 +1179,7 @@ $(document).ready(function () {
         data: $(form)
           .serialize()
           //.replace(/(^|&)drafts-[a-zA-Z0-9\-\_]+=\d+(&|$)/, ""), //ditch the stupid drafts table named fields
-          .replace(/(^|&)drafts-[a-zA-Z0-9_-]+=\d+(&|$)/, ""), 
+          .replace(/(^|&)drafts-[a-zA-Z0-9_-]+=\d+(&|$)/, ""),
       })
         .success(function (response) {
           let r = JSON.parse(response);
@@ -1275,7 +1270,7 @@ $(document).ready(function () {
   //add each platform tab
   $.each(platforms, function (k, v) {
     $(v.id).prop("disabled", true);
-  var ddadd = $("#dropdownadd").append(
+    var ddadd = $("#dropdownadd").append(
       format(
         `<li>
             <a class="dropdown-item" data-list-id="{}" href="#">{}</a>
@@ -1284,10 +1279,10 @@ $(document).ready(function () {
         v.name
       )
     );
-$("#dropdown").before(
+    $("#dropdown").before(
       format(
         `<li id="li{}" class="nav-item" style="display: none;" role="presentation">
-            <a href="#{}" class="nav-link platform" data-toggle="tab" data-target="#{}" role="tab" aria-controls="{}" aria-expanded="false">
+            <a href="#{}" class="nav-link platform h-100" data-toggle="tab" data-target="#{}" role="tab" aria-controls="{}" aria-expanded="false">
                 <span>{}</span>
                 <i class="glyphicon glyphicon-ban-circle"></i>
                 <i class="glyphicon glyphicon-upload"></i>
