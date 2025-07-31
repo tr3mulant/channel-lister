@@ -99,7 +99,7 @@ class ChannelLister
 
         $upcDefinitions = array_filter($prefixConfig, fn (array $upcDefinition): bool => $upcDefinition['prefix'] === $prefix);
 
-        if (empty($upcDefinitions)) {
+        if ($upcDefinitions === []) {
             return null;
         }
 
