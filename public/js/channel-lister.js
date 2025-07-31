@@ -1284,9 +1284,7 @@ $(document).ready(function () {
         `<li id="li{}" class="nav-item" style="display: none;" role="presentation">
             <a href="#{}" class="nav-link platform h-100" data-toggle="tab" data-target="#{}" role="tab" aria-controls="{}" aria-expanded="false">
                 <span>{}</span>
-                <i class="glyphicon glyphicon-ban-circle"></i>
-                <i class="glyphicon glyphicon-upload"></i>
-                <i class="glyphicon glyphicon-remove"></i>
+                <i class="text-danger icon-x" data-toggle="tooltip" title="Remove marketplace"></i>
             </a>
         </li>`,
         v.id,
@@ -1305,7 +1303,7 @@ $(document).ready(function () {
       )
     );
     $("#li" + v.id)
-      .find("i.glyphicon-remove")
+      .find("i.icon-x")
       .click(function (e) {
         closePlatformTab(v.id);
         e.stopPropagation();

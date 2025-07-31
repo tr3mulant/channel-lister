@@ -232,6 +232,13 @@ div.fixed-bottom-right {
   line-height: 1;
 }
 
+.icon-x::before {
+  content: "×";
+  font-size: 1.5em;
+  font-weight: bold;
+  line-height: 1;
+}
+
 .dropdown-toggle.icon-plus::after {
   display: none;
 }
