@@ -1,44 +1,38 @@
-<div class="form-group {{ $required }}">
-    <div class="">
-        <label class="col-form-label">{{ $label_text }}</label>
-    </div>
-    <div class="col-md-4">
-        <input type="text" name="{{ $element_name }}" {{ $required }} pattern="^[0-9]{12,13}$" maxlength="13"
-            class="form-group upc_field" id="{{ $platform }}_upc">
-        <p class="form-text">{!! $tooltip !!}</p>
-        <p class="form-text">{!! $maps_to_text !!}</p>
+<div @class(['form-group container', 'required' => $required]) @required($required)>
+    <div class="row">
+        <label class="col-form-label font-weight-bold" for="{{ $platform }}_upc">{{ $label_text }}</label>
     </div>
 
-    <div class="col-md-8">
-        <div class="row">
-            <div class="col-lg-3 .text-center"><input class="btn btn-primary fill_upc"
-                    data-platform="{{ $platform }}" type="button" value="Make UPC starting with:"></div>
-            <div class="col-lg-3"><input type="text" class="form-group" id="{{ $platform }}_upc_seed"
-                    placeholder="Nothing" pattern="^\d{0,11}$"></div>
-            <div class="col-lg-6">
-                <select id='{{ $platform }}_upc_start_selction' class="form-group manufacturer_code_select"
-                    data-platform="{{ $platform }}">
-                    <option value="" selected="">Manufacturer Code</option>
+    <div class="row">
+        <div class="col-sm-4">
+            <input type="text" name="{{ $element_name }}" @required($required) pattern="^[0-9]{12,13}$" maxlength="13"
+                class="form-control upc_field" id="{{ "{$platform}_upc" }}">
+            <p class="form-text">{!! $tooltip !!}</p>
+            <p class="form-text">{!! $maps_to_text !!}</p>
+        </div>
+        <div class="col-sm-8">
+            <div class="row">
+                <div class="col text-center">
+                    <input class="btn btn-primary fill_upc" data-platform="{{ $platform }}" type="button"
+                        value="Make UPC starting with:">
+                </div>
+                <div class="col">
+                    <input class="form-control" type="text" class="" id="{{ "{$platform}_upc_seed" }}"
+                        placeholder="Nothing" pattern="^\d{0,11}$">
+                </div>
+                <div class="col">
+                    <select class="form-control manufacturer_code_select" id="{{ "{$platform}_upc_start_selection" }}"
+                        data-platform="{{ $platform }}">
+                        <option value="" selected="">Manufacturer Code</option>
 
-                    {{-- added this instead of 3 hardcoded option instances --}}
-                    @foreach ($asr_upc_prefixes as $prefix)
-                        <option class="error" value="{{ $prefix }}">{{ 'Purchased UPC Prefix: ' . $prefix }}
-                        </option>
-                    @endforeach
-                    <option value="850549">Best Ride On Cars</option>
-                    <option value="616588">Heininger</option>
-                    <option value="783152">Flatline Ops</option>
-                    <option value="885189">Lucky Star</option>
-                    <option value="021563">McNett</option>
-                    <option value="060886">Neptune</option>
-                    <option value="670468">Productive Fitness</option>
-                    <option value="766359">Shomer</option>
-                    <option value="706569">Sona</option>
-                    <option value="032281">UPD</option>
-                    <option value="819673">Zak Tools</option>
-                </select>
+                        @foreach ($user_defined_upc_prefixes as $prefix)
+                            <option class="" value="{{ $prefix['prefix'] }}">
+                                {{ "Prefix: {$prefix['name']}" }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
         </div>
     </div>
-    <br class="clearfloat">
 </div>

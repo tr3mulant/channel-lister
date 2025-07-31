@@ -224,22 +224,18 @@ function seedUPC(platform, value) {
  */
 function fillUPC(platform) {
   //generate a new random upc and add it to the UPC form field
-  var seed_field = $("#" + platform + "_upc_seed");
-  var upc_field = $("#" + platform + "_upc");
+  var seed_field = $(`#${platform}_upc_seed`);
+  var upc_field = $(`#${platform}_upc`);
   var seed = seed_field.val();
-  /*if (seed.length < 5) {
-		alert('Our UPC operating procedure is now to utilize the first 5 real upc digits. Please double check you made a UPC using 5 starting digits.');
-	}*/
-  $.getJSON("api/Products/makeUpc", { upc_start: seed }).done(function (
-    response
-  ) {
-    if (response.status == "success") {
-      upc_field.val(response.data);
-      $("#" + platform + "_upc").trigger("change");
-    } else {
-      alert(response.message);
-    }
-  });
+
+  $.getJSON("api/channel-lister/build-upc", { prefix: seed })
+    .done((response) => {
+      upc_field.val(response.data).trigger("change");
+    })
+    .fail((response) => {
+      console.error(response);
+      alert(response.responseText);
+    });
 }
 
 function getAndSetProductTypeOptions(category) {
@@ -1153,10 +1149,9 @@ $(document).ready(function () {
       UPC: {
         required: true,
         remote: {
-          url: "api/Products/isValid",
+          url: "api/channel-lister/is-upc-valid",
           type: "GET",
           data: {
-            upc: $(".upc_field").val(),
             sku: $("[id='Inventory Number-id']").val(),
           },
         },
