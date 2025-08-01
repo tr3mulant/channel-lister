@@ -69,11 +69,18 @@
     "test:lint": "pint --test",
     "test:types": "phpstan analyse --ansi",
     "test:unit": "pest --colors=always --coverage --min=80",
+    "test:unit:coverage-html": "pest --colors=always --min=80 --coverage-html tests/coverage",
     "test": [
       "@test:refacto",
       "@test:lint",
       "@test:types",
       "@test:unit"
+    ],
+    "test:coverage-html": [
+      "@test:refacto",
+      "@test:lint",
+      "@test:types",
+      "@test:unit:coverage-html"
     ],
     "post-autoload-dump": [
       "@clear",
