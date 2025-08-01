@@ -127,4 +127,37 @@ class ChannelLister
 
         return (int) $upc[11] === $expectedCheckDigit;
     }
+
+    /**
+     * Maps lowercase marketplace names to form used in labels
+     *
+     * @param  string  $marketplace  lowercase name of marketplace
+     * @return string Marketplace formatted as used in label
+     */
+    public static function marketplaceDisplayName($marketplace): string
+    {
+        return match ($marketplace) {
+            'amazon', 'amazon-us', 'amazon_us' => 'Amazon US',
+            'amazon-ca', 'amazon_ca' => 'Amazon CA',
+            'amazon-au', 'amazon_au' => 'Amazon AU',
+            'amazon-mx', 'amazon_mx' => 'Amazon MX',
+            'ebay' => 'eBay',
+            'walmart', 'walmart-us', 'walmart_us' => 'Walmart US',
+            'walmart-ca', 'walmart_ca' => 'Walmart CA',
+            default => ucwords(strtolower($marketplace)),
+        };
+    }
+
+    /**
+     * Get the disabled marketplaces from the configuration.
+     *
+     * @return string[] Array of disabled marketplace names
+     */
+    public static function disabledMarketplaces(): array
+    {
+        /** @var string[]|string $disabledMarketplaces */
+        $disabledMarketplaces = config('channel-lister.marketplaces.disabled', []);
+
+        return is_array($disabledMarketplaces) ? $disabledMarketplaces : [$disabledMarketplaces];
+    }
 }

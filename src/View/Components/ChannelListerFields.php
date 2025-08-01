@@ -2,6 +2,7 @@
 
 namespace IGE\ChannelLister\View\Components;
 
+use IGE\ChannelLister\ChannelLister;
 use IGE\ChannelLister\Models\ChannelListerField;
 use Illuminate\View\Component;
 
@@ -36,16 +37,6 @@ class ChannelListerFields extends Component
      */
     protected function mapMarketplaceToName(string $marketplace): string
     {
-        return match ($marketplace) {
-            'amazon' => 'Amazon US',
-            'amazon-ca' => 'Amazon CA',
-            'amazon-au' => 'Amazon AU',
-            'amazon-mx' => 'Amazon MX',
-            'dealsonly' => 'DealsOnly',
-            'ebay' => 'eBay',
-            'resourceridge' => 'Resource Ridge',
-            'walmart-ca' => 'Walmart CA',
-            default => ucwords($marketplace),
-        };
+        return ChannelLister::marketplaceDisplayName($marketplace);
     }
 }
