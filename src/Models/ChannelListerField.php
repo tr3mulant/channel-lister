@@ -72,6 +72,47 @@ class ChannelListerField extends Model
     ];
 
     /**
+     * Get the table columns for the Channel Lister Field index view.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public static function getTableColumns(): array
+    {
+        return [
+            ['label' => 'Order', 'value' => 'ordering'],
+            ['label' => 'Field Name', 'value' => 'field_name'],
+            ['label' => 'Display Name', 'value' => 'display_name'],
+            [
+                'label' => 'Marketplace',
+                'value' => fn ($field): string => '<span class=\"badge badge-secondary\">'.$field->marketplace.'</span>',
+            ],
+            ['label' => 'Input Type', 'value' => fn ($field) => $field->input_type->value],
+            [
+                'label' => 'Required',
+                'value' => fn ($field): string => $field->required
+                    ? '<span class=\"badge badge-danger\">Required</span>'
+                    : '<span class=\"badge badge-secondary\">Optional</span>',
+            ],
+            ['label' => 'Grouping', 'value' => 'grouping'],
+            ['label' => 'Type', 'value' => fn ($field) => $field->type->value],
+            ['label' => 'Tool Tip', 'value' => 'tooltip'],
+            [
+                'label' => 'Actions',
+                'value' => fn ($field): string => '
+                                <div class=\"btn-group\" role=\"group\">
+                                    <a href=\"'.route('channel-lister-field.show', $field->id).'\" class=\"btn btn-sm btn-outline-info\">View</a>
+                                    <a href=\"'.route('channel-lister-field.edit', $field->id).'\" class=\"btn btn-sm btn-outline-primary\">Edit</a>
+                                    <form action=\"'.route('channel-lister-field.destroy', $field->id).'\" method=\"POST\" style=\"display: inline;\">
+                                        '.csrf_field().method_field('DELETE').'
+                                        <button type=\"submit\" class=\"btn btn-sm btn-outline-danger\" onclick=\"return confirm(\'Are you sure you want to delete this field?\')\">Delete</button>
+                                    </form>
+                                </div>
+                            ',
+            ],
+        ];
+    }
+
+    /**
      * Create a new factory instance for the model.
      */
     protected static function newFactory(): ChannelListerFieldFactory
