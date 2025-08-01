@@ -2,8 +2,8 @@
     <script src="{{ asset('vendor/channel-lister/js/channel-lister-field.js') }}"></script>
 @endpush
 <x-channel-lister::layout>
-    <div class="container">
-        <div class=row>
+    <div class="container my-4">
+        <div class="row">
             <div class="col-lg-12">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h1>Channel Lister Fields</h1>
@@ -17,80 +17,67 @@
                         {{ session('success') }}
                     </div>
                 @endif
-
-                <div class="card">
+                <!-- Search Form -->
+                <div class="card mb-3">
                     <div class="card-body">
-                        @if ($fields->count() > 0)
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Order</th>
-                                            <th>Field Name</th>
-                                            <th>Display Name</th>
-                                            <th>Marketplace</th>
-                                            <th>Input Type</th>
-                                            <th>Required</th>
-                                            <th>Grouping</th>
-                                            <th>Type</th>
-                                            <th>Tool Tip</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($fields as $field)
-                                            <tr>
-                                                <td>{{ $field->ordering }}</td>
-                                                <td>{{ $field->field_name }}</td>
-                                                <td>{{ $field->display_name }}</td>
-                                                <td>
-                                                    <span class="badge badge-secondary">{{ $field->marketplace }}</span>
-                                                </td>
-                                                <td>{{ $field->input_type->value }}</td>
-                                                <td>
-                                                    @if ($field->required)
-                                                        <span class="badge badge-danger">Required</span>
-                                                    @else
-                                                        <span class="badge badge-secondary">Optional</span>
-                                                    @endif
-                                                </td>
-                                                <td>{{ $field->grouping }}</td>
-                                                <td>{{ $field->type->value }}</td>
-                                                <td>{{ $field->tooltip }}</td>
-                                                <td>
-                                                    <div class="btn-group" role="group">
-                                                        <a href="{{ route('channel-lister-field.show', $field->id) }}"
-                                                            class="btn btn-sm btn-outline-info">View</a>
-                                                        <a href="{{ route('channel-lister-field.edit', $field->id) }}"
-                                                            class="btn btn-sm btn-outline-primary">Edit</a>
-                                                        <form
-                                                            action="{{ route('channel-lister-field.destroy', $field->id) }}"
-                                                            method="POST" style="display: inline;">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                                onclick="return confirm('Are you sure you want to delete this field?')">
-                                                                Delete
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                        <form id="search-form" data-search-url="{{ route('api.channel-lister-field.search') }}">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="search">Search</label>
+                                        <input type="text" class="form-control" id="search" name="search"
+                                            placeholder="Search fields...">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="marketplace">Marketplace</label>
+                                        <select class="form-control" id="marketplace" name="marketplace">
+                                            <option value="">All</option>
+                                            @foreach ($marketplaces as $item)
+                                                <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="required">Required</label>
+                                        <select class="form-control" id="required" name="required">
+                                            <option value="">All</option>
+                                            <option value="1">Required</option>
+                                            <option value="0">Optional</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="per_page">Per Page</label>
+                                        <select class="form-control" id="per_page" name="per_page">
+                                            <option value="15">15</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>&nbsp;</label>
+                                        <div>
+                                            <button type="submit" class="btn btn-primary">Search</button>
+                                            <button type="button" class="btn btn-secondary"
+                                                id="clear-search">Clear</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        @else
-                            <div class="text-center py-5">
-                                <h4>No Channel Lister Fields Found</h4>
-                                <p class="text-muted">Get started by creating your first field.</p>
-                                <a href="{{ route('channel-lister-field.create') }}" class="btn btn-primary">
-                                    Create New Field
-                                </a>
-                            </div>
-                        @endif
+                        </form>
                     </div>
                 </div>
+                <x-channel-lister::paginated-table :table-data="$fields" :columns="$columns"
+                    empty-message="No Channel Lister Fields Found" :create-route="route('channel-lister-field.create')"
+                    create-button-text="Create New Field" />
             </div>
         </div>
     </div>

@@ -1,9 +1,10 @@
 <?php
 
 use IGE\ChannelLister\Http\Controllers\Api\ChannelListerController;
+use IGE\ChannelLister\Http\Controllers\Api\ChannelListerFieldController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('channel-lister')->name('api.')->group(function () {
+Route::prefix('channel-lister')->name('api.channel-lister.')->group(function () {
     Route::get('build-modal-view', [ChannelListerController::class, 'buildModalView'])
         ->name('build-modal-view');
 
@@ -13,4 +14,9 @@ Route::prefix('channel-lister')->name('api.')->group(function () {
     Route::get('build-upc', [ChannelListerController::class, 'buildUpc'])->name('build-upc');
 
     Route::get('is-upc-valid', [ChannelListerController::class, 'isUpcValid'])->name('is-upc-valid');
+
+});
+
+Route::prefix('channel-lister-field')->name('api.channel-lister-field.')->group(function () {
+    Route::get('search', [ChannelListerFieldController::class, 'search'])->name('search');
 });

@@ -2,6 +2,7 @@
 
 namespace IGE\ChannelLister\Http\Controllers;
 
+use IGE\ChannelLister\ChannelLister;
 use IGE\ChannelLister\Enums\InputType;
 use IGE\ChannelLister\Enums\Type;
 use IGE\ChannelLister\Models\ChannelListerField;
@@ -20,8 +21,26 @@ class ChannelListerFieldController extends Controller
      */
     public function index(): View
     {
+        $disabledMarketplaces = ChannelLister::disabledMarketplaces();
+
+        /** @var \Illuminate\Support\Collection<int,string> $marketplaces */
+        $marketplaces = ChannelListerField::query()
+            ->select('marketplace')
+            ->groupBy('marketplace')
+            ->whereNotIn('marketplace', $disabledMarketplaces)
+            ->pluck('marketplace')
+            ->sort();
+
+        $marketplaces = $marketplaces->map(fn (string $marketplace): array => [
+            'id' => $marketplace,
+            'name' => ChannelLister::marketplaceDisplayName($marketplace),
+        ])
+            ->toArray();
+
         return view('channel-lister::channel-lister-field.index', [
             'fields' => ChannelListerField::query()->paginate(15),
+            'columns' => ChannelListerField::getTableColumns(),
+            'marketplaces' => $marketplaces,
         ]);
     }
 
