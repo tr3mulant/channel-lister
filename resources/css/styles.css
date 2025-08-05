@@ -232,6 +232,13 @@ div.fixed-bottom-right {
   line-height: 1;
 }
 
+.icon-minus::before {
+  content: "-";
+  font-size: 1.5em;
+  font-weight: bold;
+  line-height: 1;
+}
+
 .icon-x::before {
   content: "×";
   font-size: 1.5em;
@@ -241,4 +248,16 @@ div.fixed-bottom-right {
 
 .dropdown-toggle.icon-plus::after {
   display: none;
+}
+
+.bundle-component-row + .bundle-component-row {
+  margin-top: 0.5rem;
+}
+
+.error {
+  color: red;
+}
+
+.form-text code {
+  color: #89b1c9;
 }
