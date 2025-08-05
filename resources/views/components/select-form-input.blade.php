@@ -1,16 +1,14 @@
-<div class="form-group {{ $required }}">
+<div @class(['form-group', 'required' => $required])>
     <label class="col-form-label" for="{{ $id }}">{{ $label_text }}</label>
-    <select name="{{ $element_name }}" class="{{ $classStrDefault }} {{ $select_type }}" data-size="10"
-        data-live-search="{{ $select_search }}" id="{{ $id }}" placeholder="{{ $placeholder }}" {{ $required }}
-        title="Select...">
+    <select name="{{ $element_name }}" @if ($select_type === 'selectpicker') data-style="bg-white border" @endif
+        @class([
+            $classStrDefault,
+            $select_type,
+            'bg-white' => $select_type !== 'selectpicker',
+        ]) data-size="10" data-live-search="{{ $select_search }}" id="{{ $id }}"
+        title="Select..." @required($required)>
         @foreach ($display_names as $option => $display_name)
-            @php
-                $style = '';
-                if (strlen($display_name) > 256) {
-                    $style = 'white-space:normal;';
-                }
-            @endphp
-            <option style="{{ $style }}" value="{{ $option }}">{{ $display_name }}</option>
+            <option @style(['white-space:normal' => strlen($display_name) > 256]) value="{{ $option }}">{{ $display_name }}</option>
         @endforeach
     </select>
     <p class="form-text">{!! $tooltip !!}</p>

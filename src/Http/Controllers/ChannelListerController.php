@@ -31,6 +31,7 @@ class ChannelListerController extends Controller
             ->toArray();
 
         $platform_json = collect($marketplaces)
+            ->reject(fn (string $marketplace): bool => $marketplace === 'common')
             ->map(fn (string $marketplace): array => [
                 'id' => $marketplace,
                 'name' => ChannelLister::marketplaceDisplayName($marketplace),

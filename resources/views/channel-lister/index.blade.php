@@ -4,7 +4,6 @@
             .insertAdjacentHTML("afterbegin",
                 '<div id="loading"><img src="{{ asset('vendor/channel-lister/images/load_large.gif') }}"></div>');
         var platforms = {{ Illuminate\Support\Js::from($platform_json) }};
-        console.log(platforms);
     </script>
     <script src="{{ asset('vendor/channel-lister/js/channel-lister.js') }}"></script>
 @endpush
@@ -32,6 +31,7 @@
                     <div id="pantab" class="tab-content">
                         <div class="tab-pane fade show active platform-container" id="common" role="tabpanel"
                             aria-labelledby="licommon">
+                            <x-channel-lister::channel-lister-fields marketplace="common" />
                         </div>
                     </div>
                     <div class="d-flex justify-content-center align-items-center row" id="buttons_div">

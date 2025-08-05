@@ -5,11 +5,6 @@ namespace IGE\ChannelLister\View\Components;
 use IGE\ChannelLister\Models\ChannelListerField;
 use Illuminate\View\Component;
 
-/**
- * This is placeholder for v/ChannelLister.
- * I don't expect to keep this either as we should expect to extract the view components that exist
- * in v/ChannelLister into their own component classes and associated views.
- */
 class SelectFormInput extends Component
 {
     public function __construct(public ChannelListerField $params, public string $classStrDefault = 'form-group')
@@ -34,14 +29,14 @@ class SelectFormInput extends Component
         if (! is_array($options)) {
             $options = [];
         }
-        $required = empty($this->params->required) ? '' : 'required';
+        $required = $this->params->required;
         $label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
         $id = $this->params->field_name.'-id';
         $tooltip = $this->params->tooltip;
         $placeholder = $this->params->example;
         $maps_to_text = 'Maps To: <code>'.$this->params->field_name.'</code>';
         $display_names = [];
-        $select_type = 'select-picker'; // default select type
+        $select_type = 'selectpicker'; // default select type
         $select_search = count($options) > 10 ? 'true' : 'false';
         $display_names = $this->explodeOnEqualsEquals($options);
 
@@ -51,9 +46,7 @@ class SelectFormInput extends Component
             $select_type = 'editable-select';
         }
 
-        //
         return [
-            'params' => $this->params,
             'element_name' => $element_name,
             'options' => $options,
             'required' => $required,

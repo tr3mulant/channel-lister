@@ -4,6 +4,7 @@ namespace IGE\ChannelLister\Http\Controllers\Api;
 
 use IGE\ChannelLister\ChannelLister;
 use IGE\ChannelLister\View\Components\ChannelListerFields;
+use IGE\ChannelLister\View\Components\Custom\SkuBundleComponentInputRow;
 use IGE\ChannelLister\View\Components\Modal\Header;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -57,5 +58,10 @@ class ChannelListerController extends Controller
         ]);
 
         return response()->json(['UPC' => ChannelLister::isValidUpc($validated['UPC'])]);
+    }
+
+    public function addBundleComponentRow(): JsonResponse
+    {
+        return response()->json(['data' => Blade::renderComponent(new SkuBundleComponentInputRow)]);
     }
 }

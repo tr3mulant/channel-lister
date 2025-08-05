@@ -11,7 +11,7 @@
         }).success(function(response) {
             $html = response.data;
             $('#walmart_atts').html($html);
-            $('.select-picker').selectpicker();
+            $('.selectpicker').selectpicker();
         }).error(function(response) {
             console.error(response);
             alert(response.responseText);
