@@ -31,9 +31,9 @@ class AlertMessage extends Component
         if (! in_array($alert_type, self::VALID_ALERT_TYPES)) {
             throw new \RuntimeException("Invalid alert type '$alert_type' in field 'input_type_aux' must be one of ".implode(', ', self::VALID_ALERT_TYPES));
         }
-        $name = empty($this->params['display_name']) ? $this->params['field_name'] : $this->params['display_name'];
-        $message = $this->params['tooltip'];
-        $additional_text = $this->params['example'];
+        $name = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
+        $message = $this->params->tooltip;
+        $additional_text = $this->params->example;
 
         //
         return view('channel-lister::components.alert-message', data: [

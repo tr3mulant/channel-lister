@@ -12,7 +12,7 @@ use Illuminate\View\Component;
  */
 class ListedBy extends Component
 {
-    public function __construct(public ChannelListerField $params)
+    public function __construct(public ChannelListerField $params, public string $classStrDefault = 'form-control')
     {
         //
     }
@@ -24,9 +24,9 @@ class ListedBy extends Component
         if (! is_string($patternRegex)) {
             $patternRegex = '';
         }
-        $pattern = $patternRegex === '' || $patternRegex === '0' ? '' : "pattern='{$patternRegex}'";
+        $pattern = $patternRegex === '' || $patternRegex === '0' ? '' : 'pattern="'.$patternRegex.'"';
         $required = empty($this->params->required) ? '' : 'required';
-        $label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
+        $label_text = $this->params->display_name;
         $id = $this->params->field_name.'-id';
         $tooltip = $this->params->tooltip;
         $placeholder = $this->params->example;
@@ -43,6 +43,7 @@ class ListedBy extends Component
             'placeholder' => $placeholder,
             'maps_to_text' => $maps_to_text,
             'ml_user' => $ml_user,
+            'classStrDefault' => $this->classStrDefault,
         ]);
     }
 }

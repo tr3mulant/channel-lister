@@ -19,7 +19,7 @@ class Prop65 extends Component
 
     public function render()
     {
-        return view('channel-lister::components.custom.prop-65-html', data: [
+        return view('channel-lister::components.custom.prop-65', data: [
             'container_id' => $this->params->field_name.'-container-id',
             'prop65_warning' => $this->getProp65WarningType(),
             'prop65_chem_base' => $this->getChemBase(),
@@ -29,11 +29,11 @@ class Prop65 extends Component
     protected function getProp65WarningType(): \IGE\ChannelLister\Models\ChannelListerField
     {
         $options = $this->params->input_type_aux ? explode('&&', $this->params->input_type_aux) : [];
-        $this->params->input_type_aux = $options[0];
+        $this->params->input_type_aux = $options[0] ?? '';
 
         $values = [
             'field_name' => 'prop65_warn_type',
-            'input_type_aux' => $options[1],
+            'input_type_aux' => $options[1] ?? '',
             'required' => 1,
             'display_name' => 'Prop 65 Warning Type',
             'tooltip' => 'The supplier should indicate the warning type on the packaging',

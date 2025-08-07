@@ -26,7 +26,12 @@ class DecimalFormInput extends Component
         $id = $name.'-id';
         $tooltip = $this->params->tooltip;
         $placeholder = $this->params->example;
-        $step_size = is_numeric(trim($this->params->input_type_aux ?? '')) ? $this->params->input_type_aux : '0.001';
+
+        // replaced commented line with 2 lines below
+        // $step_size = is_numeric(trim($this->params->input_type_aux ?? '')) ? $this->params->input_type_aux : '0.001';
+        $step_size_raw = trim($this->params->input_type_aux ?? '');
+        $step_size = (is_numeric($step_size_raw) && $step_size_raw) != '0' ? $step_size_raw : '0.001';
+
         $maps_to_text = 'Maps To: <code>'.$this->params->field_name.'</code>';
 
         return view('channel-lister::components.decimal-form-input', data: [

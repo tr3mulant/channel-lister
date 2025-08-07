@@ -15,6 +15,7 @@ class ChannelListerFields extends Component
 
     public function render()
     {
+
         /** @var \Illuminate\Support\Collection<string, \Illuminate\Support\Collection<int, ChannelListerField>> $fields */
         $fields = ChannelListerField::query()
             ->where('marketplace', $this->marketplace)
@@ -26,7 +27,9 @@ class ChannelListerFields extends Component
 
         return view('channel-lister::components.channel-lister-fields', [
             'fields' => $fields,
+            'marketplace' => $this->marketplace,
             'marketplace_name' => $marketplace_name,
+            'classStrDefault' => $this->classStrDefault,
         ]);
     }
 

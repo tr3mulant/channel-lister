@@ -14,6 +14,9 @@ class FormInput extends Component
 
     public function render()
     {
-        return view('channel-lister::components.custom.form-input');
+        return view('channel-lister::components.custom.form-input', [
+            'params' => $this->params,
+            'classStrDefault' => $this->classStrDefault,
+        ]);
     }
 }

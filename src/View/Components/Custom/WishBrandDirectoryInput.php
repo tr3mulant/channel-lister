@@ -28,10 +28,24 @@ class WishBrandDirectoryInput extends Component
             ->pluck('brand_id', 'brand_name')
             ->toArray();
 
-        $params['input_type_aux'] = $brand_data;
+        $element_name = $this->params->field_name;
+        $required = $this->params->required ? 'required' : '';
+        $label_text = $this->params->display_name;
+        $id = $this->params->field_name.'-id';
+        $tooltip = $this->params->tooltip;
+        $placeholder = $this->params->example ?? '';
+        $maps_to_text = 'Maps To: <code>'.$this->params->field_name.'</code>';
 
         return view('channel-lister::components.custom.wish-brand-directory-input', data: [
-            'input_type_aux' => $params['input_type_aux'],
+            'params' => $this->params,
+            'element_name' => $element_name,
+            'required' => $required,
+            'label_text' => $label_text,
+            'id' => $id,
+            'tooltip' => $tooltip,
+            'placeholder' => $placeholder,
+            'maps_to_text' => $maps_to_text,
+            'input_type_aux' => $brand_data,
         ]);
     }
 }

@@ -45,9 +45,7 @@ class Panel extends Component
         if ($class !== null) {
             $this->class .= ' '.$class;
         }
-        if ($this->wide) {
-            $this->class .= ' panel_wide';
-        }
+
         $this->idCount = $idCount ?? $this->lastId++;
 
         $this->panelId = $panelId ?? 'panel_'.$this->idCount;

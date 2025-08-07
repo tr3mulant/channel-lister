@@ -7,14 +7,6 @@
         <x-channel-lister::checkbox-form-input :params="$params" :class-str-default="$classStrDefault" />
     @break
 
-    @case(\IGE\ChannelLister\Enums\InputType::CLONESITE_CATS)
-        <x-channel-lister::clone-site-category :params="$params" :class-str-default="$classStrDefault" />
-    @break
-
-    @case(\IGE\ChannelLister\Enums\InputType::CLONESITE_TAGS)
-        <x-channel-lister::clone-site-tags :params="$params" :class-str-default="$classStrDefault" />
-    @break
-
     @case(\IGE\ChannelLister\Enums\InputType::COMMA_SEPARATED)
         <x-channel-lister::comma-separated-form :params="$params" :class-str-default="$classStrDefault" />
     @break
@@ -52,7 +44,7 @@
     @break
 
     @default
-        @dump($params->toArray())
+        {{-- @dump($params->toArray()) --}}
         <div class="alert alert-danger">
             <strong>Error:</strong> Unrecognized input_type: '{{ $params->input_type }}'
         </div>

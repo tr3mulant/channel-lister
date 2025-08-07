@@ -10,9 +10,9 @@ use Illuminate\View\Component;
  * I don't expect to keep this either as we should expect to extract the view components that exist
  * in v/ChannelLister into their own component classes and associated views.
  */
-class AmazonSpecialRefinementsHtml extends Component
+class AmazonSpecialRefinements extends Component
 {
-    public function __construct(public ChannelListerField $params)
+    public function __construct(public ChannelListerField $params, public string $classStrDefault = 'form-control')
     {
         //
     }
@@ -21,15 +21,27 @@ class AmazonSpecialRefinementsHtml extends Component
     {
         $element_name = $this->params->field_name;
 
-        /** @var array<int|string, mixed> $options */
-        $options = $this->params->input_type_aux ?? '';
+        /** @var string|array<int|string, mixed> $options */
+        $options = $this->params->input_type_aux ?? [];
+
+        // Handle both string and array formats
+        if (is_string($options)) {
+            // If it's a string, try to decode it as JSON first
+            $decoded = json_decode($options, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                $options = $decoded;
+            } else {
+                // Fall back to simple string splitting
+                $options = $this->params->getInputTypeAuxOptions() ?? [];
+            }
+        }
 
         // Ensure options is an array
         if (! is_array($options)) {
             $options = [];
         }
         $required = empty($this->params->required) ? '' : 'required';
-        $label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
+        $label_text = $this->params->display_name;
         $id = $this->params->field_name.'-id';
         $tooltip = $this->params->tooltip;
         $placeholder = $this->params->example;
@@ -63,6 +75,7 @@ class AmazonSpecialRefinementsHtml extends Component
             'limit' => $limit,
             'display_sets' => $display_sets,
             'checkbox_count' => $checkbox_count,
+            'classStrDefault' => $this->classStrDefault,
         ]);
     }
 }
