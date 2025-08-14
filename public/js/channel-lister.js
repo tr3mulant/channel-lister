@@ -278,7 +278,7 @@ function updateShipCost() {
       },
       dataType: "json",
     })
-      .success(function (response) {
+      .done(function (response) {
         var rate = response.data;
         console.log(rate);
         $("#cost_shipping-api-error").hide();
@@ -326,7 +326,7 @@ function updateShipCost() {
         }
         $("#calculated_shipping_service-id").val(rate[1]);
       })
-      .error(function (response) {
+      .fail(function (response) {
         console.log(response);
         alert(response.responseText);
       });
@@ -708,7 +708,7 @@ $(document).ready(function () {
       },
     },
     invalidHandler: function (event, validator) {
-      var err_el_id = $(validator.invalidElements()[0]).context.id;
+      var err_el_id = validator.invalidElements()[0].id;
       console.log(err_el_id);
       var platform = $("[id='" + err_el_id + "']")
         .closest(".platform-container")
@@ -720,13 +720,13 @@ $(document).ready(function () {
       event.preventDefault();
       $.ajax({
         method: "POST",
-        url: "api/channel-lister/submitProductData",
+        url: "api/channel-lister/submit-product-data",
         data: $(form)
           .serialize()
           //.replace(/(^|&)drafts-[a-zA-Z0-9\-\_]+=\d+(&|$)/, ""), //ditch the stupid drafts table named fields
           .replace(/(^|&)drafts-[a-zA-Z0-9_-]+=\d+(&|$)/, ""),
       })
-        .success(function (response) {
+        .done(function (response) {
           let r = JSON.parse(response);
           if (r.status !== "success") {
             console.log(r);
@@ -739,7 +739,7 @@ $(document).ready(function () {
           }
           $("#databaseResponse").append(html);
         })
-        .error(function (response) {
+        .fail(function (response) {
           console.log(response);
           alert(response.responseText);
         });
@@ -1365,11 +1365,11 @@ $(document).ready(function () {
         url: "api/channel-lister/getEbayCategoryVariationExclusions",
         dataType: "json",
       })
-        .success(function (response) {
+        .done(function (response) {
           ebayCatVarExclusions = JSON.parse(response.data);
           eBayCategoryVariationSupported(catId, ebayCatVarExclusions);
         })
-        .error(function (response) {
+        .fail(function (response) {
           console.log(response);
           alert(response.responseText);
         });

@@ -16,6 +16,10 @@ Route::prefix('channel-lister')->name('api.channel-lister.')->group(function () 
     Route::get('is-upc-valid', [ChannelListerController::class, 'isUpcValid'])->name('is-upc-valid');
 
     Route::get('add-bundle-component-row', [ChannelListerController::class, 'addBundleComponentRow'])->name('add-bundle-component-row');
+
+    Route::get('getCountryCodeOptions/{country}/{digits}', [ChannelListerController::class, 'getCountryCodeOptions'])->name('get-country-code-options');
+
+    Route::post('/', [ChannelListerController::class, 'submitProductData'])->name('submit-product-data');
 });
 
 Route::prefix('channel-lister-field')->name('api.channel-lister-field.')->group(function () {

@@ -38,9 +38,9 @@ class TextFormInput extends Component
                 $element_name_override .= "Maps to: <code>{$pieces[1]}</code> if marketplace is $pieces[0]</br>";
             }
         }
-        $pattern = empty($this->params->input_type_aux) ? '' : 'pattern="'.$this->params->input_type_aux.'"';
+        $pattern = empty($this->params->input_type_aux) ? '' : $this->params->input_type_aux;
         $required = empty($this->params->required) ? '' : 'required';
-        $readonly = (property_exists($this->params, 'readonly') && ! empty($this->params->readonly)) ? 'readonly' : '';
+        $readonly = property_exists($this->params, 'readonly') && $this->params->readonly;
         $label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
         $id = $this->params->field_name.'-id';
         $tooltip = $this->params->tooltip;

@@ -5,6 +5,8 @@ namespace IGE\ChannelLister\Tests\Feature\View\Components;
 use IGE\ChannelLister\Models\ChannelListerField;
 use IGE\ChannelLister\Tests\TestCase;
 use IGE\ChannelLister\View\Components\DecimalFormInput;
+use Illuminate\Support\Facades\Blade;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DecimalFormInputTest extends TestCase
 {
@@ -109,10 +111,9 @@ class DecimalFormInputTest extends TestCase
 
     /**
      * Test that custom step sizes work correctly.
-     *
-     * @dataProvider stepSizeProvider
      */
-    public function test_custom_step_sizes(string $stepSize): void
+    #[DataProvider('stepSizeProvider')]
+    public static function test_custom_step_sizes(string $stepSize): void
     {
         // $field = ChannelListerField::factory()->create([
         //     'field_name' => 'measurement',
@@ -125,12 +126,18 @@ class DecimalFormInputTest extends TestCase
             'required' => false,
         ]);
 
-        $view = $this->blade(
+        $renderedHtml = Blade::renderComponent(new DecimalFormInput($field, 'form-control'));
+
+        self::assertStringContainsString("step=\"{$stepSize}\"", $renderedHtml);
+
+        /*
+        $view = Blade::renderComponent(new DecimalFormInput($field));(
             '<x-channel-lister::decimal-form-input :params="$field" class-str-default="form-control" />',
             ['field' => $field]
         );
 
         $view->assertSee("step=\"{$stepSize}\"", false);
+        */
     }
 
     /**

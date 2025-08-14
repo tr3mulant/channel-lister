@@ -66,4 +66,6 @@ return [
     'upc_prefixes' => [],
 
     'cache_prefix' => 'channel-lister',
+
+    'default_warehouse' => env('CHANNEL_LISTER_DEFAULT_WAREHOUSE', 'channellister'),
 ];
