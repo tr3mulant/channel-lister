@@ -11,3 +11,4 @@
 /tests/coverage
 .env*
 !.env.example
+workbench/storage
