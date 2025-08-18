@@ -71,6 +71,49 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Amazon SP-API Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configuration for Amazon Selling Partner API integration. These settings
+    | are used for dynamic listing creation and product type search.
+    |
+    */
+    'amazon' => [
+        'sp_api_base_url' => env('CHANNEL_LISTER_AMAZON_SP_API_BASE_URL', 'https://sellingpartnerapi-na.amazon.com'),
+        'access_token' => env('CHANNEL_LISTER_AMAZON_SP_API_ACCESS_TOKEN'),
+        'marketplace_id' => env('CHANNEL_LISTER_AMAZON_MARKETPLACE_ID', 'ATVPDKIKX0DER'), // US marketplace default
+        'region' => env('CHANNEL_LISTER_AMAZON_SP_API_REGION', 'us-east-1'),
+        'client_id' => env('CHANNEL_LISTER_AMAZON_SP_API_CLIENT_ID'),
+        'client_secret' => env('CHANNEL_LISTER_AMAZON_SP_API_CLIENT_SECRET'),
+        'refresh_token' => env('CHANNEL_LISTER_AMAZON_SP_API_REFRESH_TOKEN'),
+
+        /*
+        |--------------------------------------------------------------------------
+        | Amazon Caching Configuration
+        |--------------------------------------------------------------------------
+        |
+        | Configure caching behavior for Amazon SP-API responses and schema files.
+        | This helps reduce API calls and improve performance.
+        |
+        */
+        'cache' => [
+            // Disk to use for persistent schema caching (local, s3, etc.)
+            'disk' => env('CHANNEL_LISTER_AMAZON_CACHE_DISK', 'local'),
+
+            // Cache TTL in seconds
+            'ttl' => [
+                'product_types_search' => env('CHANNEL_LISTER_AMAZON_CACHE_TTL_PRODUCT_SEARCH', 3600), // 1 hour
+                'listing_requirements' => env('CHANNEL_LISTER_AMAZON_CACHE_TTL_REQUIREMENTS', 86400), // 24 hours
+                'schema_files' => env('CHANNEL_LISTER_AMAZON_CACHE_TTL_SCHEMA', 604800), // 7 days
+            ],
+
+            // Directory path within the disk for schema files
+            'schema_path' => env('CHANNEL_LISTER_AMAZON_CACHE_SCHEMA_PATH', 'amazon-schemas'),
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | ShipStation API Configuration
     |--------------------------------------------------------------------------
     |
