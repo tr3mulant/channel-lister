@@ -25,7 +25,7 @@ class TextFormInput extends Component
     /**
      * Return an array of options to be used in the view.
      *
-     * @return array<string, mixed>
+     * @return array<string, null|string|bool>
      */
     protected function getOptions(): array
     {

@@ -87,14 +87,7 @@ function getOpenPlataformTabs() {
  * @param  {Boolean} is_disabled true to disable, false to enable
  */
 function toggleDisableFormElementsByPlatform(platform, is_disabled) {
-  console.log("toggleDisableFormElementsByPlatform", {
-    platform: platform,
-    is_disabled: is_disabled,
-  });
   $("#" + platform + " .form-group").attr("disabled", is_disabled);
-  //   $("#" + platform + " .selectpicker")
-  //     .selectpicker("destroy")
-  //     .selectpicker();
 }
 
 /**
@@ -353,8 +346,6 @@ function isValidUrl(url) {
  * Runs JS functions on form inputs, called when a new tab is added
  */
 function runTabInitFunctions(platform) {
-  console.log("runTabInitFunctions", platform);
-  //   $("#" + platform + " .selectpicker").selectpicker();
   $("#" + platform + " .editable-select").editableSelect();
   $("#" + platform + " input.form-group[maxlength]").maxlength({
     alwaysShow: true,
@@ -1295,7 +1286,6 @@ $(document).ready(function () {
   //checks for the change in the sku type dropdown menu
   //Adds the form fields for the selected values
   const skuTypeSelector = $.escapeSelector("SKU Type-id");
-  console.log("skuTypeSelector", skuTypeSelector);
   $(`#${skuTypeSelector}`).on("change", function () {
     console.log("SKU Type changed to " + $(this).val());
     if ($(this).val() == "bundle") {
