@@ -92,6 +92,10 @@
         <x-channel-lister::custom.amazon-special-refinements :params="$params" :class-str-default="$classStrDefault" />
     @break
 
+    @case('amazon_product_type')
+        <x-channel-lister::custom.amazon-product-type-search :params="$params" :class-str-default="$classStrDefault" />
+    @break
+
     @default
         <div class="alert alert-danger">
             <strong>Failure:</strong> Unable to build input field for {{ $params->field_name }}
