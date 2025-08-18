@@ -1,8 +1,10 @@
 <?php
 
+use IGE\ChannelLister\Http\Controllers\Api\AmazonListingController;
 use IGE\ChannelLister\Http\Controllers\Api\ChannelListerController;
 use IGE\ChannelLister\Http\Controllers\Api\ChannelListerFieldController;
 use IGE\ChannelLister\Http\Controllers\Api\ShippingController;
+use IGE\ChannelLister\Http\Middleware\AmazonSpApiAuth;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('channel-lister')->name('api.channel-lister.')->group(function () {
@@ -25,6 +27,36 @@ Route::prefix('channel-lister')->name('api.channel-lister.')->group(function () 
 
 Route::prefix('channel-lister-field')->name('api.channel-lister-field.')->group(function () {
     Route::get('search', [ChannelListerFieldController::class, 'search'])->name('search');
+});
+
+Route::prefix('amazon-listing')->name('api.amazon-listing.')->middleware(['api', AmazonSpApiAuth::class])->group(function () {
+    Route::post('search-product-types', [AmazonListingController::class, 'searchProductTypes'])
+        ->name('search-product-types');
+
+    Route::post('listing-requirements', [AmazonListingController::class, 'getListingRequirements'])
+        ->name('listing-requirements');
+
+    Route::post('existing-listing', [AmazonListingController::class, 'getExistingListing'])
+        ->name('existing-listing');
+
+    // Form submission and management
+    Route::post('submit', [AmazonListingController::class, 'submitListing'])
+        ->name('submit');
+
+    Route::post('validate', [AmazonListingController::class, 'validateListing'])
+        ->name('validate');
+
+    Route::post('generate-file', [AmazonListingController::class, 'generateFile'])
+        ->name('generate-file');
+
+    Route::get('listings', [AmazonListingController::class, 'getListings'])
+        ->name('listings');
+
+    Route::get('listings/{listing}', [AmazonListingController::class, 'getListingStatus'])
+        ->name('listing-status');
+
+    Route::get('listings/{listing}/download', [AmazonListingController::class, 'downloadFile'])
+        ->name('download-file');
 });
 
 Route::prefix('shipping')->name('api.shipping.')->group(function () {

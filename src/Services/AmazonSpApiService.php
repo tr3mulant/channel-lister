@@ -199,7 +199,7 @@ class AmazonSpApiService implements MarketplaceListingProvider
                     if ($this->shouldIncludeProperty($property)) {
                         // Extract type and enum, handling nested array structures for Amazon boolean fields
                         $typeInfo = $this->extractTypeAndEnum($property);
-                        
+
                         $requirements[] = [
                             'name' => $propertyName,
                             'displayName' => $property['title'] ?? null,
@@ -224,7 +224,7 @@ class AmazonSpApiService implements MarketplaceListingProvider
                 if ($this->shouldIncludeProperty($property)) {
                     // Extract type and enum, handling nested array structures for Amazon boolean fields
                     $typeInfo = $this->extractTypeAndEnum($property);
-                    
+
                     $requirements[] = [
                         'name' => $propertyName,
                         'displayName' => $property['title'] ?? null,
@@ -248,7 +248,7 @@ class AmazonSpApiService implements MarketplaceListingProvider
 
     /**
      * Extract type and enum information from property, handling nested array structures.
-     * 
+     *
      * Amazon uses nested array structures for boolean fields like:
      * {
      *   "type": "array",
@@ -266,18 +266,18 @@ class AmazonSpApiService implements MarketplaceListingProvider
     protected function extractTypeAndEnum(array $property): array
     {
         // Check for nested array structure with value property (Amazon's boolean pattern)
-        if (($property['type'] ?? null) === 'array' && 
+        if (($property['type'] ?? null) === 'array' &&
             isset($property['items']['properties']['value'])) {
-            
+
             $valueProperty = $property['items']['properties']['value'];
-            
+
             return [
                 'type' => $valueProperty['type'] ?? 'string',
                 'enum' => $valueProperty['enum'] ?? null,
                 'enumNames' => $valueProperty['enumNames'] ?? null,
             ];
         }
-        
+
         // Standard property structure
         return [
             'type' => $property['type'] ?? 'string',
@@ -335,11 +335,12 @@ class AmazonSpApiService implements MarketplaceListingProvider
                     $value = $requirement['enum'][$index] ?? $index;
                     // Convert boolean values to strings for form handling
                     $valueStr = is_bool($value) ? ($value ? 'true' : 'false') : (string) $value;
-                    $options[] = $displayName . '==' . $valueStr;
+                    $options[] = $displayName.'=='.$valueStr;
                 }
+
                 return implode('||', $options);
             }
-            
+
             // Default enum handling for non-boolean fields
             return implode('||', $requirement['enum']);
         }
