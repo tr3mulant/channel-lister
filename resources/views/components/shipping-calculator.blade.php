@@ -80,7 +80,10 @@
             </div>
 
             <!-- Dimensional Weight Info -->
-            <div id="dimensional-weight-info" class="alert alert-info" style="display: none;">
+            <div id="dimensional-weight-info" class="alert alert-info" style="display: none; position: relative;">
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('dimensional-weight-info').style.display='none';" style="position: absolute; top: 10px; right: 10px; padding: 2px 8px; font-size: 12px;">
+                    ×
+                </button>
                 <h6>Dimensional Weight Calculation:</h6>
                 <div id="dimensional-weight-details"></div>
             </div>
@@ -104,7 +107,7 @@
             <!-- Results -->
             <div id="shipping-results" style="display: none;">
                 <h6>Available Shipping Options:</h6>
-                <div id="shipping-rates-list"></div>
+                <div id="shipping-rates-list" style="max-height: 300px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px; background-color: #fafafa;"></div>
                 
                 <!-- Final shipping cost selection -->
                 <div class="form-group mt-3">

@@ -116,7 +116,10 @@
                         </div>
 
                         <!-- Dimensional Weight Info -->
-                        <div id="dimensional-weight-info-{{ $id }}" class="alert alert-info" style="display: none;">
+                        <div id="dimensional-weight-info-{{ $id }}" class="alert alert-info" style="display: none; position: relative;">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('dimensional-weight-info-{{ $id }}').style.display='none';" style="position: absolute; top: 10px; right: 10px; padding: 2px 8px; font-size: 12px;">
+                                ×
+                            </button>
                             <h6><i class="fas fa-info-circle"></i> Dimensional Weight Calculation:</h6>
                             <div id="dimensional-weight-details-{{ $id }}"></div>
                         </div>
@@ -137,7 +140,22 @@
                         <!-- Results -->
                         <div id="shipping-results-{{ $id }}" style="display: none;">
                             <h6><i class="fas fa-list"></i> Available Shipping Options:</h6>
-                            <div id="shipping-rates-list-{{ $id }}"></div>
+                            <div id="shipping-rates-list-{{ $id }}" style="max-height: 300px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px; background-color: #fafafa;"></div>
+                            
+                            <!-- Selected Cost Input (outside scrollable area) -->
+                            <div id="selected-cost-section-{{ $id }}" style="display: none;">
+                                <div class="form-group mt-3">
+                                    <label class="col-form-label">Selected Shipping Cost</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">$</span>
+                                        </div>
+                                        <input type="number" class="form-control" id="selected-shipping-cost-{{ $id }}" 
+                                               step="0.01" min="0" readonly>
+                                    </div>
+                                    <small class="form-text text-muted">Click a shipping option above to select</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -299,23 +317,18 @@ async function calculateShippingRates(fieldId) {
             alert('Please enter a valid shipping cost');
             return;
         }
-        // Add selected shipping cost field for manual entry
-        if (!document.getElementById(`selected-shipping-cost-${fieldId}`)) {
-            const resultsDiv = document.getElementById(`shipping-results-${fieldId}`);
-            resultsDiv.innerHTML = `
-                <div class="form-group">
-                    <label class="col-form-label">Selected Shipping Cost</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">$</span>
-                        </div>
-                        <input type="number" class="form-control" id="selected-shipping-cost-${fieldId}" 
-                               step="0.01" min="0" value="${manualCost}" readonly>
-                    </div>
-                </div>
-            `;
-            resultsDiv.style.display = 'block';
+        // Set the manual cost in the selected shipping cost field
+        const selectedCostInput = document.getElementById(`selected-shipping-cost-${fieldId}`);
+        const selectedCostSection = document.getElementById(`selected-cost-section-${fieldId}`);
+        const resultsDiv = document.getElementById(`shipping-results-${fieldId}`);
+        
+        if (selectedCostInput) {
+            selectedCostInput.value = manualCost;
         }
+        
+        // Show the results and selected cost sections
+        resultsDiv.style.display = 'block';
+        selectedCostSection.style.display = 'block';
         return;
     }
 
@@ -400,7 +413,9 @@ function showDimensionalWeightInfo(data, fieldId) {
 function showShippingResults(result, fieldId) {
     const resultsDiv = document.getElementById(`shipping-results-${fieldId}`);
     const ratesDiv = document.getElementById(`shipping-rates-list-${fieldId}`);
+    const selectedCostSection = document.getElementById(`selected-cost-section-${fieldId}`);
     
+    // Only populate the rates list (for scrollable area)
     let html = '<div class="list-group">';
     
     result.rates.forEach((rate, index) => {
@@ -420,23 +435,12 @@ function showShippingResults(result, fieldId) {
     
     html += '</div>';
     
-    // Add selected cost input
-    html += `
-        <div class="form-group mt-3">
-            <label class="col-form-label">Selected Shipping Cost</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">$</span>
-                </div>
-                <input type="number" class="form-control" id="selected-shipping-cost-${fieldId}" 
-                       step="0.01" min="0" readonly>
-            </div>
-            <small class="form-text text-muted">Click a shipping option above to select</small>
-        </div>
-    `;
-    
+    // Populate only the rates list in the scrollable area
     ratesDiv.innerHTML = html;
+    
+    // Show the results section and the selected cost section
     resultsDiv.style.display = 'block';
+    selectedCostSection.style.display = 'block';
 }
 
 function showManualEntry(fieldId, message = 'API not available - please enter shipping cost manually') {
