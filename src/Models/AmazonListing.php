@@ -28,12 +28,11 @@ class AmazonListing extends Model
     use HasFactory;
 
     /**
-     * Create a new factory instance for the model.
+     * The table associated with the model.
+     *
+     * @var string
      */
-    protected static function newFactory(): AmazonListingFactory
-    {
-        return AmazonListingFactory::new();
-    }
+    protected $table = 'channel_lister_amazon_listings';
 
     protected $fillable = [
         'status',
@@ -285,5 +284,13 @@ class AmazonListing extends Model
     public function scopeRecent($query, int $days = 7)
     {
         return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): AmazonListingFactory
+    {
+        return AmazonListingFactory::new();
     }
 }

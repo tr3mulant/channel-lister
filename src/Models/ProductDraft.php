@@ -20,6 +20,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ProductDraft extends Model
 {
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'channel_lister_product_drafts';
+
     protected $fillable = [
         'form_data',
         'status',

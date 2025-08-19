@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('amazon_listings', function (Blueprint $table) {
+        Schema::create('channel_lister_amazon_listings', function (Blueprint $table) {
             $table->id();
             $table->string('status')->default('draft'); // draft, validating, validated, submitted, error
             $table->string('product_type');
@@ -29,6 +29,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('amazon_listings');
+        Schema::dropIfExists('channel_lister_amazon_listings');
     }
 };

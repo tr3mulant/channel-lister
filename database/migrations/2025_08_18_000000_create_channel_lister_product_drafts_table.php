@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_drafts', function (Blueprint $table) {
+        Schema::create('channel_lister_product_drafts', function (Blueprint $table) {
             $table->id();
             $table->json('form_data')->comment('All form data from all marketplace tabs');
             $table->string('status', 50)->default('draft')->comment('draft, validated, exported');
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_drafts');
+        Schema::dropIfExists('channel_lister_product_drafts');
     }
 };
