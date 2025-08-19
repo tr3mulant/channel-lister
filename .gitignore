@@ -10,5 +10,6 @@
 *.swo
 /tests/coverage
 .env*
+**/.env*/**
 !.env.example
 workbench/storage
