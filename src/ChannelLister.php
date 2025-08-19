@@ -420,12 +420,12 @@ class ChannelLister
             'Zimbabwe' => ['ZW', 'ZWE'],
         ];
 
-        if (!isset($countryCodes[$countryName])) {
+        if (! isset($countryCodes[$countryName])) {
             return null;
         }
 
         $codes = $countryCodes[$countryName];
-        
+
         return $digits === 2 ? $codes[0] : $codes[1];
     }
 

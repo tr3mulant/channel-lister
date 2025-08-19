@@ -2,6 +2,7 @@
 
 use IGE\ChannelLister\Http\Controllers\Api\ChannelListerController;
 use IGE\ChannelLister\Http\Controllers\Api\ChannelListerFieldController;
+use IGE\ChannelLister\Http\Controllers\Api\ShippingController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('channel-lister')->name('api.channel-lister.')->group(function () {
@@ -24,4 +25,12 @@ Route::prefix('channel-lister')->name('api.channel-lister.')->group(function () 
 
 Route::prefix('channel-lister-field')->name('api.channel-lister-field.')->group(function () {
     Route::get('search', [ChannelListerFieldController::class, 'search'])->name('search');
+});
+
+Route::prefix('shipping')->name('api.shipping.')->group(function () {
+    Route::get('check-api', [ShippingController::class, 'checkApiAvailability'])->name('check-api');
+    Route::get('location', [ShippingController::class, 'getLocation'])->name('location');
+    Route::post('calculate', [ShippingController::class, 'calculateRates'])->name('calculate');
+    Route::get('carriers', [ShippingController::class, 'getCarriers'])->name('carriers');
+    Route::post('dimensional-weight', [ShippingController::class, 'calculateDimensionalWeight'])->name('dimensional-weight');
 });

@@ -10,7 +10,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Blade;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ChannelListerController extends Controller
 {
@@ -22,7 +21,7 @@ class ChannelListerController extends Controller
     public function formDataByPlatform(Request $request, string $platform): JsonResponse
     {
         $request->merge(['platform' => $platform])->validate([
-            'platform' => 'required|string|exists:channel_lister_fields,marketplace',
+            'platform' => 'required|string',
         ]);
 
         return response()->json(['data' => Blade::renderComponent(new ChannelListerFields($platform))]);
@@ -77,7 +76,7 @@ class ChannelListerController extends Controller
 
         if ($countryCode === null) {
             return response()->json([
-                'error' => 'Country code not found for: ' . $country,
+                'error' => 'Country code not found for: '.$country,
             ], 404);
         }
 
@@ -90,7 +89,7 @@ class ChannelListerController extends Controller
             // Basic validation for form data structure
             // Since fields are dynamic, we validate the overall structure
             '*' => 'nullable|string|max:65535', // Allow any field name with string values up to TEXT length
-            
+
             // Specific validation for known critical fields if they exist
             'Title' => 'nullable|string|max:255',
             'Description' => 'nullable|string|max:10000',
@@ -98,10 +97,10 @@ class ChannelListerController extends Controller
             'Price' => 'nullable|numeric|min:0|max:999999.99',
             'Total Quantity' => 'nullable|integer|min:0|max:999999',
             'Weight' => 'nullable|numeric|min:0|max:999999.99',
-            
+
             // Image fields (can be multiple)
             'image*' => 'nullable|url|max:2048',
-            
+
             // Bundle component fields (can be arrays)
             'sku_bundle_component_*' => 'nullable|string|max:255',
             'sku_bundle_quantity_*' => 'nullable|integer|min:1|max:999999',
@@ -114,8 +113,8 @@ class ChannelListerController extends Controller
             'download_url' => $filename,
         ]);
 
-        //This return works when the return type is BinaryFileResponse
-        //return response()->download($filename, 'channel_lister_export.csv');
+        // This return works when the return type is BinaryFileResponse
+        // return response()->download($filename, 'channel_lister_export.csv');
 
     }
 }

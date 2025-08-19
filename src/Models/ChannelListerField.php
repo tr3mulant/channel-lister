@@ -5,7 +5,6 @@ namespace IGE\ChannelLister\Models;
 use IGE\ChannelLister\Database\Factories\ChannelListerFieldFactory;
 use IGE\ChannelLister\Enums\InputType;
 use IGE\ChannelLister\Enums\Type;
-use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

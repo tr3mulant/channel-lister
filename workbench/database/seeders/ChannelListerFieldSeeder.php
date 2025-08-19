@@ -12,7 +12,9 @@ class ChannelListerFieldSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('channel_lister_fields')->insert($this->data());
+        // Explicitly use sqlite connection to populate the file that the server will use
+        DB::connection('sqlite')->table('channel_lister_fields')->insert($this->data());
+        // }
     }
 
     protected function data(): array

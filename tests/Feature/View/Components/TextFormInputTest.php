@@ -382,7 +382,7 @@ class TextFormInputTest extends TestCase
         $this->assertEquals('test_title-id', $data['id']);
         $this->assertEquals('Test tooltip', $data['tooltip']);
         $this->assertEquals('Test example', $data['placeholder']);
-        $this->assertEquals('pattern="^[A-Za-z ]{5,50}$"', $data['pattern']);
+        $this->assertEquals('^[A-Za-z ]{5,50}$', $data['pattern']);
         $this->assertEquals("maxlength='50'", $data['max_len_str']);
         $this->assertEquals('Maps To: <code>test_title</code>', $data['maps_to_text']);
     }

@@ -10,6 +10,10 @@ migrations:
 seeders:
   - Workbench\Database\Seeders\DatabaseSeeder
 
+# env:
+#   - DB_CONNECTION=sqlite
+#   - DB_DEFAULT_SEEDER=Workbench\Database\Seeders\DatabaseSeeder
+
 factories:
   - database/factories
 
@@ -28,6 +32,7 @@ workbench:
   user: "channel@lister.com"
   install: true
   health: false
+  # env: workbench/.env
   discovers:
     web: true
     api: true

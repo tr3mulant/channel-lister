@@ -68,4 +68,18 @@ return [
     'cache_prefix' => 'channel-lister',
 
     'default_warehouse' => env('CHANNEL_LISTER_DEFAULT_WAREHOUSE', 'channellister'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | ShipStation API Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configuration for ShipStation API integration for shipping cost calculation.
+    | If api_key is not set, users will need to enter shipping costs manually.
+    |
+    */
+    'shipstation' => [
+        'api_key' => env('SHIPSTATION_API_KEY'),
+        'base_url' => env('SHIPSTATION_BASE_URL', 'https://api.shipengine.com/v1'),
+    ],
 ];

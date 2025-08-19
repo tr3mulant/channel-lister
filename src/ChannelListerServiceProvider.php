@@ -35,6 +35,9 @@ class ChannelListerServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/channel-lister.php', 'channel-lister');
+
+        // Register shipping calculator service
+        $this->app->singleton(\IGE\ChannelLister\Services\ShippingCalculatorService::class);
     }
 
     protected function registerMiddleware(): void
@@ -59,7 +62,7 @@ class ChannelListerServiceProvider extends ServiceProvider
 
         Route::group([
             'domain' => config('channel-lister.domain', null),
-            'namespace' => 'App\Http\Controllers\Api',
+            'namespace' => 'IGE\ChannelLister\Http\Controllers\Api',
             'prefix' => config('channel-lister.api_path'),
             'middleware' => 'api',
         ], function (): void {
