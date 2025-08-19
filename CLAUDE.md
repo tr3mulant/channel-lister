@@ -10,8 +10,6 @@ ow would we use the shipping station api to calculate the estimated shipping cos
 
 I don't know much about the Ship Station API call, how would we use it? Could you give me a prototype of this application working?
 
-Here is the sandbox API key you'll need: TEST_+W/0RB45wGgTC0lbBGA/+mBTcVlmHlhRTcbI7aVmhKA
-
 I also want it to be a feature to where if the user does not give the api key, The user should just fill in their estimated shipping cost in the form. If there is an api key, do all of the calculation logic. 
 
 Please use the code below to intgrate this application into channel lister. I also want the UI to be uniform with what channel lister already has set up. 
