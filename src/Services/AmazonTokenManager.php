@@ -21,10 +21,7 @@ class AmazonTokenManager
 
     public function __construct()
     {
-        $this->clientId = config('channel-lister.amazon.client_id');
-        $this->clientSecret = config('channel-lister.amazon.client_secret');
-        $this->refreshToken = config('channel-lister.amazon.refresh_token');
-        $this->cachePrefix = config('channel-lister.cache_prefix', 'channel-lister').':amazon:token';
+        //
     }
 
     /**
@@ -56,10 +53,10 @@ class AmazonTokenManager
     {
         try {
             $response = Http::asForm()
-                ->withBasicAuth($this->clientId, $this->clientSecret)
+                ->withBasicAuth($this->clientId(), $this->clientSecret())
                 ->post($this->tokenEndpoint, [
                     'grant_type' => 'refresh_token',
-                    'refresh_token' => $this->refreshToken,
+                    'refresh_token' => $this->refreshToken(),
                 ]);
 
             if (! $response->successful()) {
@@ -175,7 +172,7 @@ class AmazonTokenManager
      */
     protected function getCacheKey(): string
     {
-        return $this->cachePrefix.':access_token';
+        return $this->cachePrefix().':access_token';
     }
 
     /**
@@ -185,18 +182,38 @@ class AmazonTokenManager
     {
         $errors = [];
 
-        if ($this->clientId === '' || $this->clientId === '0') {
+        if ($this->clientId() === '' || $this->clientId() === '0') {
             $errors[] = 'AMAZON_SP_API_CLIENT_ID is required';
         }
 
-        if ($this->clientSecret === '' || $this->clientSecret === '0') {
+        if ($this->clientSecret() === '' || $this->clientSecret() === '0') {
             $errors[] = 'AMAZON_SP_API_CLIENT_SECRET is required';
         }
 
-        if ($this->refreshToken === '' || $this->refreshToken === '0') {
+        if ($this->refreshToken() === '' || $this->refreshToken() === '0') {
             $errors[] = 'AMAZON_SP_API_REFRESH_TOKEN is required';
         }
 
         return $errors;
+    }
+
+    protected function clientId(): string
+    {
+        return $this->clientId ??= config('channel-lister.amazon.client_id') ?: '';
+    }
+
+    protected function clientSecret(): string
+    {
+        return $this->clientSecret ??= config('channel-lister.amazon.client_secret') ?: '';
+    }
+
+    protected function refreshToken(): string
+    {
+        return $this->refreshToken ??= config('channel-lister.amazon.refresh_token') ?: '';
+    }
+
+    protected function cachePrefix(): string
+    {
+        return $this->cachePrefix ??= config('channel-lister.cache_prefix', 'channel-lister').':amazon:token';
     }
 }

@@ -308,18 +308,68 @@ class AmazonSpApiService implements MarketplaceListingProvider
     }
 
     /**
+     * Check if this property is a simple array attribute that only wraps a single value.
+     *
+     * Simple attributes have array structure but only contain a single "value" property
+     * along with optional metadata fields that don't need form inputs.
+     */
+    protected function isSimpleArrayAttribute(array $property): bool
+    {
+        if (($property['type'] ?? null) !== 'array' ||
+            ($property['items']['type'] ?? null) !== 'object' ||
+            ! isset($property['items']['properties'])) {
+            return false;
+        }
+
+        $itemProperties = $property['items']['properties'];
+
+        // Check if it has a "value" property
+        if (! isset($itemProperties['value'])) {
+            return false;
+        }
+
+        // Count non-metadata properties (exclude language_tag, marketplace_id)
+        $metadataFields = ['language_tag', 'marketplace_id'];
+        $nonMetadataProperties = array_filter(
+            array_keys($itemProperties),
+            fn ($key): bool => ! in_array($key, $metadataFields)
+        );
+
+        // It's simple if it only has a "value" property (plus optional metadata)
+        return count($nonMetadataProperties) === 1 && in_array('value', $nonMetadataProperties);
+    }
+
+    /**
      * Check if this property is a complex nested property that needs multiple fields.
      */
     protected function isComplexNestedProperty(array $property): bool
     {
-        return ($property['type'] ?? null) === 'array' &&
-               ($property['items']['type'] ?? null) === 'object' &&
-               isset($property['items']['properties']) &&
-               count($property['items']['properties']) > 1;
+        if (($property['type'] ?? null) !== 'array' ||
+            ($property['items']['type'] ?? null) !== 'object' ||
+            ! isset($property['items']['properties'])) {
+            return false;
+        }
+
+        // If it's a simple array attribute, it's not complex
+        if ($this->isSimpleArrayAttribute($property)) {
+            return false;
+        }
+
+        $itemProperties = $property['items']['properties'];
+        $metadataFields = ['language_tag', 'marketplace_id'];
+
+        // Count non-metadata properties
+        $nonMetadataProperties = array_filter(
+            array_keys($itemProperties),
+            fn ($key): bool => ! in_array($key, $metadataFields)
+        );
+
+        // It's complex if it has more than one non-metadata property
+        return count($nonMetadataProperties) > 1;
     }
 
     /**
-     * Recursively extract fields from a complex nested property.
+     * Extract fields from a nested property, handling both simple and complex attributes.
      */
     protected function extractNestedFields(array $property, string $propertyName, array $requiredFields): array
     {
@@ -328,6 +378,12 @@ class AmazonSpApiService implements MarketplaceListingProvider
         $baseTitle = $property['title'] ?? ucfirst(str_replace('_', ' ', $propertyName));
         $baseGrouping = $baseTitle; // Use property title as group name
 
+        // Handle simple array attributes (like brand with just a "value" property)
+        if ($this->isSimpleArrayAttribute($property)) {
+            return $this->extractSimpleArrayField($property, $propertyName, $isRequired, $baseGrouping);
+        }
+
+        // Handle complex nested properties with multiple sub-properties
         $itemProperties = $property['items']['properties'] ?? [];
 
         foreach ($itemProperties as $subPropertyName => $subProperty) {
@@ -341,7 +397,8 @@ class AmazonSpApiService implements MarketplaceListingProvider
                 $propertyName,
                 $subPropertyName,
                 $isRequired,
-                $baseGrouping
+                $baseGrouping,
+                true // Mark as complex for proper naming
             );
 
             $fields = array_merge($fields, $extractedFields);
@@ -351,9 +408,33 @@ class AmazonSpApiService implements MarketplaceListingProvider
     }
 
     /**
+     * Extract a simple array field that only contains a single value property.
+     */
+    protected function extractSimpleArrayField(array $property, string $propertyName, bool $isRequired, string $grouping): array
+    {
+        $valueProperty = $property['items']['properties']['value'] ?? [];
+        $typeInfo = $this->extractTypeAndEnum($property);
+
+        return [[
+            'name' => $propertyName, // Use parent name directly (e.g., "brand" not "brand_value")
+            'displayName' => $property['title'] ?? ucfirst(str_replace('_', ' ', $propertyName)),
+            'description' => $property['description'] ?? null,
+            'type' => $typeInfo['type'],
+            'required' => $isRequired,
+            'enum' => $typeInfo['enum'],
+            'enumNames' => $typeInfo['enumNames'],
+            'minLength' => $valueProperty['minLength'] ?? null,
+            'maxLength' => $valueProperty['maxLength'] ?? null,
+            'pattern' => $valueProperty['pattern'] ?? null,
+            'example' => $property['examples'][0] ?? $valueProperty['examples'][0] ?? null,
+            'grouping' => $grouping,
+        ]];
+    }
+
+    /**
      * Extract fields from a sub-property, handling various nesting patterns.
      */
-    protected function extractFieldsFromSubProperty(array $subProperty, string $parentName, string $subPropertyName, bool $isRequired, string $grouping): array
+    protected function extractFieldsFromSubProperty(array $subProperty, string $parentName, string $subPropertyName, bool $isRequired, string $grouping, bool $isComplex = true): array
     {
         $fields = [];
 

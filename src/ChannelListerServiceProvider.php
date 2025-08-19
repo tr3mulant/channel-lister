@@ -49,22 +49,22 @@ class ChannelListerServiceProvider extends ServiceProvider
     protected function registerServices(): void
     {
         // Register token manager
-        $this->app->singleton(AmazonTokenManager::class, fn ($app): \IGE\ChannelLister\Services\AmazonTokenManager => new AmazonTokenManager);
+        $this->app->singleton(AmazonTokenManager::class, fn ($app): AmazonTokenManager => new AmazonTokenManager);
 
         // Register Amazon SP-API service
-        $this->app->singleton(AmazonSpApiService::class, fn ($app): \IGE\ChannelLister\Services\AmazonSpApiService => new AmazonSpApiService($app->make(AmazonTokenManager::class)));
+        $this->app->singleton(AmazonSpApiService::class, fn ($app): AmazonSpApiService => new AmazonSpApiService($app->make(AmazonTokenManager::class)));
 
         // Bind the marketplace provider interface
         $this->app->bind(MarketplaceListingProvider::class, AmazonSpApiService::class);
 
         // Register form processor
-        $this->app->singleton(AmazonListingFormProcessor::class, fn ($app): \IGE\ChannelLister\Services\AmazonListingFormProcessor => new AmazonListingFormProcessor($app->make(AmazonSpApiService::class)));
+        $this->app->singleton(AmazonListingFormProcessor::class, fn ($app): AmazonListingFormProcessor => new AmazonListingFormProcessor($app->make(AmazonSpApiService::class)));
 
         // Register data transformer
-        $this->app->singleton(AmazonDataTransformer::class, fn ($app): \IGE\ChannelLister\Services\AmazonDataTransformer => new AmazonDataTransformer);
+        $this->app->singleton(AmazonDataTransformer::class, fn ($app): AmazonDataTransformer => new AmazonDataTransformer);
 
         // Register middleware
-        $this->app->singleton(AmazonSpApiAuth::class, fn ($app): \IGE\ChannelLister\Http\Middleware\AmazonSpApiAuth => new AmazonSpApiAuth($app->make(AmazonTokenManager::class)));
+        $this->app->singleton(AmazonSpApiAuth::class, fn ($app): AmazonSpApiAuth => new AmazonSpApiAuth($app->make(AmazonTokenManager::class)));
 
         // Register shipping calculator service
         $this->app->singleton(\IGE\ChannelLister\Services\ShippingCalculatorService::class);

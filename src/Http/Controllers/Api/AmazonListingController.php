@@ -286,7 +286,7 @@ class AmazonListingController extends Controller
             'product_type' => 'required|string|max:255',
             'marketplace_id' => 'required|string|max:50',
             'form_data' => 'required|array',
-            'listing_id' => 'nullable|integer|exists:amazon_listings,id',
+            'listing_id' => 'nullable|integer|exists:IGE\ChannelLister\Models\AmazonListing,id',
         ]);
 
         try {
@@ -328,7 +328,7 @@ class AmazonListingController extends Controller
     public function validateListing(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'listing_id' => 'required|integer|exists:amazon_listings,id',
+            'listing_id' => 'required|integer|exists:IGE\ChannelLister\Models\AmazonListing,id',
         ]);
 
         try {
@@ -357,7 +357,7 @@ class AmazonListingController extends Controller
     public function generateFile(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'listing_id' => 'required|integer|exists:amazon_listings,id',
+            'listing_id' => 'required|integer|exists:IGE\ChannelLister\Models\AmazonListing,id',
             'format' => 'required|string|in:csv,json',
         ]);
 

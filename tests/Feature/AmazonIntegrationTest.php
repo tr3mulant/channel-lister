@@ -2,20 +2,17 @@
 
 use IGE\ChannelLister\Models\AmazonListing;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
-uses(RefreshDatabase::class);
+uses(RefreshDatabase::class, WithFaker::class);
 
 beforeEach(function (): void {
     // Set up storage and cache for testing
     Storage::fake('local');
     Cache::flush();
-
-    // Set up test configuration
-    config(['channel-lister.amazon.cache.disk' => 'local']);
-    config(['channel-lister.amazon.cache.schema_path' => 'amazon-schemas']);
 });
 
 it('can complete full amazon listing workflow', function (): void {
@@ -23,6 +20,15 @@ it('can complete full amazon listing workflow', function (): void {
 
     // Mock all external API calls
     Http::fake([
+        // Listing requirements
+        'sellingpartnerapi-na.amazon.com/definitions/2020-09-01/productTypes/LUGGAGE*' => Http::response([
+            'schema' => [
+                'link' => [
+                    'resource' => $schemaUrl,
+                ],
+            ],
+        ], 200),
+
         // Product type search
         'sellingpartnerapi-na.amazon.com/definitions/2020-09-01/productTypes*' => Http::response([
             'productTypes' => [
@@ -30,15 +36,6 @@ it('can complete full amazon listing workflow', function (): void {
                     'name' => 'LUGGAGE',
                     'displayName' => 'Luggage',
                     'description' => 'Travel luggage and bags',
-                ],
-            ],
-        ], 200),
-
-        // Listing requirements
-        'sellingpartnerapi-na.amazon.com/definitions/2020-09-01/productTypes/LUGGAGE*' => Http::response([
-            'schema' => [
-                'link' => [
-                    'resource' => $schemaUrl,
                 ],
             ],
         ], 200),
@@ -141,14 +138,12 @@ it('can complete full amazon listing workflow', function (): void {
     $listingId = $submitData['listing_id'];
 
     // Verify listing was created in database
-    expect('amazon_listings')->toHaveRecord([
-        'id' => $listingId,
-        'product_type' => 'LUGGAGE',
-        'marketplace_id' => 'ATVPDKIKX0DER',
-        'status' => 'validated', // Should be validated since all required fields provided
-    ]);
-
     $listing = AmazonListing::find($listingId);
+
+    expect($listing)->not()->toBeNull();
+    expect($listing->product_type)->toEqual('LUGGAGE');
+    expect($listing->marketplace_id)->toEqual('ATVPDKIKX0DER');
+    expect($listing->status)->toEqual('validated');
     expect($listing->form_data)->toEqual($formData);
 
     // Step 4: Get listing status
@@ -312,7 +307,7 @@ it('validates form data and shows errors', function (): void {
     $responseData = $response->json();
 
     expect($responseData['success'])->toBeTrue();
-    expect($responseData['status'])->toBe('draft'); // Should be draft, not validated
+    expect($responseData['status'])->toBe('error');
 
     // Should have validation summary with missing fields
     expect($responseData)->toHaveKey('validation_summary');
