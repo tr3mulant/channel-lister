@@ -196,7 +196,43 @@ class AmazonSpApiService implements MarketplaceListingProvider
 
             if ($schemaData && isset($schemaData['properties'])) {
                 foreach ($schemaData['properties'] as $propertyName => $property) {
-                    if ($this->shouldIncludeProperty($property)) {
+                    if ($this->shouldIncludeProperty($property, $propertyName)) {
+                        // Check if this is a complex nested property that needs multiple fields
+                        if ($this->isComplexNestedProperty($property)) {
+                            $nestedFields = $this->extractNestedFields($property, $propertyName, $schemaData['required'] ?? []);
+                            $requirements = array_merge($requirements, $nestedFields);
+                        } else {
+                            // Extract type and enum, handling nested array structures for Amazon boolean fields
+                            $typeInfo = $this->extractTypeAndEnum($property);
+
+                            $requirements[] = [
+                                'name' => $propertyName,
+                                'displayName' => $property['title'] ?? null,
+                                'description' => $property['description'] ?? null,
+                                'type' => $typeInfo['type'],
+                                'required' => in_array($propertyName, $schemaData['required'] ?? []),
+                                'enum' => $typeInfo['enum'],
+                                'enumNames' => $typeInfo['enumNames'],
+                                'minLength' => $property['minLength'] ?? null,
+                                'maxLength' => $property['maxLength'] ?? null,
+                                'pattern' => $property['pattern'] ?? null,
+                                'example' => $property['examples'][0] ?? null,
+                                'grouping' => $this->determineGrouping($propertyName, $property),
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+        // Fallback for old API format (direct schema in response)
+        elseif (isset($data['schema']['properties'])) {
+            foreach ($data['schema']['properties'] as $propertyName => $property) {
+                if ($this->shouldIncludeProperty($property, $propertyName)) {
+                    // Check if this is a complex nested property that needs multiple fields
+                    if ($this->isComplexNestedProperty($property)) {
+                        $nestedFields = $this->extractNestedFields($property, $propertyName, $data['schema']['required'] ?? []);
+                        $requirements = array_merge($requirements, $nestedFields);
+                    } else {
                         // Extract type and enum, handling nested array structures for Amazon boolean fields
                         $typeInfo = $this->extractTypeAndEnum($property);
 
@@ -205,7 +241,7 @@ class AmazonSpApiService implements MarketplaceListingProvider
                             'displayName' => $property['title'] ?? null,
                             'description' => $property['description'] ?? null,
                             'type' => $typeInfo['type'],
-                            'required' => in_array($propertyName, $schemaData['required'] ?? []),
+                            'required' => in_array($propertyName, $data['schema']['required'] ?? []),
                             'enum' => $typeInfo['enum'],
                             'enumNames' => $typeInfo['enumNames'],
                             'minLength' => $property['minLength'] ?? null,
@@ -215,30 +251,6 @@ class AmazonSpApiService implements MarketplaceListingProvider
                             'grouping' => $this->determineGrouping($propertyName, $property),
                         ];
                     }
-                }
-            }
-        }
-        // Fallback for old API format (direct schema in response)
-        elseif (isset($data['schema']['properties'])) {
-            foreach ($data['schema']['properties'] as $propertyName => $property) {
-                if ($this->shouldIncludeProperty($property)) {
-                    // Extract type and enum, handling nested array structures for Amazon boolean fields
-                    $typeInfo = $this->extractTypeAndEnum($property);
-
-                    $requirements[] = [
-                        'name' => $propertyName,
-                        'displayName' => $property['title'] ?? null,
-                        'description' => $property['description'] ?? null,
-                        'type' => $typeInfo['type'],
-                        'required' => in_array($propertyName, $data['schema']['required'] ?? []),
-                        'enum' => $typeInfo['enum'],
-                        'enumNames' => $typeInfo['enumNames'],
-                        'minLength' => $property['minLength'] ?? null,
-                        'maxLength' => $property['maxLength'] ?? null,
-                        'pattern' => $property['pattern'] ?? null,
-                        'example' => $property['examples'][0] ?? null,
-                        'grouping' => $this->determineGrouping($propertyName, $property),
-                    ];
                 }
             }
         }
@@ -265,10 +277,19 @@ class AmazonSpApiService implements MarketplaceListingProvider
      */
     protected function extractTypeAndEnum(array $property): array
     {
-        // Check for nested array structure with value property (Amazon's boolean pattern)
-        if (($property['type'] ?? null) === 'array' &&
-            isset($property['items']['properties']['value'])) {
+        $propertyType = $property['type'] ?? null;
 
+        if ($propertyType === 'array' && isset($property['items']['properties']['type']['enum'])) {
+            $typeProperty = $property['items']['properties']['type'];
+
+            return [
+                'type' => $typeProperty['type'] ?? 'string',
+                'enum' => $typeProperty['enum'] ?? null,
+                'enumNames' => $typeProperty['enumNames'] ?? null,
+            ];
+        }
+
+        if ($propertyType === 'array' && isset($property['items']['properties']['value']['enum'])) {
             $valueProperty = $property['items']['properties']['value'];
 
             return [
@@ -284,6 +305,108 @@ class AmazonSpApiService implements MarketplaceListingProvider
             'enum' => $property['enum'] ?? null,
             'enumNames' => $property['enumNames'] ?? null,
         ];
+    }
+
+    /**
+     * Check if this property is a complex nested property that needs multiple fields.
+     */
+    protected function isComplexNestedProperty(array $property): bool
+    {
+        return ($property['type'] ?? null) === 'array' &&
+               ($property['items']['type'] ?? null) === 'object' &&
+               isset($property['items']['properties']) &&
+               count($property['items']['properties']) > 1;
+    }
+
+    /**
+     * Recursively extract fields from a complex nested property.
+     */
+    protected function extractNestedFields(array $property, string $propertyName, array $requiredFields): array
+    {
+        $fields = [];
+        $isRequired = in_array($propertyName, $requiredFields);
+        $baseTitle = $property['title'] ?? ucfirst(str_replace('_', ' ', $propertyName));
+        $baseGrouping = $baseTitle; // Use property title as group name
+
+        $itemProperties = $property['items']['properties'] ?? [];
+
+        foreach ($itemProperties as $subPropertyName => $subProperty) {
+            // Skip metadata fields that shouldn't be form inputs
+            if (in_array($subPropertyName, ['marketplace_id', 'language_tag'])) {
+                continue;
+            }
+
+            $extractedFields = $this->extractFieldsFromSubProperty(
+                $subProperty,
+                $propertyName,
+                $subPropertyName,
+                $isRequired,
+                $baseGrouping
+            );
+
+            $fields = array_merge($fields, $extractedFields);
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Extract fields from a sub-property, handling various nesting patterns.
+     */
+    protected function extractFieldsFromSubProperty(array $subProperty, string $parentName, string $subPropertyName, bool $isRequired, string $grouping): array
+    {
+        $fields = [];
+
+        // Handle array sub-properties with nested structures
+        if (($subProperty['type'] ?? null) === 'array' && isset($subProperty['items']['properties'])) {
+            $itemProperties = $subProperty['items']['properties'];
+
+            foreach ($itemProperties as $nestedName => $nestedProperty) {
+                // Skip metadata fields
+                if (in_array($nestedName, ['marketplace_id', 'language_tag'])) {
+                    continue;
+                }
+
+                $fieldName = "{$parentName}_{$subPropertyName}_{$nestedName}";
+                $displayName = $nestedProperty['title'] ?? $subProperty['title'] ?? ucfirst(str_replace('_', ' ', $fieldName));
+
+                $fields[] = [
+                    'name' => $fieldName,
+                    'displayName' => $displayName,
+                    'description' => $nestedProperty['description'] ?? $subProperty['description'] ?? null,
+                    'type' => $nestedProperty['type'] ?? 'string',
+                    'required' => $isRequired,
+                    'enum' => $nestedProperty['enum'] ?? null,
+                    'enumNames' => $nestedProperty['enumNames'] ?? null,
+                    'minLength' => $nestedProperty['minLength'] ?? null,
+                    'maxLength' => $nestedProperty['maxLength'] ?? null,
+                    'pattern' => $nestedProperty['pattern'] ?? null,
+                    'example' => $nestedProperty['examples'][0] ?? $subProperty['examples'][0] ?? null,
+                    'grouping' => $grouping,
+                ];
+            }
+        } else {
+            // Handle direct sub-properties
+            $fieldName = "{$parentName}_{$subPropertyName}";
+            $displayName = $subProperty['title'] ?? ucfirst(str_replace('_', ' ', $fieldName));
+
+            $fields[] = [
+                'name' => $fieldName,
+                'displayName' => $displayName,
+                'description' => $subProperty['description'] ?? null,
+                'type' => $subProperty['type'] ?? 'string',
+                'required' => $isRequired,
+                'enum' => $subProperty['enum'] ?? null,
+                'enumNames' => $subProperty['enumNames'] ?? null,
+                'minLength' => $subProperty['minLength'] ?? null,
+                'maxLength' => $subProperty['maxLength'] ?? null,
+                'pattern' => $subProperty['pattern'] ?? null,
+                'example' => $subProperty['examples'][0] ?? null,
+                'grouping' => $grouping,
+            ];
+        }
+
+        return $fields;
     }
 
     /**
@@ -327,9 +450,9 @@ class AmazonSpApiService implements MarketplaceListingProvider
     protected function getInputTypeAux(array $requirement): ?string
     {
         if (isset($requirement['enum'])) {
-            // For boolean fields with enumNames, use the display names instead of raw values
-            if ($requirement['type'] === 'boolean' && isset($requirement['enumNames'])) {
-                // Create key-value pairs: "No==false||Yes==true"
+            // For fields with enumNames, use the display names with corresponding values
+            if (isset($requirement['enumNames'])) {
+                // Create key-value pairs: "EAN==ean||GTIN==gtin||UPC==upc"
                 $options = [];
                 foreach ($requirement['enumNames'] as $index => $displayName) {
                     $value = $requirement['enum'][$index] ?? $index;
@@ -341,25 +464,36 @@ class AmazonSpApiService implements MarketplaceListingProvider
                 return implode('||', $options);
             }
 
-            // Default enum handling for non-boolean fields
+            // Default enum handling for fields without enumNames
             return implode('||', $requirement['enum']);
         }
 
         return null;
     }
 
-    protected function shouldIncludeProperty(array $property): bool
+    protected function shouldIncludeProperty(array $property, string $propertyName = ''): bool
     {
-        // Skip system properties and complex nested objects
+        // Skip complex nested objects that don't have clear form field mappings
         $excludePatterns = [
-            'externally_assigned_product_identifier',
             'fulfillment_availability',
             'merchant_suggested_asin',
+            'purchasable_offer',
         ];
+
+        // Allow specific array-type properties that we know how to handle
+        $allowedArrayProperties = [
+            'externally_assigned_product_identifier',
+            'supplier_declared_has_product_identifier_exemption',
+        ];
+
+        // If this is an array type we know how to handle, allow it
+        if (in_array($propertyName, $allowedArrayProperties)) {
+            return true;
+        }
 
         return ! isset($property['type']) ||
                $property['type'] !== 'object' ||
-               ! in_array($property['name'] ?? '', $excludePatterns);
+               ! in_array($propertyName, $excludePatterns);
     }
 
     protected function determineGrouping(string $propertyName, array $property): string

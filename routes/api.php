@@ -22,7 +22,25 @@ Route::prefix('channel-lister')->name('api.channel-lister.')->group(function () 
 
     Route::get('getCountryCodeOptions/{country}/{digits}', [ChannelListerController::class, 'getCountryCodeOptions'])->name('get-country-code-options');
 
+    // Legacy endpoint (backward compatibility)
     Route::post('/', [ChannelListerController::class, 'submitProductData'])->name('submit-product-data');
+
+    // ===== UNIFIED DRAFT SYSTEM ENDPOINTS =====
+
+    // Save unified draft from all marketplace tabs
+    Route::post('save-draft', [ChannelListerController::class, 'saveDraft'])->name('save-draft');
+
+    // Load specific draft
+    Route::get('drafts/{draft}', [ChannelListerController::class, 'loadDraft'])->name('load-draft');
+
+    // Get list of drafts
+    Route::get('drafts', [ChannelListerController::class, 'getDrafts'])->name('get-drafts');
+
+    // Export draft in specified format(s)
+    Route::post('export-draft/{draft}', [ChannelListerController::class, 'exportDraft'])->name('export-draft');
+
+    // Delete draft
+    Route::delete('drafts/{draft}', [ChannelListerController::class, 'deleteDraft'])->name('delete-draft');
 });
 
 Route::prefix('channel-lister-field')->name('api.channel-lister-field.')->group(function () {

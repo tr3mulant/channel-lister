@@ -185,9 +185,9 @@ describe('ChannelLister', function (): void {
         it('formats correctly', function (string $input, string $expected): void {
             expect(ChannelLister::marketplaceDisplayName($input))->toBe($expected);
         })->with([
-            'amazon' => ['amazon', 'Amazon US'],
-            'amazon-us' => ['amazon-us', 'Amazon US'],
-            'amazon_us' => ['amazon_us', 'Amazon US'],
+            'amazon' => ['amazon', 'Amazon'],
+            'amazon-us' => ['amazon-us', 'Amazon'],
+            'amazon_us' => ['amazon_us', 'Amazon'],
             'amazon-ca' => ['amazon-ca', 'Amazon CA'],
             'amazon_ca' => ['amazon_ca', 'Amazon CA'],
             'amazon-au' => ['amazon-au', 'Amazon AU'],

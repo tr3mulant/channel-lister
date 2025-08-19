@@ -140,12 +140,12 @@ class ChannelLister
     public static function marketplaceDisplayName($marketplace): string
     {
         return match ($marketplace) {
-            'amazon', 'amazon-us', 'amazon_us' => 'Amazon US',
+            'amazon', 'amazon-us', 'amazon_us' => 'Amazon',
             'amazon-ca', 'amazon_ca' => 'Amazon CA',
             'amazon-au', 'amazon_au' => 'Amazon AU',
             'amazon-mx', 'amazon_mx' => 'Amazon MX',
             'ebay' => 'eBay',
-            'walmart', 'walmart-us', 'walmart_us' => 'Walmart US',
+            'walmart', 'walmart-us', 'walmart_us' => 'Walmart',
             'walmart-ca', 'walmart_ca' => 'Walmart CA',
             default => ucwords(strtolower($marketplace)),
         };
@@ -430,7 +430,7 @@ class ChannelLister
     }
 
     /**
-     * Undocumented function
+     * Generate CSV export for Channel Advisor/Rithum format
      *
      * @param  array<string,string>  $data
      */
@@ -438,6 +438,20 @@ class ChannelLister
     {
         $ca_data = static::extractData($data);
         $custom_data = static::extractData($data, true);
+
+        return static::writeCsv($ca_data, $custom_data);
+    }
+
+    /**
+     * Generate CSV export for unified ProductDraft data
+     * This method handles both ChannelAdvisor/Rithum and marketplace-specific custom attributes
+     *
+     * @param  array<string,string>  $exportData  Unified export data from AmazonChannelListerIntegrationService
+     */
+    public static function csvFromUnifiedData(array $exportData): string
+    {
+        $ca_data = static::extractChannelAdvisorFields($exportData);
+        $custom_data = static::extractCustomAttributes($exportData);
 
         return static::writeCsv($ca_data, $custom_data);
     }
@@ -585,5 +599,82 @@ class ChannelLister
     private static function isValidCustomField(Collection $fields, string $key, string $value): bool
     {
         return strlen($value) > 0 && ! $fields->has($key);
+    }
+
+    /**
+     * Extract ChannelAdvisor/Rithum fields from unified export data
+     *
+     * @param  array<string,string>  $exportData
+     * @return array<string,string>
+     */
+    protected static function extractChannelAdvisorFields(array $exportData): array
+    {
+        /** @var Collection<string,ChannelListerField> $fields */
+        $fields = ChannelListerField::query()
+            ->select(['field_name', 'input_type'])
+            ->where('type', '=', 'channeladvisor')
+            ->get()
+            ->keyBy('field_name');
+
+        $result = [];
+
+        foreach ($exportData as $fieldName => $value) {
+            // Only include fields that are defined as ChannelAdvisor fields
+            if ($fields->has($fieldName) && ! in_array(trim($value), ['', '0'], true)) {
+                $result[$fieldName] = trim($value);
+            }
+        }
+
+        // Handle image preparation for ChannelAdvisor format
+        $result['Picture URLs'] = (new self)->prepareCaImages($exportData);
+
+        // Handle quantity updates if present
+        if (array_key_exists('Total Quantity', $result)) {
+            $result['Quantity Update Type'] = 'UNSHIPPED';
+            $warehouse = config('channel-lister.default_warehouse', '');
+            if (! is_string($warehouse)) {
+                $warehouse = '';
+            }
+            $result['DC Quantity'] = "{$warehouse}={$result['Total Quantity']}";
+            $result['DC Quantity Update Type'] = 'partial dc list';
+            unset($result['Total Quantity']);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Extract custom attributes from unified export data
+     * These are marketplace-specific fields that become Rithum custom attributes
+     *
+     * @param  array<string,string>  $exportData
+     * @return array<string,string>
+     */
+    protected static function extractCustomAttributes(array $exportData): array
+    {
+        /** @var Collection<string,ChannelListerField> $fields */
+        $fields = ChannelListerField::query()
+            ->select(['field_name'])
+            ->where('type', '=', 'channeladvisor')
+            ->get()
+            ->keyBy('field_name');
+
+        $result = [];
+
+        foreach ($exportData as $fieldName => $value) {
+            if ($fields->has($fieldName)) {
+                continue;
+            }
+            if (in_array(trim($value), ['', '0'], true)) {
+                continue;
+            }
+            // Skip special processed fields
+            if ($fieldName === 'Picture URLs') {
+                continue;
+            }
+            $result[$fieldName] = trim($value);
+        }
+
+        return $result;
     }
 }

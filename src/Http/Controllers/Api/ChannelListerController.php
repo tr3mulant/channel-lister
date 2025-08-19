@@ -3,7 +3,8 @@
 namespace IGE\ChannelLister\Http\Controllers\Api;
 
 use IGE\ChannelLister\ChannelLister;
-use IGE\ChannelLister\Models\ChannelListerField;
+use IGE\ChannelLister\Models\ProductDraft;
+use IGE\ChannelLister\Services\AmazonChannelListerIntegrationService;
 use IGE\ChannelLister\View\Components\ChannelListerFields;
 use IGE\ChannelLister\View\Components\Custom\SkuBundleComponentInputRow;
 use IGE\ChannelLister\View\Components\Modal\Header;
@@ -119,6 +120,8 @@ class ChannelListerController extends Controller
             'sku_bundle_quantity_*' => 'nullable|integer|min:1|max:999999',
         ]);
 
+        // For backward compatibility, continue using the original CSV method
+        // when data comes directly from form submission (legacy workflow)
         $filename = ChannelLister::csv($validated);
 
         return response()->json([
@@ -129,5 +132,188 @@ class ChannelListerController extends Controller
         // This return works when the return type is BinaryFileResponse
         // return response()->download($filename, 'channel_lister_export.csv');
 
+    }
+
+    // ===== UNIFIED DRAFT SYSTEM METHODS =====
+
+    /**
+     * Save unified product draft from all marketplace tabs.
+     */
+    public function saveDraft(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'form_data' => 'required|array',
+            'form_data.*' => 'array', // Each marketplace tab data
+            'draft_id' => 'nullable|integer|exists:product_drafts,id',
+        ]);
+
+        try {
+            if (isset($validated['draft_id'])) {
+                // Update existing draft
+                $draft = ProductDraft::findOrFail($validated['draft_id']);
+                $draft->form_data = $validated['form_data'];
+                $draft->updateIdentifiers();
+                $draft->save();
+            } else {
+                // Create new draft
+                $draft = ProductDraft::create([
+                    'form_data' => $validated['form_data'],
+                    'status' => ProductDraft::STATUS_DRAFT,
+                ]);
+                $draft->updateIdentifiers();
+                $draft->save();
+            }
+
+            return response()->json([
+                'draft_id' => $draft->id,
+                'message' => 'Draft saved successfully!',
+                'title' => $draft->title,
+                'sku' => $draft->sku,
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to save draft: '.$e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Load a specific product draft.
+     */
+    public function loadDraft(Request $request, int $draftId): JsonResponse
+    {
+        try {
+            $draft = ProductDraft::findOrFail($draftId);
+
+            return response()->json([
+                'success' => true,
+                'draft' => [
+                    'id' => $draft->id,
+                    'form_data' => $draft->form_data,
+                    'status' => $draft->status,
+                    'title' => $draft->title,
+                    'sku' => $draft->sku,
+                    'created_at' => $draft->created_at,
+                    'updated_at' => $draft->updated_at,
+                ],
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to load draft: '.$e->getMessage(),
+            ], 404);
+        }
+    }
+
+    /**
+     * Get list of product drafts.
+     */
+    public function getDrafts(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'status' => 'nullable|string|in:draft,validated,exported',
+            'page' => 'nullable|integer|min:1',
+            'per_page' => 'nullable|integer|min:1|max:100',
+        ]);
+
+        $query = ProductDraft::query();
+
+        if (! empty($validated['status'])) {
+            $query->byStatus($validated['status']);
+        }
+
+        $drafts = $query->latest()
+            ->paginate($validated['per_page'] ?? 15);
+
+        return response()->json([
+            'drafts' => $drafts->items(),
+            'pagination' => [
+                'current_page' => $drafts->currentPage(),
+                'last_page' => $drafts->lastPage(),
+                'per_page' => $drafts->perPage(),
+                'total' => $drafts->total(),
+            ],
+        ]);
+    }
+
+    /**
+     * Export product draft in specified format(s).
+     */
+    public function exportDraft(Request $request, int $draftId): JsonResponse
+    {
+        $validated = $request->validate([
+            'format' => 'required|string|in:rithum,amazon,all',
+        ]);
+
+        try {
+            $draft = ProductDraft::findOrFail($draftId);
+
+            $integrationService = app(AmazonChannelListerIntegrationService::class);
+            $results = [];
+
+            if ($validated['format'] === 'rithum' || $validated['format'] === 'all') {
+                // Generate Rithum CSV export using unified data structure
+                $filename = $integrationService->generateRithumCsvFile($draft);
+
+                $results['rithum'] = [
+                    'format' => 'csv',
+                    'filename' => $filename,
+                    'download_url' => $filename,
+                ];
+            }
+
+            if ($validated['format'] === 'amazon' || $validated['format'] === 'all') {
+                // Generate Amazon export (future implementation)
+                $amazonData = $draft->getAmazonData();
+                if (! empty($amazonData)) {
+                    $results['amazon'] = [
+                        'format' => 'json',
+                        'data' => $amazonData,
+                        'message' => 'Amazon data ready for submission',
+                    ];
+                }
+            }
+
+            // Update draft export status
+            $draft->status = ProductDraft::STATUS_EXPORTED;
+            $draft->export_formats = array_keys($results);
+            $draft->save();
+
+            return response()->json([
+                'success' => true,
+                'exports' => $results,
+                'message' => 'Draft exported successfully!',
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to export draft: '.$e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Delete a product draft.
+     */
+    public function deleteDraft(Request $request, int $draftId): JsonResponse
+    {
+        try {
+            $draft = ProductDraft::findOrFail($draftId);
+            $draft->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Draft deleted successfully!',
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete draft: '.$e->getMessage(),
+            ], 500);
+        }
     }
 }
