@@ -1,5 +1,5 @@
 <div @class(['form-group', 'required' => $required])>
-    <label class="col-form-label" for="{{ $id }}">{{ $label_text }}</label>
+    <label class="col-form-label font-weight-bold" for="{{ $id }}">{{ $label_text }}</label>
     <select name="{{ $element_name }}" @if ($select_type === 'selectpicker') data-style="bg-white border" @endif
         @class([
             $classStrDefault,
@@ -11,6 +11,6 @@
             <option @style(['white-space:normal' => strlen($display_name) > 256]) value="{{ $option }}">{{ $display_name }}</option>
         @endforeach
     </select>
-    <p class="form-text">{!! $tooltip !!}</p>
-    <p class="form-text">{!! $maps_to_text !!}</p>
+    <p class="form-text text-secondary">{!! $tooltip !!}</p>
+    <p class="form-text text-secondary">{!! $maps_to_text !!}</p>
 </div>

@@ -8,7 +8,7 @@
             <p>{{ $display_set_name }}</p>
             @foreach ($display_names as $option_val => $option_name)
                 @php
-                    $checkbox_id = $element_name . $label_text . "-checkbox" . $checkbox_count;
+                    $checkbox_id = $element_name . $label_text . '-checkbox' . $checkbox_count;
                     $checkbox_count++;
                 @endphp
                 <div class="">
@@ -20,6 +20,6 @@
             @endforeach
         @endforeach
     </div>
-    <p class="form-text">{!! $tooltip !!}</p>
-    <p class="form-text">{!! $maps_to_text !!}</p>
+    <p class="form-text text-secondary">{!! $tooltip !!}</p>
+    <p class="form-text text-secondary">{!! $maps_to_text !!}</p>
 </div>

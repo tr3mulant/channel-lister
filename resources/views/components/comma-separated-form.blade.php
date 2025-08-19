@@ -1,12 +1,12 @@
 <div class="form-group {{ $required }}">
-    <label class="col-form-label" for="{{ $id }}">{{ $label_text }}</label>
+    <label class="col-form-label font-weight-bold" for="{{ $id }}">{{ $label_text }}</label>
     <input type="text" name="{{ $element_name }}" class="{{ $classStrDefault }}" id="{{ $id }}"
         placeholder="{{ $placeholder }}" {{ $required }}>
     <div class="comma-sep-options">
         @php $checkbox_count = 0; @endphp
         @foreach ($display_names as $option_val => $option_name)
             @php
-                $checkbox_id = $element_name . $label_text . "-checkbox" . $checkbox_count;
+                $checkbox_id = $element_name . $label_text . '-checkbox' . $checkbox_count;
                 $checkbox_count++;
             @endphp
             <div class="checkbox-inline">
@@ -16,6 +16,6 @@
             </div>
         @endforeach
     </div>
-    <p class="form-text">{!! $tooltip !!}</p>
-    <p class="form-text">{!! $maps_to_text !!}</p>
+    <p class="form-text text-secondary">{!! $tooltip !!}</p>
+    <p class="form-text text-secondary">{!! $maps_to_text !!}</p>
 </div>
