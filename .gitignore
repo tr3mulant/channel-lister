@@ -13,3 +13,4 @@
 **/.env*/**
 !.env.example
 workbench/storage
+/.CLAUDE.md
