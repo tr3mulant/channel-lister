@@ -156,7 +156,7 @@ it('renders empty paragraph when tooltip is empty', function (): void {
     );
 
     // Should still have the paragraph element but empty
-    $view->assertSee('<p class="form-text"></p>', false);
+    $view->assertSee('<p class="form-text text-secondary"></p>', false);
 });
 
 it('uses example value for placeholder', function (): void {
@@ -335,7 +335,7 @@ it('renders component with minimal fields', function (): void {
     $view->assertSee('name="refinements"', false);
     $view->assertSee('id="refinements-id"', false);
     $view->assertSee('placeholder=""', false);
-    $view->assertSee('<p class="form-text"></p>', false);
+    $view->assertSee('<p class="form-text text-secondary"></p>', false);
     $view->assertSee('Maps To: <code>refinements</code>', false);
     $view->assertSee('Limit: '); // No limit value
     $view->assertSee('data-limit=""', false);

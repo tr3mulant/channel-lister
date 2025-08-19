@@ -3,6 +3,8 @@
 namespace IGE\ChannelLister\Tests;
 
 use IGE\ChannelLister\ChannelListerServiceProvider;
+use IGE\ChannelLister\Services\AmazonSpApiService;
+use IGE\ChannelLister\Services\AmazonTokenManager;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -22,6 +24,22 @@ abstract class TestCase extends TestbenchTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        // Mock the AmazonTokenManager service to avoid real authentication
+        $mockTokenManager = \Mockery::mock(AmazonTokenManager::class);
+        $mockTokenManager->shouldReceive('getAccessToken')->andReturn('fake-access-token');
+        $mockTokenManager->shouldReceive('validateConfiguration')->andReturn([]);
+        $mockTokenManager->shouldReceive('getTokenInfo')->andReturn([
+            'access_token' => 'fake-access-token',
+            'expires_at' => now()->addHour(),
+        ]);
+
+        $this->app->singleton(AmazonTokenManager::class, fn () => $mockTokenManager);
+
+        $this->app->singleton(
+            AmazonSpApiService::class,
+            fn () => new AmazonSpApiService($this->app->make(AmazonTokenManager::class))
+        );
     }
 
     /**

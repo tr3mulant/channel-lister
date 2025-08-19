@@ -1,7 +1,8 @@
-<div class="form-group {{ $required }}">
+<div @class(['form-group', 'required' => $params->required])>
     <label class="col-form-label font-weight-bold" for="{{ $id }}">{{ $label_text }}</label>
     <input type="url" name="{{ $element_name }}" class="{{ $classStrDefault }}" id="{{ $id }}"
-        pattern="{{ $pattern }}" placeholder="{{ $placeholder }}" {{ $required }}>
+        @if ($pattern) pattern="{{ $pattern }}" @endif
+        @if ($placeholder) placeholder="{{ $placeholder }}" @endif @required($params->required)>
     <p class="form-text text-secondary">{!! $tooltip !!}</p>
     <p class="form-text text-secondary">{!! $maps_to_text !!}</p>
     <div class="iframe-wrap">
