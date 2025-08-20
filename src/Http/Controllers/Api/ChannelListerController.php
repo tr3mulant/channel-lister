@@ -3,6 +3,7 @@
 namespace IGE\ChannelLister\Http\Controllers\Api;
 
 use IGE\ChannelLister\ChannelLister;
+use IGE\ChannelLister\Models\ChannelListerField;
 use IGE\ChannelLister\Models\ProductDraft;
 use IGE\ChannelLister\Services\AmazonChannelListerIntegrationService;
 use IGE\ChannelLister\View\Components\ChannelListerFields;
