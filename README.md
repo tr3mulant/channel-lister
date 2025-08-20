@@ -17,6 +17,7 @@
 - 📋 **Smart Validation** - Real-time validation with progress tracking
 - 📄 **Multiple Export Formats** - CSV and JSON export for various platforms
 - 🔍 **Existing Listing Lookup** - Pre-populate forms from existing marketplace data
+- 📦 **Shipping Cost Calculator** - Real-time shipping cost calculations with ShipEngine API
 - ⚡ **Modern Stack** - Built with Laravel, Pest testing, and modern PHP 8.3+
 
 > **Requires [PHP 8.3+](https://php.net/releases/)**
@@ -110,6 +111,10 @@ AMAZON_SP_API_REGION=us-east-1
 AMAZON_SP_API_CLIENT_ID=your_client_id_here
 AMAZON_SP_API_CLIENT_SECRET=your_client_secret_here
 AMAZON_SP_API_REFRESH_TOKEN=your_refresh_token_here
+
+# Shipping Calculator (Optional)
+SHIPSTATION_API_KEY=your_shipengine_api_key_here
+SHIPSTATION_BASE_URL=https://api.shipengine.com/v1
 ```
 
 **Note**: The system now uses OAuth 2.0 with automatic token refresh. You only need to provide your client credentials and refresh token - access tokens are managed automatically.
@@ -211,6 +216,94 @@ The system provides a complete workflow for creating Amazon listings:
 - **Constraints**: Length limits, regex patterns, value ranges
 - **Business Logic**: SKU uniqueness, price consistency, dimension validation
 - **Real-time Feedback**: Instant validation results and progress tracking
+
+---
+
+## 📦 Shipping Cost Calculator
+
+Channel Lister includes a powerful shipping cost calculator that integrates with ShipEngine API to provide real-time shipping rates from major carriers (UPS, FedEx, USPS). This feature helps sellers accurately estimate shipping costs for their products, improving pricing decisions and customer experience.
+
+### ✨ Features
+
+- **Real-time Rate Shopping** - Get live rates from multiple carriers simultaneously
+- **Dimensional Weight Calculation** - Automatic calculation for different carrier divisors
+- **IP Geolocation** - Detect origin location automatically from user's IP
+- **Manual Entry Fallback** - Enter shipping costs manually when API is unavailable
+- **Smart Integration** - Seamlessly integrated into cost-related form fields
+- **Carrier Comparison** - Compare rates across UPS, FedEx, and USPS
+- **Auto-fill Dimensions** - Pull package dimensions from existing form fields
+
+### ⚙️ Configuration
+
+Add the following environment variables to your `.env` file:
+
+```env
+# ShipEngine API Configuration
+SHIPSTATION_API_KEY=your_shipengine_api_key_here
+SHIPSTATION_BASE_URL=https://api.shipengine.com/v1
+```
+
+**Note**: The system gracefully handles missing API keys by providing manual entry options for shipping costs. ShipEngine API usage incurs costs based on your plan - see [ShipEngine pricing](https://www.shipengine.com/pricing/) for details.
+
+### 📋 Usage
+
+The shipping calculator appears as an integrated button within cost-related form fields:
+
+1. **Automatic Detection**: Click "Calculate Shipping" button on any shipping cost field
+2. **Location Setup**: System detects your location via IP or enter ZIP codes manually  
+3. **Package Details**: Enter dimensions (length, width, height) and weight
+4. **Auto-fill**: Use existing form data to populate dimensions automatically
+5. **Rate Comparison**: View rates from multiple carriers sorted by price
+6. **Selection**: Click desired rate to populate the form field
+
+### 🔗 API Endpoints
+
+**Shipping Calculator Endpoints:**
+
+- `GET /api/shipping/check-api` - Check if ShipEngine API key is available
+- `GET /api/shipping/location` - Get user location from IP address  
+- `POST /api/shipping/calculate` - Calculate shipping rates for package
+- `GET /api/shipping/carriers` - Get available carriers from ShipEngine
+- `POST /api/shipping/dimensional-weight` - Calculate dimensional weight only
+
+### 📊 Dimensional Weight Calculation
+
+The system automatically calculates dimensional weight using carrier-specific divisors:
+
+- **UPS Commercial**: 139 cubic inches per pound
+- **FedEx**: 139 cubic inches per pound  
+- **USPS**: 166 cubic inches per pound
+
+**Billable Weight**: The greater of actual weight or dimensional weight is used for rate calculation.
+
+### 🎯 Integration Details
+
+The shipping calculator integrates seamlessly with the form system:
+
+- **Field Detection**: Automatically appears on fields with "shipping", "cost", or similar names
+- **Modal Interface**: Clean, user-friendly modal with step-by-step workflow
+- **Responsive Design**: Works on desktop and mobile devices
+- **Error Handling**: Graceful fallbacks when API is unavailable
+- **Caching**: Efficient rate caching to minimize API calls
+
+### 💡 Manual Entry Mode
+
+When ShipEngine API is not configured or unavailable:
+
+- System automatically switches to manual entry mode
+- Users can enter estimated shipping costs directly
+- All functionality remains available without API dependency
+- Clear messaging indicates manual entry is required
+
+### 🔧 Development & Testing
+
+The shipping calculator includes comprehensive test coverage and follows Laravel best practices:
+
+- **Service Layer**: Clean separation of concerns with `ShippingCalculatorService`
+- **API Integration**: Robust HTTP client with error handling
+- **Form Components**: Reusable Blade components with JavaScript integration
+- **Validation**: Input validation for dimensions, ZIP codes, and weights
+- **Testing**: Full test suite covering happy paths and error conditions
 
 ---
 
