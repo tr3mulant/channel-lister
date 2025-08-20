@@ -8,7 +8,9 @@ use IGE\ChannelLister\Enums\InputType;
 use IGE\ChannelLister\Models\ChannelListerField;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\Str;
 
 class ChannelLister
 {
@@ -447,6 +449,7 @@ class ChannelLister
      * This method handles both ChannelAdvisor/Rithum and marketplace-specific custom attributes
      *
      * @param  array<string,string>  $exportData  Unified export data from AmazonChannelListerIntegrationService
+     * @return string The stored file path that can be used for downloads
      */
     public static function csvFromUnifiedData(array $exportData): string
     {
@@ -457,11 +460,11 @@ class ChannelLister
     }
 
     /**
-     * Writes a temporary file formatted for channeladvisor and returns contents
+     * Writes a temporary file formatted for channeladvisor and returns the file path
      *
      * @param  array<string,string>  $ca_params  associative array of ChannelAdvisor reserved attributes
      * @param  array<string,string>  $custom_params  associative array of custom attributes
-     * @return string file contents
+     * @return string The stored file path relative to the configured disk
      */
     protected static function writeCsv(array $ca_params, array $custom_params): string
     {
@@ -475,16 +478,69 @@ class ChannelLister
             $data[] = $custom_value;
             $index++;
         }
+
+        // Get configuration for downloads
+        /** @var string $disk */
+        $disk = config('channel-lister.downloads.disk', 'local');
+        /** @var string $path */
+        $path = config('channel-lister.downloads.path', 'channel-lister/exports');
+
+        // Generate unique filename
+        $filename = $path.'/'.Str::uuid().'_export_'.now()->format('Y-m-d_H-i-s').'.csv';
+
         $delim = ','; // default delimiter
         $encl = '"'; // default enclosure
         $esc = ''; // disables the escape character that is default "\\"
-        $fp = tmpfile();
-        $filename = stream_get_meta_data($fp)['uri'];
-        fwrite($fp, "\xEF\xBB\xBF"); // Byte Order Mark - UTF-8
-        fputcsv($fp, $ca_headers, $delim, $encl, $esc);
-        fputcsv($fp, $data, $delim, $encl, $esc);
+
+        // Create CSV content in memory
+        $csvContent = "\xEF\xBB\xBF"; // Byte Order Mark - UTF-8
+
+        // Add headers
+        $csvContent .= static::arrayToCsvLine($ca_headers, $delim, $encl, $esc)."\n";
+
+        // Add data row
+        $csvContent .= static::arrayToCsvLine($data, $delim, $encl, $esc)."\n";
+
+        // Store the file using Laravel Storage
+        Storage::disk($disk)->put($filename, $csvContent);
 
         return $filename;
+    }
+
+    /**
+     * Convert array to CSV line (similar to fputcsv functionality)
+     *
+     * @param  array<string>  $data
+     */
+    protected static function arrayToCsvLine(array $data, string $delimiter = ',', string $enclosure = '"', string $escape = '\\'): string
+    {
+        $csvLine = '';
+        $first = true;
+
+        foreach ($data as $field) {
+            if (! $first) {
+                $csvLine .= $delimiter;
+            }
+
+            // Escape any enclosure characters within the field
+            if ($escape !== '' && str_contains((string) $field, $enclosure)) {
+                $field = str_replace($enclosure, $escape.$enclosure, (string) $field);
+            }
+
+            // Enclose field if it contains delimiter, enclosure, or newline
+            if (str_contains((string) $field, $delimiter) ||
+                str_contains((string) $field, $enclosure) ||
+                str_contains((string) $field, "\n") ||
+                str_contains((string) $field, "\r")) {
+                $csvLine .= $enclosure.$field.$enclosure;
+            } else {
+                $csvLine .= $field;
+            }
+
+            $first = false;
+        }
+
+        return $csvLine;
     }
 
     /**

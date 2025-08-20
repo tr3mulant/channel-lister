@@ -65,7 +65,7 @@ return [
 
     'upc_prefixes' => [],
 
-    'cache_prefix' => 'channel-lister',
+    'cache_prefix' => env('CHANNEL_LISTER_CACHE_PREFIX', 'channel-lister'),
 
     'default_warehouse' => env('CHANNEL_LISTER_DEFAULT_WAREHOUSE', 'channellister'),
 
@@ -110,6 +110,32 @@ return [
             // Directory path within the disk for schema files
             'schema_path' => env('CHANNEL_LISTER_AMAZON_CACHE_SCHEMA_PATH', 'amazon-schemas'),
         ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | File Downloads Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configure how exported files are stored and downloaded. Files are
+    | temporarily stored before download and automatically cleaned up.
+    |
+    */
+    'downloads' => [
+        // Disk to use for temporary file storage (local, s3, etc.)
+        'disk' => env('CHANNEL_LISTER_DOWNLOADS_DISK', 'local'),
+
+        // Directory path within the disk for temporary files
+        'path' => env('CHANNEL_LISTER_DOWNLOADS_PATH', 'channel-lister/exports'),
+
+        // How long download tokens remain valid (in seconds)
+        'token_ttl' => env('CHANNEL_LISTER_DOWNLOADS_TOKEN_TTL', 30),
+
+        // How long files persist on disk (in seconds)
+        'file_ttl' => env('CHANNEL_LISTER_DOWNLOADS_FILE_TTL', 60),
+
+        // Auto-delete files after first download
+        'delete_after_download' => env('CHANNEL_LISTER_DOWNLOADS_DELETE_AFTER', true),
     ],
 
     /*

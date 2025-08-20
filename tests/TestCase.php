@@ -38,7 +38,7 @@ abstract class TestCase extends TestbenchTestCase
 
         $this->app->singleton(
             AmazonSpApiService::class,
-            fn () => new AmazonSpApiService($this->app->make(AmazonTokenManager::class))
+            fn (): \IGE\ChannelLister\Services\AmazonSpApiService => new AmazonSpApiService($this->app->make(AmazonTokenManager::class))
         );
     }
 

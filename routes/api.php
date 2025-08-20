@@ -39,6 +39,9 @@ Route::prefix('channel-lister')->name('api.channel-lister.')->group(function () 
     // Export draft in specified format(s)
     Route::post('export-draft/{draft}', [ChannelListerController::class, 'exportDraft'])->name('export-draft');
 
+    // Download file with secure token
+    Route::get('download/{token}', [ChannelListerController::class, 'downloadFile'])->name('download-file');
+
     // Delete draft
     Route::delete('drafts/{draft}', [ChannelListerController::class, 'deleteDraft'])->name('delete-draft');
 });

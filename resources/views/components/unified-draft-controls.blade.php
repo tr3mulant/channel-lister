@@ -161,14 +161,15 @@
                 <button type="button" id="unified-save-draft-btn" class="btn btn-secondary btn-sm">
                     💾 Save Draft
                 </button>
-                <button type="button" id="unified-validate-btn" class="btn btn-warning btn-sm">
-                    ✓ Validate
+                <button type="button" id="unified-validate-btn" class="btn btn-outline-warning btn-sm">
+                    ✓ Check Data (Optional)
                 </button>
                 <button type="button" id="unified-export-btn" class="btn btn-primary btn-sm" disabled>
                     ⬇ Export
                 </button>
             </div>
-            <small class="form-text text-muted">Save, validate, and export your product data</small>
+            <small class="form-text text-muted">Save and export your product data. Optionally check data quality before
+                export.</small>
         </div>
     </div>
 
@@ -225,6 +226,7 @@
                 this.detectCrossTabData();
                 this.setupFormChangeDetection();
                 this.setupAutoDetection();
+                this.updateExportButtonState(); // Initialize export button state
             },
 
             // Bind event handlers
@@ -359,9 +361,11 @@
                     },
                     dataType: 'json'
                 }).done((response) => {
-                    this.currentDraftId = response.draft_id;
-                    this.updateCurrentDraftDisplay(response);
+                    this.currentDraftId = response.draft.id;
+                    this.updateCurrentDraftDisplay(response.draft);
                     this.loadDrafts(); // Refresh draft list
+                    this
+                        .updateExportButtonState(); // Enable export since we have a saved draft with data
                     this.showMessage('success', 'Draft saved successfully!');
                 }).fail((xhr) => {
                     this.showMessage('error', 'Error saving draft: ' + xhr.responseText);
@@ -497,6 +501,9 @@
                 // Update current draft display
                 this.updateCurrentDraftDisplay(draft);
 
+                // Enable export button since we have a draft loaded
+                this.updateExportButtonState();
+
                 // Use enhanced global function if available
                 if (typeof window.populateAllTabData === 'function') {
                     // Clear existing form data first
@@ -537,6 +544,8 @@
                 // Update cross-tab indicator
                 setTimeout(() => {
                     this.detectCrossTabData();
+                    this
+                        .updateExportButtonState(); // Enable export since we loaded a draft with data
                 }, 1500);
             },
 
@@ -565,11 +574,11 @@
             // Validate draft
             validateDraft: function() {
                 if (!this.currentDraftId) {
-                    alert('Please save a draft first before validating');
+                    alert('Please save a draft first before checking data quality');
                     return;
                 }
 
-                this.updateButtonState('#unified-validate-btn', true, 'Validating...');
+                this.updateButtonState('#unified-validate-btn', true, 'Checking...');
 
                 // For now, basic validation - can be enhanced later
                 const formData = this.collectAllFormData();
@@ -580,21 +589,23 @@
                         this.currentStatus = 'validated';
                         this.showValidationSummary({
                             success: true,
-                            message: 'All validations passed!',
+                            message: 'Data quality check passed!',
                             completion_percentage: 100
                         });
-                        $('#unified-export-btn').prop('disabled', false);
-                        this.showMessage('success', 'Draft validated successfully!');
+                        this.showMessage('success',
+                            'Data quality check completed successfully!');
                     } else {
                         this.showValidationSummary({
                             success: false,
                             message: 'Please fill in required fields',
                             completion_percentage: 25
                         });
-                        this.showMessage('warning', 'Validation failed - please review errors');
+                        this.showMessage('warning',
+                            'Data quality check found issues - please review');
                     }
 
-                    this.updateButtonState('#unified-validate-btn', false, '✓ Validate');
+                    this.updateButtonState('#unified-validate-btn', false,
+                        '✓ Check Data (Optional)');
                 }, 1000);
             },
 
@@ -639,7 +650,19 @@
             // Export draft
             exportDraft: function(format) {
                 if (!this.currentDraftId) {
-                    alert('Please save and validate a draft first');
+                    alert('Please save a draft first');
+                    return;
+                }
+
+                // Basic validation check - ensure we have some data to export
+                const formData = this.collectAllFormData();
+                const hasData = Object.keys(formData.common).length > 0 ||
+                    Object.keys(formData.amazon || {}).length > 0 ||
+                    Object.keys(formData.marketplaces || {}).reduce((total, marketplace) =>
+                        total + Object.keys(marketplace || {}).length, 0) > 0;
+
+                if (!hasData) {
+                    alert('Please add some product data before exporting');
                     return;
                 }
 
@@ -658,8 +681,12 @@
                         this.showMessage('success', 'Export completed successfully!');
 
                         // Handle download links
-                        if (response.exports.rithum) {
+                        if (response.exports.rithum && response.exports.rithum.download_url) {
                             window.open(response.exports.rithum.download_url, '_blank');
+                        }
+
+                        if (response.exports.amazon && response.exports.amazon.download_url) {
+                            window.open(response.exports.amazon.download_url, '_blank');
                         }
                     } else {
                         this.showMessage('error', 'Export failed: ' + response.message);
@@ -668,6 +695,8 @@
                     this.showMessage('error', 'Export error: ' + xhr.responseText);
                 }).always(() => {
                     this.updateButtonState(btn, false, btn.data('original-text') || 'Export');
+                    // Keep export button enabled after export completes (allow re-export)
+                    this.updateExportButtonState();
                 });
             },
 
@@ -900,6 +929,18 @@
 
                     // Update tab indicators
                     this.updateTabIndicators();
+                }
+            },
+
+            // Update export button state based on current draft and data
+            updateExportButtonState: function() {
+                const exportBtn = $('#unified-export-btn');
+
+                // Enable export if we have a saved draft ID
+                if (this.currentDraftId) {
+                    exportBtn.prop('disabled', false);
+                } else {
+                    exportBtn.prop('disabled', true);
                 }
             }
         };

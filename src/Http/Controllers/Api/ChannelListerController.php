@@ -12,6 +12,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ChannelListerController extends Controller
 {
@@ -165,10 +169,8 @@ class ChannelListerController extends Controller
             }
 
             return response()->json([
-                'draft_id' => $draft->id,
                 'message' => 'Draft saved successfully!',
-                'title' => $draft->title,
-                'sku' => $draft->sku,
+                'draft' => $draft->only(['id', 'title', 'sku', 'status']),
             ]);
 
         } catch (\Exception $e) {
@@ -241,7 +243,7 @@ class ChannelListerController extends Controller
     /**
      * Export product draft in specified format(s).
      */
-    public function exportDraft(Request $request, int $draftId): JsonResponse
+    public function exportDraft(Request $request, int $draftId, AmazonChannelListerIntegrationService $integrationService): JsonResponse
     {
         $validated = $request->validate([
             'format' => 'required|string|in:rithum,amazon,all',
@@ -250,17 +252,19 @@ class ChannelListerController extends Controller
         try {
             $draft = ProductDraft::findOrFail($draftId);
 
-            $integrationService = app(AmazonChannelListerIntegrationService::class);
             $results = [];
 
             if ($validated['format'] === 'rithum' || $validated['format'] === 'all') {
                 // Generate Rithum CSV export using unified data structure
-                $filename = $integrationService->generateRithumCsvFile($draft);
+                $filePath = $integrationService->generateRithumCsvFile($draft);
+
+                // Generate download token
+                $downloadToken = $this->generateDownloadToken($filePath, 'channel_lister_export.csv', 'text/csv');
 
                 $results['rithum'] = [
                     'format' => 'csv',
-                    'filename' => $filename,
-                    'download_url' => $filename,
+                    'filename' => basename($filePath),
+                    'download_url' => url("/api/channel-lister/download/{$downloadToken}"),
                 ];
             }
 
@@ -315,5 +319,88 @@ class ChannelListerController extends Controller
                 'message' => 'Failed to delete draft: '.$e->getMessage(),
             ], 500);
         }
+    }
+
+    /**
+     * Download a file using a secure token.
+     */
+    public function downloadFile(string $token): StreamedResponse|JsonResponse
+    {
+        $key = $this->cacheKey("download_token:{$token}");
+
+        $fileInfo = Cache::get($key);
+
+        if (! $fileInfo) {
+            return response()->json([
+                'error' => 'Invalid or expired download token',
+            ], 404);
+        }
+
+        $storage = Storage::disk(config('channel-lister.downloads.disk', 'local'));
+
+        // Check if file exists
+        if (! $storage->exists($fileInfo['file_path'])) {
+            // Clean up the token
+            Cache::forget("download_token:{$token}");
+
+            return response()->json([
+                'error' => 'File not found',
+            ], 404);
+        }
+
+        try {
+            // Handle cleanup based on configuration
+            if (config('channel-lister.downloads.delete_after_download', true)) {
+                // Schedule file deletion after response is sent
+                register_shutdown_function(function () use ($storage, $fileInfo, $token): void {
+                    $storage->delete($fileInfo['file_path']);
+                    Cache::forget("download_token:{$token}");
+                });
+            } else {
+                // Just remove the token, let file TTL handle cleanup
+                Cache::forget("download_token:{$token}");
+            }
+
+            return Storage::download($fileInfo['file_path'], $fileInfo['original_name']);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Failed to download file: '.$e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Generate a secure download token for a file.
+     *
+     * @param  string  $filePath  The path to the file relative to the configured disk
+     * @param  string  $originalName  The original filename for download
+     * @param  string  $mimeType  The MIME type of the file
+     * @return string The download token
+     */
+    protected function generateDownloadToken(string $filePath, string $originalName, string $mimeType): string
+    {
+        $token = Str::random(64);
+        $tokenTtl = config('channel-lister.downloads.token_ttl', 30);
+
+        $fileInfo = [
+            'file_path' => $filePath,
+            'original_name' => $originalName,
+            'mime_type' => $mimeType,
+            'created_at' => now()->toISOString(),
+        ];
+
+        // Store file info in cache with TTL
+        $key = $this->cacheKey("download_token:{$token}");
+
+        logger("generateDownloadToken $token generated key $key");
+
+        Cache::put($key, $fileInfo, now()->addMinutes($tokenTtl));
+
+        return $token;
+    }
+
+    protected function cacheKey($key): string
+    {
+        return config('channel-lister.cache_prefix')."_$key";
     }
 }

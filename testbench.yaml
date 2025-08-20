@@ -1,4 +1,6 @@
 laravel: "@testbench"
+env:
+  - CACHE_STORE=file
 
 providers:
   - IGE\ChannelLister\ChannelListerServiceProvider
