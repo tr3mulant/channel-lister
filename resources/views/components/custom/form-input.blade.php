@@ -16,47 +16,6 @@
         <x-channel-lister::custom.label :params="$params" :class-str-default="$classStrDefault" />
     @break
 
-    @case('item_type_amazon')
-        <x-channel-lister::custom.category-search.amazon-item-type :params="$params" :class-str-default="$classStrDefault" />
-    @break
-
-    @case('category_dealsonly')
-        <x-channel-lister::custom.category-search.category-dealsonly :params="$params" :class-str-default="$classStrDefault" />
-    @break
-
-    @case('StoreCategoryID')
-    @case('StoreCategoryID2')
-        <x-channel-lister::custom.category-search.ebay-store-category :params="$params" :class-str-default="$classStrDefault" />
-    @break
-
-    @case('ebay_categories')
-        <x-channel-lister::custom.category-search.ebay-category :params="$params" :class-str-default="$classStrDefault" />
-    @break
-
-    @case('jet_cat')
-        <x-channel-lister::custom.category-search.jet-category :params="$params" :class-str-default="$classStrDefault" />
-    @break
-
-    @case('taxonomy_etsy')
-        <x-channel-lister::custom.category-search.etsy-category :params="$params" :class-str-default="$classStrDefault" />
-    @break
-
-    @case('category_newegg')
-        <x-channel-lister::custom.category-search.newegg-category :params="$params" :class-str-default="$classStrDefault" />
-    @break
-
-    @case('sears_cat')
-        <x-channel-lister::custom.category-search.sears-category :params="$params" :class-str-default="$classStrDefault" />
-    @break
-
-    @case('walmart_cat')
-        <x-channel-lister::custom.category-search.walmart-category :params="$params" :class-str-default="$classStrDefault" />
-    @break
-
-    @case('walmart_subcat')
-        <x-channel-lister::custom.category-search.walmart-subcategory :params="$params" :class-str-default="$classStrDefault" />
-    @break
-
     @case('cost_shipping')
         <x-channel-lister::custom.cost-shipping :params="$params" :class-str-default="$classStrDefault" />
     @break
