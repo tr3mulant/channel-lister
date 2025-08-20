@@ -22,7 +22,6 @@ class CostShipping extends Component
         $element_name = $this->params->field_name;
         $required = $this->params->required ? 'required' : '';
         $label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
-        $name = $this->params->field_name;
         $id = str_replace(' ', '_', $this->params->field_name).'-id';
         $tooltip = $this->params->tooltip;
         $placeholder = $this->params->example;

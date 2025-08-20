@@ -17,7 +17,7 @@ class ShippingCostInput extends Component
     public function render()
     {
         $element_name = $this->params->field_name;
-        $required = empty($this->params->required) ? '' : 'required';
+        $required = $this->params->required ? 'required' : '';
         $label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
         $name = $this->params->field_name;
         $id = $name.'-id';
