@@ -173,7 +173,7 @@ class TextareaFormInputTest extends TestCase
         );
 
         // Should still have the paragraph element but empty
-        $view->assertSee('<p class="form-text"></p>', false);
+        $view->assertSee('<p class="form-text text-secondary"></p>', false);
     }
 
     /**
@@ -325,7 +325,7 @@ class TextareaFormInputTest extends TestCase
         $view->assertSee('name="notes"', false);
         $view->assertSee('id="notes-id"', false);
         $view->assertSee('placeholder=""', false);
-        $view->assertSee('<p class="form-text"></p>', false);
+        $view->assertSee('<p class="form-text text-secondary"></p>', false);
         $view->assertSee('Maps To: <code>notes</code>', false);
     }
 

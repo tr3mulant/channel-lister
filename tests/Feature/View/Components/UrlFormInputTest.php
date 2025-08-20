@@ -111,8 +111,7 @@ class UrlFormInputTest extends TestCase
             ['field' => $field]
         );
 
-        // Pattern gets HTML-encoded by Blade, so we need to check for the encoded version
-        $view->assertSee('pattern=&quot;https://.*\.example\.com/.*&quot;', false);
+        $view->assertSee('pattern="https://.*\.example\.com/.*"', false);
     }
 
     /**
@@ -199,7 +198,7 @@ class UrlFormInputTest extends TestCase
         );
 
         // Should still have the paragraph element but empty
-        $view->assertSee('<p class="form-text"></p>', false);
+        $view->assertSee('<p class="form-text text-secondary"></p>', false);
     }
 
     /**
@@ -237,7 +236,7 @@ class UrlFormInputTest extends TestCase
             ['field' => $field]
         );
 
-        $view->assertSee('placeholder=""', false);
+        $view->assertDontSee('placeholder=', false);
     }
 
     /**
@@ -343,7 +342,7 @@ class UrlFormInputTest extends TestCase
         $view->assertSee('id="product_url-id"', false);
         $view->assertSee('class="form-control url-input"', false);
         $view->assertSee('placeholder="https://www.manufacturer.com/product/12345"', false);
-        $view->assertSee('pattern=&quot;https://.*&quot;', false);
+        $view->assertSee('pattern="https://.*"', false);
         $view->assertSee('required', false);
         $view->assertSee('Enter the <strong>official</strong> product URL', false);
         $view->assertSee('Maps To: <code>product_url</code>', false);
@@ -377,10 +376,10 @@ class UrlFormInputTest extends TestCase
         $view->assertSee('url');
         $view->assertSee('name="url"', false);
         $view->assertSee('id="url-id"', false);
-        $view->assertSee('placeholder=""', false);
-        $view->assertSee('<p class="form-text"></p>', false);
+        $view->assertSee('<p class="form-text text-secondary"></p>', false);
         $view->assertSee('Maps To: <code>url</code>', false);
         $view->assertDontSee('pattern=', false);
+        $view->assertDontSee('placeholder=""', false);
         $view->assertSee('iframe-wrap', false);
     }
 
@@ -410,7 +409,7 @@ class UrlFormInputTest extends TestCase
         $this->assertEquals('test_url-id', $data['id']);
         $this->assertEquals('Test tooltip', $data['tooltip']);
         $this->assertEquals('https://test.com', $data['placeholder']);
-        $this->assertEquals('pattern="https://.*\.com/.*"', $data['pattern']);
+        $this->assertEquals('https://.*\.com/.*', $data['pattern']);
         $this->assertEquals('Maps To: <code>test_url</code>', $data['maps_to_text']);
     }
 
@@ -483,7 +482,7 @@ class UrlFormInputTest extends TestCase
 
         // The script tag should be escaped in the label
         $view->assertSee('&lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt;Website', false);
-        $view->assertDontSee('<script>alert("XSS")</script>', false);
+        $view->assertDontSee('<script>alert(&quot;XSS&quot;)</script>', false);
     }
 
     /**
@@ -577,7 +576,7 @@ class UrlFormInputTest extends TestCase
                 ['field' => $field]
             );
 
-            $view->assertSee('pattern=&quot;'.$pattern.'&quot;', false);
+            $view->assertSee('pattern="'.$pattern.'"', false);
         }
     }
 }

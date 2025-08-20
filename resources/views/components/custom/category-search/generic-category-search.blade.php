@@ -1,5 +1,5 @@
 <div class="form-group {{ $required }}">
-    <div class=""> {{-- was form-horizontal--}}
+    <div class=""> {{-- was form-horizontal --}}
         <label class="col-form-label">{{ $label_text }}</label>
     </div>
     <div class="col-sm-4">
@@ -9,7 +9,7 @@
         <div class="row">
             <input type="text" name="{{ $element_name }}" class="{{ $classStrDefault }}" id="{{ $id }}"
                 placeholder="{{ $placeholder }}" {{ $required }}>
-            <p class="form-text">{!! $maps_to_text !!}</p>
+            <p class="form-text text-secondary">{!! $maps_to_text !!}</p>
         </div>
     </div>
     <script>
@@ -129,4 +129,4 @@
     <div id="{{ $element_name }}-matches" class="cat_results_wrapper">
     </div>
 </div>
-<p class="form-text">{!! $tooltip !!}</p>
+<p class="form-text text-secondary">{!! $tooltip !!}</p>

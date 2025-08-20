@@ -27,6 +27,6 @@
             $("#tbSearch").keyup();
         </script>
         <div id="matchesSelect"></div>
-        <p class="form-text">{!! $maps_to_text !!}</p>
+        <p class="form-text text-secondary">{!! $maps_to_text !!}</p>
     </div>
 </div>

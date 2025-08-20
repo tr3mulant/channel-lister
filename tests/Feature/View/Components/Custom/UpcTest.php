@@ -74,7 +74,7 @@ class UpcTest extends TestCase
         );
 
         $view->assertSee('required', false);
-        $view->assertSee('form-group container required', false);
+        $view->assertSee('form-group container-fluid required', false);
     }
 
     /**

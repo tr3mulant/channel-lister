@@ -8,7 +8,9 @@ use IGE\ChannelLister\Enums\InputType;
 use IGE\ChannelLister\Models\ChannelListerField;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\Str;
 
 class ChannelLister
 {
@@ -140,12 +142,12 @@ class ChannelLister
     public static function marketplaceDisplayName($marketplace): string
     {
         return match ($marketplace) {
-            'amazon', 'amazon-us', 'amazon_us' => 'Amazon US',
+            'amazon', 'amazon-us', 'amazon_us' => 'Amazon',
             'amazon-ca', 'amazon_ca' => 'Amazon CA',
             'amazon-au', 'amazon_au' => 'Amazon AU',
             'amazon-mx', 'amazon_mx' => 'Amazon MX',
             'ebay' => 'eBay',
-            'walmart', 'walmart-us', 'walmart_us' => 'Walmart US',
+            'walmart', 'walmart-us', 'walmart_us' => 'Walmart',
             'walmart-ca', 'walmart_ca' => 'Walmart CA',
             default => ucwords(strtolower($marketplace)),
         };
@@ -430,7 +432,7 @@ class ChannelLister
     }
 
     /**
-     * Undocumented function
+     * Generate CSV export for Channel Advisor/Rithum format
      *
      * @param  array<string,string>  $data
      */
@@ -443,11 +445,26 @@ class ChannelLister
     }
 
     /**
-     * Writes a temporary file formatted for channeladvisor and returns contents
+     * Generate CSV export for unified ProductDraft data
+     * This method handles both ChannelAdvisor/Rithum and marketplace-specific custom attributes
+     *
+     * @param  array<string,string>  $exportData  Unified export data from AmazonChannelListerIntegrationService
+     * @return string The stored file path that can be used for downloads
+     */
+    public static function csvFromUnifiedData(array $exportData): string
+    {
+        $ca_data = static::extractChannelAdvisorFields($exportData);
+        $custom_data = static::extractCustomAttributes($exportData);
+
+        return static::writeCsv($ca_data, $custom_data);
+    }
+
+    /**
+     * Writes a temporary file formatted for channeladvisor and returns the file path
      *
      * @param  array<string,string>  $ca_params  associative array of ChannelAdvisor reserved attributes
      * @param  array<string,string>  $custom_params  associative array of custom attributes
-     * @return string file contents
+     * @return string The stored file path relative to the configured disk
      */
     protected static function writeCsv(array $ca_params, array $custom_params): string
     {
@@ -461,16 +478,69 @@ class ChannelLister
             $data[] = $custom_value;
             $index++;
         }
+
+        // Get configuration for downloads
+        /** @var string $disk */
+        $disk = config('channel-lister.downloads.disk', 'local');
+        /** @var string $path */
+        $path = config('channel-lister.downloads.path', 'channel-lister/exports');
+
+        // Generate unique filename
+        $filename = $path.'/'.Str::uuid().'_export_'.now()->format('Y-m-d_H-i-s').'.csv';
+
         $delim = ','; // default delimiter
         $encl = '"'; // default enclosure
         $esc = ''; // disables the escape character that is default "\\"
-        $fp = tmpfile();
-        $filename = stream_get_meta_data($fp)['uri'];
-        fwrite($fp, "\xEF\xBB\xBF"); // Byte Order Mark - UTF-8
-        fputcsv($fp, $ca_headers, $delim, $encl, $esc);
-        fputcsv($fp, $data, $delim, $encl, $esc);
+
+        // Create CSV content in memory
+        $csvContent = "\xEF\xBB\xBF"; // Byte Order Mark - UTF-8
+
+        // Add headers
+        $csvContent .= static::arrayToCsvLine($ca_headers, $delim, $encl, $esc)."\n";
+
+        // Add data row
+        $csvContent .= static::arrayToCsvLine($data, $delim, $encl, $esc)."\n";
+
+        // Store the file using Laravel Storage
+        Storage::disk($disk)->put($filename, $csvContent);
 
         return $filename;
+    }
+
+    /**
+     * Convert array to CSV line (similar to fputcsv functionality)
+     *
+     * @param  array<string>  $data
+     */
+    protected static function arrayToCsvLine(array $data, string $delimiter = ',', string $enclosure = '"', string $escape = '\\'): string
+    {
+        $csvLine = '';
+        $first = true;
+
+        foreach ($data as $field) {
+            if (! $first) {
+                $csvLine .= $delimiter;
+            }
+
+            // Escape any enclosure characters within the field
+            if ($escape !== '' && str_contains((string) $field, $enclosure)) {
+                $field = str_replace($enclosure, $escape.$enclosure, (string) $field);
+            }
+
+            // Enclose field if it contains delimiter, enclosure, or newline
+            if (str_contains((string) $field, $delimiter) ||
+                str_contains((string) $field, $enclosure) ||
+                str_contains((string) $field, "\n") ||
+                str_contains((string) $field, "\r")) {
+                $csvLine .= $enclosure.$field.$enclosure;
+            } else {
+                $csvLine .= $field;
+            }
+
+            $first = false;
+        }
+
+        return $csvLine;
     }
 
     /**
@@ -585,5 +655,82 @@ class ChannelLister
     private static function isValidCustomField(Collection $fields, string $key, string $value): bool
     {
         return strlen($value) > 0 && ! $fields->has($key);
+    }
+
+    /**
+     * Extract ChannelAdvisor/Rithum fields from unified export data
+     *
+     * @param  array<string,string>  $exportData
+     * @return array<string,string>
+     */
+    protected static function extractChannelAdvisorFields(array $exportData): array
+    {
+        /** @var Collection<string,ChannelListerField> $fields */
+        $fields = ChannelListerField::query()
+            ->select(['field_name', 'input_type'])
+            ->where('type', '=', 'channeladvisor')
+            ->get()
+            ->keyBy('field_name');
+
+        $result = [];
+
+        foreach ($exportData as $fieldName => $value) {
+            // Only include fields that are defined as ChannelAdvisor fields
+            if ($fields->has($fieldName) && ! in_array(trim($value), ['', '0'], true)) {
+                $result[$fieldName] = trim($value);
+            }
+        }
+
+        // Handle image preparation for ChannelAdvisor format
+        $result['Picture URLs'] = (new self)->prepareCaImages($exportData);
+
+        // Handle quantity updates if present
+        if (array_key_exists('Total Quantity', $result)) {
+            $result['Quantity Update Type'] = 'UNSHIPPED';
+            $warehouse = config('channel-lister.default_warehouse', '');
+            if (! is_string($warehouse)) {
+                $warehouse = '';
+            }
+            $result['DC Quantity'] = "{$warehouse}={$result['Total Quantity']}";
+            $result['DC Quantity Update Type'] = 'partial dc list';
+            unset($result['Total Quantity']);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Extract custom attributes from unified export data
+     * These are marketplace-specific fields that become Rithum custom attributes
+     *
+     * @param  array<string,string>  $exportData
+     * @return array<string,string>
+     */
+    protected static function extractCustomAttributes(array $exportData): array
+    {
+        /** @var Collection<string,ChannelListerField> $fields */
+        $fields = ChannelListerField::query()
+            ->select(['field_name'])
+            ->where('type', '=', 'channeladvisor')
+            ->get()
+            ->keyBy('field_name');
+
+        $result = [];
+
+        foreach ($exportData as $fieldName => $value) {
+            if ($fields->has($fieldName)) {
+                continue;
+            }
+            if (in_array(trim($value), ['', '0'], true)) {
+                continue;
+            }
+            // Skip special processed fields
+            if ($fieldName === 'Picture URLs') {
+                continue;
+            }
+            $result[$fieldName] = trim($value);
+        }
+
+        return $result;
     }
 }

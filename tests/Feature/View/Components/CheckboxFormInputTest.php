@@ -193,7 +193,7 @@ class CheckboxFormInputTest extends TestCase
         $view->assertSee('No Tooltip Field');
         $view->assertSee('Maps To: <code>no_tooltip</code>', false);
         // Should still render the tooltip paragraph, just empty
-        $view->assertSee('<p class="form-text"></p>', false);
+        $view->assertSee('<p class="form-text text-secondary"></p>', false);
     }
 
     /**

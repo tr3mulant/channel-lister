@@ -87,14 +87,7 @@ function getOpenPlataformTabs() {
  * @param  {Boolean} is_disabled true to disable, false to enable
  */
 function toggleDisableFormElementsByPlatform(platform, is_disabled) {
-  console.log("toggleDisableFormElementsByPlatform", {
-    platform: platform,
-    is_disabled: is_disabled,
-  });
   $("#" + platform + " .form-group").attr("disabled", is_disabled);
-  //   $("#" + platform + " .selectpicker")
-  //     .selectpicker("destroy")
-  //     .selectpicker();
 }
 
 /**
@@ -353,8 +346,6 @@ function isValidUrl(url) {
  * Runs JS functions on form inputs, called when a new tab is added
  */
 function runTabInitFunctions(platform) {
-  console.log("runTabInitFunctions", platform);
-  //   $("#" + platform + " .selectpicker").selectpicker();
   $("#" + platform + " .editable-select").editableSelect();
   $("#" + platform + " input.form-group[maxlength]").maxlength({
     alwaysShow: true,
@@ -767,9 +758,9 @@ $(document).ready(function () {
     $("#dropdown").before(
       format(
         `<li id="li{}" class="nav-item" style="display: none;" role="presentation">
-            <a href="#{}" class="nav-link platform h-100" data-toggle="tab" data-target="#{}" role="tab" aria-controls="{}" aria-expanded="false">
-                <span>{}</span>
-                <i class="text-danger icon-x" data-toggle="tooltip" title="Remove marketplace"></i>
+            <a href="#{}" class="nav-link h-100" data-toggle="tab" data-target="#{}" role="tab" aria-controls="{}" aria-expanded="false">
+                {}
+                <i class="text-danger icon-x tab-close-btn" data-toggle="tooltip" title="Remove marketplace"></i>
             </a>
         </li>`,
         v.id,
@@ -1295,7 +1286,6 @@ $(document).ready(function () {
   //checks for the change in the sku type dropdown menu
   //Adds the form fields for the selected values
   const skuTypeSelector = $.escapeSelector("SKU Type-id");
-  console.log("skuTypeSelector", skuTypeSelector);
   $(`#${skuTypeSelector}`).on("change", function () {
     console.log("SKU Type changed to " + $(this).val());
     if ($(this).val() == "bundle") {
@@ -1389,6 +1379,222 @@ $(document).ready(function () {
       return false;
     }
   });
+
+  // ===== UNIFIED DRAFT SYSTEM INTEGRATION =====
+  
+  // Global namespace for unified draft functions
+  window.ChannelListerUnified = {
+    
+    // Enhanced form data collection that works across all tabs
+    collectAllTabData: function() {
+      const data = {
+        common: {},
+        marketplaces: {}
+      };
+      
+      // Get all visible marketplace tabs
+      const openTabs = getOpenPlataformTabs();
+      
+      openTabs.forEach(function(tab) {
+        const tabData = {};
+        const tabSelector = '#' + tab;
+        
+        // Collect form data from this tab
+        $(tabSelector + ' input, ' + tabSelector + ' select, ' + tabSelector + ' textarea').each(function() {
+          const field = $(this);
+          const name = field.attr('name');
+          let value = field.val();
+          
+          if (name && value !== '') {
+            if (field.is(':checkbox')) {
+              value = field.is(':checked') ? '1' : '0';
+            } else if (field.is(':radio') && !field.is(':checked')) {
+              return; // Skip unchecked radio buttons
+            }
+            
+            if (tab === 'common') {
+              data.common[name] = value;
+            } else {
+              tabData[name] = value;
+            }
+          }
+        });
+        
+        // Store marketplace data
+        if (tab !== 'common' && Object.keys(tabData).length > 0) {
+          data.marketplaces[tab] = tabData;
+        }
+      });
+      
+      // Add Amazon data if it exists and has been modified
+      if (typeof window.currentProductType !== 'undefined' && window.currentProductType) {
+        const amazonData = {};
+        $('.amazon-generated-panel input, .amazon-generated-panel select, .amazon-generated-panel textarea').each(function() {
+          const field = $(this);
+          const name = field.attr('name');
+          let value = field.val();
+          
+          if (name && value !== '') {
+            if (field.is(':checkbox')) {
+              value = field.is(':checked') ? '1' : '0';
+            }
+            amazonData[name] = value;
+          }
+        });
+        
+        if (Object.keys(amazonData).length > 0) {
+          amazonData.product_type = window.currentProductType;
+          amazonData.marketplace_id = window.currentMarketplaceId || 'ATVPDKIKX0DER';
+          data.marketplaces.amazon = amazonData;
+        }
+      }
+      
+      return data;
+    },
+    
+    // Enhanced form population that works across all tabs
+    populateAllTabData: function(formData) {
+      // Populate common tab
+      if (formData.common) {
+        this.populateTabFields('#common', formData.common);
+      }
+      
+      // Populate marketplace tabs
+      if (formData.marketplaces) {
+        Object.keys(formData.marketplaces).forEach((marketplace) => {
+          if (marketplace === 'amazon') {
+            // Handle Amazon tab specially
+            this.populateAmazonTab(formData.marketplaces.amazon);
+          } else {
+            // Handle other marketplace tabs
+            const tabSelector = '#' + marketplace;
+            if ($(tabSelector).length > 0) {
+              this.populateTabFields(tabSelector, formData.marketplaces[marketplace]);
+              // Make sure the tab is visible
+              showPlatformTab(marketplace, false);
+            }
+          }
+        });
+      }
+    },
+    
+    // Populate fields in a specific tab
+    populateTabFields: function(tabSelector, data) {
+      Object.keys(data).forEach((fieldName) => {
+        const field = $(tabSelector + ' [name="' + fieldName + '"]');
+        const value = data[fieldName];
+        
+        if (field.length > 0 && value !== null && value !== '') {
+          if (field.is('select')) {
+            field.val(value);
+          } else if (field.is(':checkbox')) {
+            field.prop('checked', value === 'true' || value === '1' || value === true);
+          } else if (field.is(':radio')) {
+            field.filter('[value="' + value + '"]').prop('checked', true);
+          } else {
+            field.val(value);
+          }
+          field.trigger('change');
+        }
+      });
+    },
+    
+    // Special handling for Amazon tab population
+    populateAmazonTab: function(amazonData) {
+      if (!amazonData || !amazonData.product_type) return;
+      
+      // Show Amazon tab if it exists
+      if ($('#liamazon').length > 0) {
+        showPlatformTab('amazon', false);
+        gotoPlatformTab('amazon');
+      }
+      
+      // If Amazon product type search exists, use it
+      if (typeof window.getAmazonListingRequirements === 'function') {
+        $('#amazon_product_type-id').val(amazonData.product_type);
+        $('#amazon_product_type-searchbox').val(amazonData.product_type);
+        
+        // Load Amazon requirements and then populate
+        window.getAmazonListingRequirements(amazonData.product_type).done(() => {
+          setTimeout(() => {
+            this.populateTabFields('.amazon-generated-panel', amazonData);
+            
+            // Update Amazon draft system variables if they exist
+            if (typeof window.currentProductType !== 'undefined') {
+              window.currentProductType = amazonData.product_type;
+              window.currentMarketplaceId = amazonData.marketplace_id || 'ATVPDKIKX0DER';
+            }
+          }, 1000);
+        });
+      }
+    },
+    
+    // Get summary of data across all tabs for display
+    getDataSummary: function() {
+      const data = this.collectAllTabData();
+      const summary = {
+        commonFields: Object.keys(data.common).length,
+        marketplaceFields: 0,
+        marketplaces: []
+      };
+      
+      Object.keys(data.marketplaces).forEach((marketplace) => {
+        const fieldCount = Object.keys(data.marketplaces[marketplace]).length;
+        summary.marketplaceFields += fieldCount;
+        summary.marketplaces.push({
+          name: marketplace,
+          fields: fieldCount
+        });
+      });
+      
+      return summary;
+    },
+    
+    // Check if form has significant data
+    hasSignificantData: function() {
+      const summary = this.getDataSummary();
+      return summary.commonFields > 0 || summary.marketplaceFields > 0;
+    },
+    
+    // Clear all form data (for loading new drafts)
+    clearAllForms: function() {
+      // Clear common tab
+      $('#common input, #common select, #common textarea').each(function() {
+        const field = $(this);
+        if (field.is(':checkbox') || field.is(':radio')) {
+          field.prop('checked', false);
+        } else {
+          field.val('');
+        }
+      });
+      
+      // Clear marketplace tabs
+      $('.platform-container:not(#common) input, .platform-container:not(#common) select, .platform-container:not(#common) textarea').each(function() {
+        const field = $(this);
+        if (field.is(':checkbox') || field.is(':radio')) {
+          field.prop('checked', false);
+        } else {
+          field.val('');
+        }
+      });
+      
+      // Clear Amazon generated panels
+      $('.amazon-generated-panel').remove();
+      
+      // Reset Amazon variables
+      if (typeof window.currentProductType !== 'undefined') {
+        window.currentProductType = null;
+        window.currentListingId = null;
+      }
+    }
+  };
+  
+  // Make unified functions available globally for the unified draft controls
+  window.collectAllTabData = window.ChannelListerUnified.collectAllTabData.bind(window.ChannelListerUnified);
+  window.populateAllTabData = window.ChannelListerUnified.populateAllTabData.bind(window.ChannelListerUnified);
+  window.clearAllForms = window.ChannelListerUnified.clearAllForms.bind(window.ChannelListerUnified);
+  window.getDataSummary = window.ChannelListerUnified.getDataSummary.bind(window.ChannelListerUnified);
+  window.hasSignificantData = window.ChannelListerUnified.hasSignificantData.bind(window.ChannelListerUnified);
 
   $("#loading").hide();
 });

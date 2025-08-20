@@ -230,7 +230,7 @@ class CommaSeparatedFormTest extends TestCase
         $view->assertSee('form-group required', false);
 
         // Label
-        $view->assertSee('<label class="col-form-label" for="complete_field-id">Complete Test Field</label>', false);
+        $view->assertSee('<label class="col-form-label font-weight-bold" for="complete_field-id">Complete Test Field</label>', false);
 
         // Input field
         $view->assertSee('<input type="text" name="complete_field" class="form-control test-class" id="complete_field-id"', false);

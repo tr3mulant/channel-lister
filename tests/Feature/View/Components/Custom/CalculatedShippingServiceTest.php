@@ -192,7 +192,7 @@ class CalculatedShippingServiceTest extends TestCase
         );
 
         // Should still have the paragraph element but empty
-        $view->assertSee('<p class="form-text"></p>', false);
+        $view->assertSee('<p class="form-text text-secondary"></p>', false);
     }
 
     /**
@@ -348,7 +348,7 @@ class CalculatedShippingServiceTest extends TestCase
         $view->assertSee('name="service"', false);
         $view->assertSee('id="service-id"', false);
         $view->assertSee('placeholder=""', false);
-        $view->assertSee('<p class="form-text"></p>', false);
+        $view->assertSee('<p class="form-text text-secondary"></p>', false);
         $view->assertSee('Maps To: <code>service</code>', false);
         $view->assertDontSee('pattern=', false);
     }

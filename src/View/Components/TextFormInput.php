@@ -25,7 +25,7 @@ class TextFormInput extends Component
     /**
      * Return an array of options to be used in the view.
      *
-     * @return array<string, mixed>
+     * @return array<string, null|string|bool>
      */
     protected function getOptions(): array
     {
@@ -44,14 +44,10 @@ class TextFormInput extends Component
         $label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
         $id = $this->params->field_name.'-id';
         $tooltip = $this->params->tooltip;
-        $placeholder = $this->params->example;
         $maps_to_text = 'Maps To: <code>'.$this->params->field_name.'</code>';
         if ($element_name_override !== '' && $element_name_override !== '0') {
             $maps_to_text .= '</br>'.$element_name_override;
         }
-        // look for max length in pattern
-        $max_len = $this->getMaxLengthFromRegex($pattern);
-        $max_len_str = $max_len === null || $max_len === '' || $max_len === '0' ? '' : "maxlength='$max_len'";
 
         return [
             'element_name' => $element_name,
@@ -62,8 +58,8 @@ class TextFormInput extends Component
             'label_text' => $label_text,
             'id' => $id,
             'tooltip' => $tooltip,
-            'placeholder' => $placeholder,
-            'max_len_str' => $max_len_str,
+            'placeholder' => $this->params->example,
+            'max_len' => $this->getMaxLengthFromRegex($pattern),
             'maps_to_text' => $maps_to_text,
         ];
     }

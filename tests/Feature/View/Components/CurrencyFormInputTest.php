@@ -204,7 +204,7 @@ class CurrencyFormInputTest extends TestCase
 
         // HTML should be rendered (not escaped) due to {!! !!}
         $view->assertSee('Enter price in <strong>USD</strong> format', false);
-        $view->assertSee('<p class="form-text">Enter price in <strong>USD</strong> format</p>', false);
+        $view->assertSee('<p class="form-text text-secondary">Enter price in <strong>USD</strong> format</p>', false);
     }
 
     /**
@@ -224,7 +224,7 @@ class CurrencyFormInputTest extends TestCase
         );
 
         // Should still have the paragraph element but empty
-        $view->assertSee('<p class="form-text"></p>', false);
+        $view->assertSee('<p class="form-text text-secondary"></p>', false);
     }
 
     /**
@@ -299,7 +299,7 @@ class CurrencyFormInputTest extends TestCase
         );
 
         $view->assertSee('Maps To: <code>wholesale_price</code>', false);
-        $view->assertSee('<p class="form-text">Maps To: <code>wholesale_price</code></p>', false);
+        $view->assertSee('<p class="form-text text-secondary">Maps To: <code>wholesale_price</code></p>', false);
     }
 
     /**
@@ -389,7 +389,7 @@ class CurrencyFormInputTest extends TestCase
         $bladeView->assertSee('name="amount"', false);
         $bladeView->assertSee('id="amount-id"', false);
         $bladeView->assertSee('placeholder=""', false);
-        $bladeView->assertSee('<p class="form-text"></p>', false);
+        $bladeView->assertSee('<p class="form-text text-secondary"></p>', false);
         $bladeView->assertSee('Maps To: <code>amount</code>', false);
     }
 

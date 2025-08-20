@@ -239,7 +239,7 @@ class IntegerFormInputTest extends TestCase
         );
 
         // Should render empty tooltip paragraph
-        $view->assertSee('<p class="form-text"></p>', false);
+        $view->assertSee('<p class="form-text text-secondary"></p>', false);
     }
 
     /**
@@ -257,7 +257,7 @@ class IntegerFormInputTest extends TestCase
             ['field' => $field]
         );
 
-        $view->assertSee('<p class="form-text"></p>', false);
+        $view->assertSee('<p class="form-text text-secondary"></p>', false);
     }
 
     /**
@@ -346,7 +346,7 @@ class IntegerFormInputTest extends TestCase
         $view->assertSee('required', false);
 
         // Label attributes
-        $view->assertSee('class="col-form-label"', false);
+        $view->assertSee('class="col-form-label font-weight-bold"', false);
         $view->assertSee('for="complete_test-id"', false);
 
         // Form group class
@@ -376,7 +376,7 @@ class IntegerFormInputTest extends TestCase
         $view->assertSee('id="empty_optionals-id"', false);
         $view->assertSee('empty_optionals'); // fallback label
         $view->assertSee('placeholder=""', false);
-        $view->assertSee('<p class="form-text"></p>', false); // empty tooltip
+        $view->assertSee('<p class="form-text text-secondary"></p>', false); // empty tooltip
         $view->assertSee('Maps To: <code>empty_optionals</code>', false);
     }
 
@@ -395,6 +395,6 @@ class IntegerFormInputTest extends TestCase
         );
 
         $view->assertSee('Maps To: <code>mapping_test</code>', false);
-        $view->assertSee('<p class="form-text">Maps To: <code>mapping_test</code></p>', false);
+        $view->assertSee('<p class="form-text text-secondary">Maps To: <code>mapping_test</code></p>', false);
     }
 }

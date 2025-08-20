@@ -195,7 +195,7 @@ class TextFormInputTest extends TestCase
         );
 
         // Should still have the paragraph element but empty
-        $view->assertSee('<p class="form-text mt-1 mb-2 leading-5-25"></p>', false);
+        $view->assertSee('<p class="form-text mt-1 mb-2 leading-5-25 text-secondary"></p>', false);
     }
 
     /**
@@ -233,7 +233,7 @@ class TextFormInputTest extends TestCase
             ['field' => $field]
         );
 
-        $view->assertSee('placeholder=""', false);
+        $view->assertDontSee('placeholder=', false);
     }
 
     /**
@@ -350,9 +350,9 @@ class TextFormInputTest extends TestCase
         $view->assertSee('title');
         $view->assertSee('name="title"', false);
         $view->assertSee('id="title-id"', false);
-        $view->assertSee('placeholder=""', false);
-        $view->assertSee('<p class="form-text mt-1 mb-2 leading-5-25"></p>', false);
+        $view->assertSee('<p class="form-text mt-1 mb-2 leading-5-25 text-secondary"></p>', false);
         $view->assertSee('Maps To: <code>title</code>', false);
+        $view->assertDontSee('placeholder=""', false);
         $view->assertDontSee('pattern=', false);
         $view->assertDontSee('maxlength=', false);
     }
@@ -383,7 +383,7 @@ class TextFormInputTest extends TestCase
         $this->assertEquals('Test tooltip', $data['tooltip']);
         $this->assertEquals('Test example', $data['placeholder']);
         $this->assertEquals('^[A-Za-z ]{5,50}$', $data['pattern']);
-        $this->assertEquals("maxlength='50'", $data['max_len_str']);
+        $this->assertEquals(50, $data['max_len']);
         $this->assertEquals('Maps To: <code>test_title</code>', $data['maps_to_text']);
     }
 
@@ -413,9 +413,9 @@ class TextFormInputTest extends TestCase
             $data = $view->getData();
 
             if ($expected === null) {
-                $this->assertEquals('', $data['max_len_str'], "Failed for pattern: '{$pattern}'");
+                $this->assertEquals('', $data['max_len'], "Failed for pattern: '{$pattern}'");
             } else {
-                $this->assertEquals("maxlength='{$expected}'", $data['max_len_str'], "Failed for pattern: '{$pattern}'");
+                $this->assertEquals($expected, $data['max_len'], "Failed for pattern: '{$pattern}'");
             }
         }
     }

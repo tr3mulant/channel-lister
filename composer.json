@@ -1,99 +1,101 @@
 {
-    "name": "tr3mulant/channel-lister",
-    "description": "Guided product creation for eComm",
-    "keywords": [
-        "php",
-        "package"
-    ],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Scott St. John",
-            "email": "scottkstjohn87@gmail.com"
-        },
-        {
-            "name": "Truman Thomas",
-            "email": "trutruthomas@gmail.com"
-        }
-    ],
-    "require": {
-        "php": "^8.3.0",
-        "illuminate/database": "^12.19",
-        "illuminate/support": "^12.19",
-        "laravel/framework": "^12.19",
-        "stevebauman/location": "^7.0"
+  "name": "tr3mulant/channel-lister",
+  "description": "Guided product creation for eComm",
+  "keywords": [
+    "php",
+    "package"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Scott St. John",
+      "email": "scottkstjohn87@gmail.com"
     },
-    "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.16",
-        "laravel/pint": "^1.18.1",
-        "orchestra/testbench": "^10.4",
-        "pestphp/pest": "^3.5.1",
-        "pestphp/pest-plugin-type-coverage": "^3.1",
-        "phpstan/phpstan": "^1.12.7",
-        "rector/rector": "^1.2.8",
-        "symfony/var-dumper": "^7.1.6"
-    },
-    "autoload": {
-        "psr-4": {
-            "IGE\\ChannelLister\\": "src/",
-            "IGE\\ChannelLister\\Database\\Factories\\": "database/factories/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "IGE\\ChannelLister\\Tests\\": "tests/",
-            "Workbench\\App\\": "workbench/app/",
-            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
-            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "IGE\\ChannelLister\\ChannelListerServiceProvider"
-            ]
-        }
-    },
-    "minimum-stability": "stable",
-    "prefer-stable": true,
-    "config": {
-        "sort-packages": true,
-        "preferred-install": "dist",
-        "allow-plugins": {
-            "pestphp/pest-plugin": true
-        }
-    },
-    "scripts": {
-        "refacto": "rector",
-        "lint": "pint",
-        "test:refacto": "rector --dry-run",
-        "test:lint": "pint --test",
-        "test:types": "phpstan analyse --ansi",
-        "test:unit": "pest --colors=always --coverage --min=80",
-        "test:unit:coverage-html": "pest --colors=always --min=80 --coverage-html tests/coverage",
-        "test": [
-            "@test:refacto",
-            "@test:lint",
-            "@test:types",
-            "@test:unit"
-        ],
-        "test:coverage-html": [
-            "@test:refacto",
-            "@test:lint",
-            "@test:types",
-            "@test:unit:coverage-html"
-        ],
-        "post-autoload-dump": [
-            "@clear",
-            "@prepare"
-        ],
-        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
-        "prepare": "@php vendor/bin/testbench package:discover --ansi",
-        "build": "@php vendor/bin/testbench workbench:build --ansi",
-        "serve": [
-            "Composer\\Config::disableProcessTimeout",
-            "@build",
-            "@php vendor/bin/testbench serve --ansi"
-        ]
+    {
+      "name": "Truman Thomas",
+      "email": "trutruthomas@gmail.com"
     }
+  ],
+  "require": {
+    "php": "^8.3.0",
+    "illuminate/database": "^12.19",
+    "illuminate/support": "^12.19",
+    "laravel/framework": "^12.19"
+  },
+  "require-dev": {
+    "barryvdh/laravel-debugbar": "^3.16",
+    "laravel/pint": "^1.18.1",
+    "orchestra/testbench": "^10.4",
+    "pestphp/pest": "^3.5.1",
+    "pestphp/pest-plugin-type-coverage": "^3.1",
+    "phpstan/phpstan": "^1.12.7",
+    "rector/rector": "^1.2.8",
+    "symfony/var-dumper": "^7.1.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "IGE\\ChannelLister\\": "src/",
+      "IGE\\ChannelLister\\Database\\Factories\\": "database/factories/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "IGE\\ChannelLister\\Tests\\": "tests/",
+      "Workbench\\App\\": "workbench/app/",
+      "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+      "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "IGE\\ChannelLister\\ChannelListerServiceProvider"
+      ]
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "config": {
+    "sort-packages": true,
+    "preferred-install": "dist",
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  },
+  "scripts": {
+    "refacto": "rector",
+    "lint": "pint",
+    "test:refacto": "rector --dry-run",
+    "test:lint": "pint --test",
+    "test:types": "phpstan analyse --ansi",
+    "test:unit": [
+      "Composer\\Config::disableProcessTimeout",
+      "pest --colors=always --coverage --min=80"
+    ],
+    "test:unit:coverage-html": "pest --colors=always --min=80 --coverage-html tests/coverage",
+    "test": [
+      "@test:refacto",
+      "@test:lint",
+      "@test:types",
+      "@test:unit"
+    ],
+    "test:coverage-html": [
+      "@test:refacto",
+      "@test:lint",
+      "@test:types",
+      "@test:unit:coverage-html"
+    ],
+    "post-autoload-dump": [
+      "@clear",
+      "@prepare"
+    ],
+    "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+    "prepare": "@php vendor/bin/testbench package:discover --ansi",
+    "build": "@php vendor/bin/testbench workbench:build --ansi",
+    "serve": [
+      "Composer\\Config::disableProcessTimeout",
+      "@build",
+      "@php vendor/bin/testbench serve --ansi"
+    ]
+  }
 }

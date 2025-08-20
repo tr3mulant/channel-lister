@@ -1,4 +1,6 @@
 laravel: "@testbench"
+env:
+  - CACHE_STORE=file
 
 providers:
   - IGE\ChannelLister\ChannelListerServiceProvider
@@ -16,16 +18,6 @@ seeders:
 
 factories:
   - database/factories
-
-# Ensure proper middleware configuration
-# middleware:
-#   web:
-#     - Illuminate\Cookie\Middleware\EncryptCookies
-#     - Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse
-#     - Illuminate\Session\Middleware\StartSession
-#     - Illuminate\View\Middleware\ShareErrorsFromSession
-#     - Illuminate\Foundation\Http\Middleware\VerifyCsrfToken
-#     - Illuminate\Routing\Middleware\SubstituteBindings
 
 workbench:
   start: "/channel-lister"

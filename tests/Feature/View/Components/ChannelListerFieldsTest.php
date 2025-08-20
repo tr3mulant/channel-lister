@@ -39,7 +39,7 @@ class ChannelListerFieldsTest extends TestCase
         $view->assertSee('List');
         $view->assertSee('Mark as Do Not List');
         $view->assertSee('Mark as Restricted');
-        $view->assertSee('Amazon US');
+        $view->assertSee('Amazon');
 
         // Should contain panel-group class (default)
         $view->assertSee('panel-group', false);
@@ -83,7 +83,7 @@ class ChannelListerFieldsTest extends TestCase
         // AI added 'resourceridge' => 'Resource Ridge',
         // in this list, may be due to testing for fields that DNE
         $marketplaces = [
-            'amazon' => 'Amazon US',
+            'amazon' => 'Amazon',
             'amazon-ca' => 'Amazon CA',
             'amazon-au' => 'Amazon AU',
             'amazon-mx' => 'Amazon MX',
@@ -357,7 +357,7 @@ class ChannelListerFieldsTest extends TestCase
     public function test_component_renders_different_marketplace_names(): void
     {
         $testCases = [
-            ['amazon', 'Amazon US'],
+            ['amazon', 'Amazon'],
             ['ebay', 'eBay'],
         ];
 

@@ -310,7 +310,7 @@ class DecimalFormInputTest extends TestCase
         );
 
         // Should still have the paragraph element but empty
-        $view->assertSee('<p class="form-text"></p>', false);
+        $view->assertSee('<p class="form-text text-secondary"></p>', false);
     }
 
     /**
@@ -468,7 +468,7 @@ class DecimalFormInputTest extends TestCase
         $view->assertSee('id="value-id"', false);
         $view->assertSee('placeholder=""', false);
         $view->assertSee('step="0.001"', false);  // Default step
-        $view->assertSee('<p class="form-text"></p>', false);
+        $view->assertSee('<p class="form-text text-secondary"></p>', false);
         $view->assertSee('Maps To: <code>value</code>', false);
     }
 

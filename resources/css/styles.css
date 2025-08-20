@@ -45,11 +45,20 @@ input.es-input.form-group {
   overflow-x: hidden;
 }
 
-.nav > li > a.platform {
-  display: flex !important;
+/* Platform flex rules removed - tabs now use consistent layout */
+
+/* Close button positioning for marketplace tabs */
+.nav > li > a {
+  position: relative;
 }
-.nav > li > a > span {
-  flex-grow: 1;
+
+.tab-close-btn {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-size: 14px;
+  line-height: 1;
+  z-index: 10;
 }
 
 /* .nav-tabs.nav-justified > li > a {

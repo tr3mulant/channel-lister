@@ -18,7 +18,7 @@
         <label class="col-form-label" for="{{ $id }}">{{ $label_text }}</label>
         <input id="{{ $id }}" pattern="{{ $pattern }}" placeholder="{{ $placeholder }}"
             {{ $required }} class="form-control" readonly="" name="{{ $element_name }}">
-        <p class="form-text">{!! $tooltip !!}</p>
-        <p class="form-text">{!! $maps_to_text !!}</p>
+        <p class="form-text text-secondary">{!! $tooltip !!}</p>
+        <p class="form-text text-secondary">{!! $maps_to_text !!}</p>
     </div>
 </div>
