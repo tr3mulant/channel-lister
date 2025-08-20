@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (result.success && result.rates) {
                 showShippingResults(result);
-            } else if (result.manual_entry_required) {
+            } else if (result.manual_entry_needed) {
                 showManualEntry(result.message);
             } else {
                 console.error('API error:', result);

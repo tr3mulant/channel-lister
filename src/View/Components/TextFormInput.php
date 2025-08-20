@@ -39,7 +39,7 @@ class TextFormInput extends Component
             }
         }
         $pattern = empty($this->params->input_type_aux) ? '' : $this->params->input_type_aux;
-        $required = empty($this->params->required) ? '' : 'required';
+        $required = $this->params->required ? 'required' : '';
         $readonly = property_exists($this->params, 'readonly') && $this->params->readonly;
         $label_text = empty($this->params->display_name) ? $this->params->field_name : $this->params->display_name;
         $id = $this->params->field_name.'-id';

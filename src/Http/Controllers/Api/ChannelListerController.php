@@ -3,6 +3,7 @@
 namespace IGE\ChannelLister\Http\Controllers\Api;
 
 use IGE\ChannelLister\ChannelLister;
+use IGE\ChannelLister\Models\ChannelListerField;
 use IGE\ChannelLister\View\Components\ChannelListerFields;
 use IGE\ChannelLister\View\Components\Custom\SkuBundleComponentInputRow;
 use IGE\ChannelLister\View\Components\Modal\Header;
@@ -20,6 +21,18 @@ class ChannelListerController extends Controller
 
     public function formDataByPlatform(Request $request, string $platform): JsonResponse
     {
+        // Check if the platform exists in the database
+        $platformExists = ChannelListerField::query()->where('marketplace', $platform)->exists();
+
+        if (! $platformExists) {
+            return response()->json([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'platform' => ['The selected platform is invalid.'],
+                ],
+            ], 422);
+        }
+
         $request->merge(['platform' => $platform])->validate([
             'platform' => 'required|string',
         ]);

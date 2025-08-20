@@ -22,8 +22,7 @@ class UrlFormInput extends Component
         // TODO make sure syntax is correct
         $element_name = $this->params->field_name;
 
-        // $pattern = empty($this->params->input_type_aux) ? '' : 'pattern="'.$this->params->input_type_aux.'"';
-        $pattern = empty($this->params->input_type_aux) ? '' : $this->params->input_type_aux;
+        $pattern = empty($this->params->input_type_aux) ? '' : 'pattern="'.$this->params->input_type_aux.'"';
 
         $required = empty($this->params->required) ? '' : 'required';
         $label_text = $this->params->display_name;

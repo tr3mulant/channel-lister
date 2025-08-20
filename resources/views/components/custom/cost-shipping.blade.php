@@ -370,7 +370,7 @@ async function calculateShippingRates(fieldId) {
         
         if (result.success && result.rates) {
             showShippingResults(result, fieldId);
-        } else if (result.manual_entry_required) {
+        } else if (result.manual_entry_needed) {
             showManualEntry(fieldId, result.message);
         } else {
             alert(result.message || 'Error calculating shipping rates');

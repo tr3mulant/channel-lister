@@ -105,7 +105,7 @@ class ShippingCalculatorService
      * @param  array<string, mixed>  $options
      * @param  array{city: string, state: string, zip: string}  $fromAddress
      * @param  array{city: string, state: string, zip: string}  $toAddress
-     * @return array{success: bool, message?: string, manual_entry_required?: bool, rates?: array<mixed>, dimensional_data?: array<mixed>, request_id?: string|null, error?: mixed}
+     * @return array{success: bool, message?: string, manual_entry_needed?: bool, rates?: array<mixed>, dimensional_data?: array<mixed>, request_id?: string|null, error?: mixed}
      */
     public function getShippingRates(array $fromAddress, array $toAddress, float $length, float $width, float $height, float $weight, array $options = []): array
     {
@@ -114,7 +114,7 @@ class ShippingCalculatorService
             return [
                 'success' => false,
                 'message' => 'No API key configured. Please enter shipping cost manually.',
-                'manual_entry_required' => true,
+                'manual_entry_needed' => true,
             ];
         }
 
@@ -191,7 +191,7 @@ class ShippingCalculatorService
                 'success' => false,
                 'message' => 'Failed to get shipping rates. Please enter shipping cost manually.',
                 'error' => $response->json(),
-                'manual_entry_required' => true,
+                'manual_entry_needed' => true,
             ];
 
         } catch (\Exception $e) {
@@ -201,7 +201,7 @@ class ShippingCalculatorService
                 'success' => false,
                 'message' => 'Error calculating shipping rates. Please enter shipping cost manually.',
                 'error' => $e->getMessage(),
-                'manual_entry_required' => true,
+                'manual_entry_needed' => true,
             ];
         }
     }
@@ -258,7 +258,7 @@ class ShippingCalculatorService
      *
      * @param  array{city: string, state: string, zip: string}  $fromAddress
      * @param  array{city: string, state: string, zip: string}  $toAddress
-     * @return array{success: bool, message?: string, manual_entry_required?: bool, rates?: array<mixed>, dimensional_data?: array<mixed>, request_id?: string|null, error?: mixed}
+     * @return array{success: bool, message?: string, manual_entry_needed?: bool, rates?: array<mixed>, dimensional_data?: array<mixed>, request_id?: string|null, error?: mixed}
      */
     public function getCarrierRates(array $fromAddress, array $toAddress, float $length, float $width, float $height, float $weight, string $carrierCode): array
     {
@@ -266,7 +266,7 @@ class ShippingCalculatorService
             return [
                 'success' => false,
                 'message' => 'No API key configured. Please enter shipping cost manually.',
-                'manual_entry_required' => true,
+                'manual_entry_needed' => true,
             ];
         }
 
@@ -277,7 +277,7 @@ class ShippingCalculatorService
             return [
                 'success' => false,
                 'message' => 'Unable to find carrier ID for: '.$carrierCode,
-                'manual_entry_required' => true,
+                'manual_entry_needed' => true,
             ];
         }
 
@@ -362,7 +362,7 @@ class ShippingCalculatorService
     /**
      * Get available carriers from ShipStation
      *
-     * @return array{success: bool, message?: string, manual_entry_required?: bool, carriers?: array<mixed>, error?: string}
+     * @return array{success: bool, message?: string, manual_entry_needed?: bool, carriers?: array<mixed>, error?: string}
      */
     public function getAvailableCarriers(): array
     {
@@ -370,7 +370,7 @@ class ShippingCalculatorService
             return [
                 'success' => false,
                 'message' => 'No API key configured',
-                'manual_entry_required' => true,
+                'manual_entry_needed' => true,
             ];
         }
 
@@ -392,7 +392,7 @@ class ShippingCalculatorService
             return [
                 'success' => false,
                 'message' => 'Failed to fetch carriers',
-                'manual_entry_required' => true,
+                'manual_entry_needed' => true,
             ];
 
         } catch (\Exception $e) {
@@ -402,7 +402,7 @@ class ShippingCalculatorService
                 'success' => false,
                 'message' => 'Error fetching available carriers',
                 'error' => $e->getMessage(),
-                'manual_entry_required' => true,
+                'manual_entry_needed' => true,
             ];
         }
     }
