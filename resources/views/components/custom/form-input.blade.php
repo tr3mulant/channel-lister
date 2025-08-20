@@ -16,7 +16,7 @@
         <x-channel-lister::custom.label :params="$params" :class-str-default="$classStrDefault" />
     @break
 
-    @case('cost_shipping')
+    @case('Cost Shipping')
         <x-channel-lister::custom.cost-shipping :params="$params" :class-str-default="$classStrDefault" />
     @break
 

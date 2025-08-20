@@ -128,7 +128,7 @@ class FormInputTest extends TestCase
     public function test_cost_shipping_component_routing(): void
     {
         $field = ChannelListerField::factory()->create([
-            'field_name' => 'cost_shipping',
+            'field_name' => 'Cost Shipping',
             'display_name' => 'Cost Shipping',
         ]);
 

@@ -353,6 +353,21 @@ class ChannelListerFieldSeeder extends Seeder
             ],
             [
                 'ordering' => 23,
+                'field_name' => 'Cost Shipping',
+                'display_name' => 'Calculated Shipping Cost',
+                'tooltip' => 'Algorithmically Determined from Ship Dimensions, Ship Packaging and Hazmat',
+                'example' => '',
+                'marketplace' => 'common',
+                'input_type' => 'custom',
+                'input_type_aux' => '',
+                'required' => 1,
+                'grouping' => 'Shipping',
+                'type' => 'custom',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'ordering' => 24,
                 'field_name' => 'Total Quantity',
                 'display_name' => 'Local Quantity',
                 'tooltip' => '',
@@ -367,7 +382,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
-                'ordering' => 24,
+                'ordering' => 25,
                 'field_name' => 'Short Description',
                 'display_name' => '',
                 'tooltip' => '2-3 sentences, no HTML, also used for TL;DR. Answer "Why do I care?" and "What will this do for me?"',
@@ -382,7 +397,7 @@ class ChannelListerFieldSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
-                'ordering' => 25,
+                'ordering' => 26,
                 'field_name' => 'Description',
                 'display_name' => 'Full Description',
                 'tooltip' => 'No need to use <code>&lt;p&gt;</code> or <code>&lt;br&gt;</code> tags in the Description',
@@ -399,7 +414,7 @@ Camo fabric and an elastic neck closure make this set great for all occasions. T
                 'updated_at' => $now,
             ],
             [
-                'ordering' => 26,
+                'ordering' => 27,
                 'field_name' => 'amazon_product_type',
                 'display_name' => 'Amazon Product Type',
                 'tooltip' => 'Amazon-specific product classification that determines which attributes are required for listing on Amazon',
