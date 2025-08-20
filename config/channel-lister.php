@@ -148,7 +148,7 @@ return [
     |
     */
     'shipstation' => [
-        'api_key' => env('SHIPSTATION_API_KEY'),
-        'base_url' => env('SHIPSTATION_BASE_URL', 'https://api.shipengine.com/v1'),
+        'api_key' => env('CHANNEL_LISTER_SHIPSTATION_API_KEY'),
+        'base_url' => env('CHANNEL_LISTER_SHIPSTATION_BASE_URL', 'https://api.shipengine.com/v1'),
     ],
 ];

@@ -11,7 +11,7 @@
 ## ✨ Key Features
 
 - 🛒 **Multi-Channel Support** - Create listings for multiple eCommerce marketplaces
-- 🔄 **Dynamic Forms** - Auto-generated forms based on real-time marketplace requirements  
+- 🔄 **Dynamic Forms** - Auto-generated forms based on real-time marketplace requirements
 - 📊 **Amazon SP-API Integration** - Native integration with Amazon's Selling Partner API
 - 📝 **Flexible Field System** - Custom and marketplace-specific field definitions
 - 📋 **Smart Validation** - Real-time validation with progress tracking
@@ -47,16 +47,19 @@ php artisan migrate
 ### Code Quality & Testing
 
 🚀 **Run the entire test suite:**
+
 ```bash
 composer test
 ```
 
 ✅ **Run unit tests using PEST:**
+
 ```bash
 composer test:unit
 ```
 
 ⚗️ **Run static analysis using PHPStan:**
+
 ```bash
 composer test:types
 ```
@@ -64,11 +67,13 @@ composer test:types
 ### Code Formatting & Refactoring
 
 🧹 **Format code with Laravel Pint:**
+
 ```bash
 composer lint
 ```
 
 ✅ **Refactor code using Rector:**
+
 ```bash
 composer refacto
 ```
@@ -76,16 +81,19 @@ composer refacto
 ### Development Server
 
 🌐 **Launch development server:**
+
 ```bash
 composer serve
 ```
 
 🗑️ **Clear caches:**
+
 ```bash
 composer clear
 ```
 
 📦 **Build assets:**
+
 ```bash
 composer build
 ```
@@ -113,8 +121,8 @@ AMAZON_SP_API_CLIENT_SECRET=your_client_secret_here
 AMAZON_SP_API_REFRESH_TOKEN=your_refresh_token_here
 
 # Shipping Calculator (Optional)
-SHIPSTATION_API_KEY=your_shipengine_api_key_here
-SHIPSTATION_BASE_URL=https://api.shipengine.com/v1
+CHANNEL_LISTER_SHIPSTATION_API_KEY=your_shipengine_api_key_here
+CHANNEL_LISTER_SHIPSTATION_BASE_URL=https://api.shipengine.com/v1
 ```
 
 **Note**: The system now uses OAuth 2.0 with automatic token refresh. You only need to provide your client credentials and refresh token - access tokens are managed automatically.
@@ -239,8 +247,8 @@ Add the following environment variables to your `.env` file:
 
 ```env
 # ShipEngine API Configuration
-SHIPSTATION_API_KEY=your_shipengine_api_key_here
-SHIPSTATION_BASE_URL=https://api.shipengine.com/v1
+CHANNEL_LISTER_SHIPSTATION_API_KEY=your_shipengine_api_key_here
+CHANNEL_LISTER_SHIPSTATION_BASE_URL=https://api.shipengine.com/v1
 ```
 
 **Note**: The system gracefully handles missing API keys by providing manual entry options for shipping costs. ShipEngine API usage incurs costs based on your plan - see [ShipEngine pricing](https://www.shipengine.com/pricing/) for details.
@@ -250,7 +258,7 @@ SHIPSTATION_BASE_URL=https://api.shipengine.com/v1
 The shipping calculator appears as an integrated button within cost-related form fields:
 
 1. **Automatic Detection**: Click "Calculate Shipping" button on any shipping cost field
-2. **Location Setup**: System detects your location via IP or enter ZIP codes manually  
+2. **Location Setup**: System detects your location via IP or enter ZIP codes manually
 3. **Package Details**: Enter dimensions (length, width, height) and weight
 4. **Auto-fill**: Use existing form data to populate dimensions automatically
 5. **Rate Comparison**: View rates from multiple carriers sorted by price
@@ -261,7 +269,7 @@ The shipping calculator appears as an integrated button within cost-related form
 **Shipping Calculator Endpoints:**
 
 - `GET /api/shipping/check-api` - Check if ShipEngine API key is available
-- `GET /api/shipping/location` - Get user location from IP address  
+- `GET /api/shipping/location` - Get user location from IP address
 - `POST /api/shipping/calculate` - Calculate shipping rates for package
 - `GET /api/shipping/carriers` - Get available carriers from ShipEngine
 - `POST /api/shipping/dimensional-weight` - Calculate dimensional weight only
@@ -271,7 +279,7 @@ The shipping calculator appears as an integrated button within cost-related form
 The system automatically calculates dimensional weight using carrier-specific divisors:
 
 - **UPS Commercial**: 139 cubic inches per pound
-- **FedEx**: 139 cubic inches per pound  
+- **FedEx**: 139 cubic inches per pound
 - **USPS**: 166 cubic inches per pound
 
 **Billable Weight**: The greater of actual weight or dimensional weight is used for rate calculation.
