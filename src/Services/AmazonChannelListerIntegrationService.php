@@ -22,8 +22,8 @@ class AmazonChannelListerIntegrationService
     /**
      * Convert Amazon form data to custom attributes format for Rithum export.
      *
-     * @param  array  $amazonFormData  Amazon form field data
-     * @return array Custom attributes in format ['field_name' => 'value']
+     * @param  array<string, mixed>  $amazonFormData  Amazon form field data
+     * @return array<string, mixed> Custom attributes in format ['field_name' => 'value']
      */
     public function mapAmazonDataToCustomAttributes(array $amazonFormData): array
     {
@@ -44,9 +44,9 @@ class AmazonChannelListerIntegrationService
      * Create dynamic ChannelListerField entries for Amazon requirements.
      * This allows Amazon dynamic fields to be treated like regular form fields.
      *
-     * @param  array  $requirements  Amazon listing requirements from API
+     * @param  array<int, array<string, mixed>>  $requirements  Amazon listing requirements from API
      * @param  string  $marketplace  Target marketplace (e.g., 'amazon')
-     * @return Collection<ChannelListerField>
+     * @return Collection<int, \IGE\ChannelLister\Models\ChannelListerField>
      */
     public function createDynamicAmazonFields(array $requirements, string $marketplace = 'amazon'): Collection
     {
@@ -77,9 +77,9 @@ class AmazonChannelListerIntegrationService
     /**
      * Merge Amazon data into unified form data structure.
      *
-     * @param  array  $unifiedFormData  Existing unified form data
-     * @param  array  $amazonFormData  Amazon-specific form data
-     * @return array Merged form data
+     * @param  array<string, mixed>  $unifiedFormData  Existing unified form data
+     * @param  array<string, mixed>  $amazonFormData  Amazon-specific form data
+     * @return array<string, mixed> Merged form data
      */
     public function mergeAmazonData(array $unifiedFormData, array $amazonFormData): array
     {
@@ -89,7 +89,7 @@ class AmazonChannelListerIntegrationService
         // Also merge Amazon data as custom attributes for backward compatibility
         $customAttributes = $this->mapAmazonDataToCustomAttributes($amazonFormData);
 
-        if (! isset($unifiedFormData['custom_attributes'])) {
+        if (! isset($unifiedFormData['custom_attributes']) || ! is_array($unifiedFormData['custom_attributes'])) {
             $unifiedFormData['custom_attributes'] = [];
         }
 
@@ -105,7 +105,7 @@ class AmazonChannelListerIntegrationService
      * Convert Amazon listing to ProductDraft format.
      *
      * @param  AmazonListing  $amazonListing  Existing Amazon listing
-     * @return array ProductDraft data structure
+     * @return array<string, mixed> ProductDraft data structure
      */
     public function convertAmazonListingToProductDraft(AmazonListing $amazonListing): array
     {
@@ -133,8 +133,8 @@ class AmazonChannelListerIntegrationService
     /**
      * Extract common product fields from Amazon form data.
      *
-     * @param  array  $amazonFormData  Amazon form data
-     * @return array Common form data fields
+     * @param  array<string, mixed>  $amazonFormData  Amazon form data
+     * @return array<string, mixed> Common form data fields
      */
     protected function extractCommonFieldsFromAmazon(array $amazonFormData): array
     {
@@ -173,6 +173,8 @@ class AmazonChannelListerIntegrationService
 
     /**
      * Map Amazon requirement to ChannelListerField input type.
+     *
+     * @param  array<string, mixed>  $requirement
      */
     protected function mapAmazonInputType(array $requirement): string
     {
@@ -182,11 +184,15 @@ class AmazonChannelListerIntegrationService
         $method = $reflection->getMethod('mapToInputType');
         $method->setAccessible(true);
 
-        return $method->invoke($amazonService, $requirement)->value;
+        $result = $method->invoke($amazonService, $requirement);
+
+        return is_object($result) && property_exists($result, 'value') ? $result->value : 'text';
     }
 
     /**
      * Get input type aux for Amazon requirement.
+     *
+     * @param  array<string, mixed>  $requirement
      */
     protected function getAmazonInputTypeAux(array $requirement): ?string
     {
@@ -196,14 +202,16 @@ class AmazonChannelListerIntegrationService
         $method = $reflection->getMethod('getInputTypeAux');
         $method->setAccessible(true);
 
-        return $method->invoke($amazonService, $requirement);
+        $result = $method->invoke($amazonService, $requirement);
+
+        return is_string($result) ? $result : null;
     }
 
     /**
      * Generate unified export data for Rithum format.
      *
      * @param  ProductDraft  $draft  Product draft
-     * @return array Export data ready for ChannelLister::csvFromUnifiedData()
+     * @return array<string, string> Export data ready for ChannelLister::csvFromUnifiedData()
      */
     public function generateUnifiedExportData(ProductDraft $draft): array
     {
@@ -212,17 +220,25 @@ class AmazonChannelListerIntegrationService
         // Start with common data
         $commonData = $draft->getCommonData();
         foreach ($commonData as $fieldName => $value) {
-            if (! empty($value)) {
-                $exportData[$fieldName] = $value;
+            if (empty($value)) {
+                continue;
             }
+            if (! is_scalar($value) && ! (is_object($value) && method_exists($value, '__toString'))) {
+                continue;
+            }
+            $exportData[$fieldName] = (string) $value;
         }
 
         // Add custom attributes from all marketplaces
         $customAttributes = $draft->getCustomAttributes();
         foreach ($customAttributes as $attributeName => $value) {
-            if (! empty($value)) {
-                $exportData[$attributeName] = $value;
+            if (empty($value)) {
+                continue;
             }
+            if (! is_scalar($value) && ! (is_object($value) && method_exists($value, '__toString'))) {
+                continue;
+            }
+            $exportData[$attributeName] = (string) $value;
         }
 
         return $exportData;

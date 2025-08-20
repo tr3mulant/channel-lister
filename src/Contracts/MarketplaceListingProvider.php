@@ -18,7 +18,7 @@ interface MarketplaceListingProvider
      * Get listing requirements for a specific product type.
      *
      * @param  string  $productType  The product type identifier
-     * @return list<array{'name': string, 'displayName': string, 'description': string, 'type': string, 'required': bool, 'enum': array|null, 'minLength': int|null, 'maxLength': int|null, 'pattern': string|null, 'example': string|null, 'grouping': string}>
+     * @return array<int, array<string, mixed>>
      */
     public function getListingRequirements(string $productType): array;
 
@@ -34,8 +34,8 @@ interface MarketplaceListingProvider
     /**
      * Generate form fields from listing requirements.
      *
-     * @param  array  $requirements  Array of field requirements
-     * @return Collection Collection of ChannelListerField instances
+     * @param  array<int, array<string, mixed>>  $requirements  Array of field requirements
+     * @return Collection<int, \IGE\ChannelLister\Models\ChannelListerField>
      */
     public function generateFormFields(array $requirements): Collection;
 

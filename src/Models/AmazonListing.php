@@ -21,6 +21,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Carbon\Carbon|null $submitted_at
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder<AmazonListing> byStatus(string $status)
+ * @method static \Illuminate\Database\Eloquent\Builder<AmazonListing> byProductType(string $productType)
+ * @method static \Illuminate\Database\Eloquent\Builder<AmazonListing> recent(int $days = 7)
+ * @method static \Illuminate\Database\Eloquent\Builder<AmazonListing> where(string $column, mixed $operator = null, mixed $value = null, string $boolean = 'and')
+ * @method static AmazonListing findOrFail(mixed $id)
+ * @method static AmazonListing create(array $attributes)
  */
 class AmazonListing extends Model
 {
@@ -259,7 +266,7 @@ class AmazonListing extends Model
      * @param  Builder<AmazonListing>  $query
      * @return Builder<AmazonListing>
      */
-    public function scopeByStatus($query, string $status)
+    public function scopeByStatus(Builder $query, string $status): Builder
     {
         return $query->where('status', $status);
     }
@@ -270,7 +277,7 @@ class AmazonListing extends Model
      * @param  Builder<AmazonListing>  $query
      * @return Builder<AmazonListing>
      */
-    public function scopeByProductType($query, string $productType)
+    public function scopeByProductType(Builder $query, string $productType): Builder
     {
         return $query->where('product_type', $productType);
     }

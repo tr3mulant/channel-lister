@@ -10,6 +10,8 @@ class AmazonDataTransformer
 {
     /**
      * Transform listing data to Amazon feed format.
+     *
+     * @return array<string, mixed>
      */
     public function transformToAmazonFormat(AmazonListing $listing, string $format = 'csv'): array
     {
@@ -30,6 +32,9 @@ class AmazonDataTransformer
 
     /**
      * Map form fields to Amazon feed column names.
+     *
+     * @param  array<string, mixed>  $formData
+     * @return array<string, mixed>
      */
     protected function mapFieldsToAmazonFormat(array $formData, string $productType): array
     {
@@ -51,6 +56,8 @@ class AmazonDataTransformer
 
     /**
      * Get field mapping for specific product type.
+     *
+     * @return array<string, string>
      */
     protected function getFieldMapping(string $productType): array
     {
@@ -126,6 +133,9 @@ class AmazonDataTransformer
 
     /**
      * Apply Amazon-specific data transformations.
+     *
+     * @param  array<string, mixed>  $amazonData
+     * @return array<string, mixed>
      */
     protected function applyAmazonTransformations(array $amazonData, string $productType): array
     {
@@ -138,11 +148,13 @@ class AmazonDataTransformer
 
         // Ensure proper formatting for specific fields
         if (isset($amazonData['standard_price'])) {
-            $amazonData['standard_price'] = number_format((float) $amazonData['standard_price'], 2, '.', '');
+            $price = $amazonData['standard_price'];
+            $amazonData['standard_price'] = number_format(is_numeric($price) ? (float) $price : 0.0, 2, '.', '');
         }
 
         if (isset($amazonData['sale_price'])) {
-            $amazonData['sale_price'] = number_format((float) $amazonData['sale_price'], 2, '.', '');
+            $price = $amazonData['sale_price'];
+            $amazonData['sale_price'] = number_format(is_numeric($price) ? (float) $price : 0.0, 2, '.', '');
         }
 
         // Format dimensions with units
@@ -163,7 +175,10 @@ class AmazonDataTransformer
 
         // Clean up SKU - Amazon has specific requirements
         if (isset($amazonData['item_sku'])) {
-            $amazonData['item_sku'] = $this->cleanSku($amazonData['item_sku']);
+            $sku = $amazonData['item_sku'];
+            if (is_scalar($sku) || (is_object($sku) && method_exists($sku, '__toString'))) {
+                $amazonData['item_sku'] = $this->cleanSku((string) $sku);
+            }
         }
 
         // Set default condition if not specified
@@ -179,6 +194,9 @@ class AmazonDataTransformer
 
     /**
      * Apply product type specific transformations.
+     *
+     * @param  array<string, mixed>  $amazonData
+     * @return array<string, mixed>
      */
     protected function applyProductTypeTransformations(array $amazonData, string $productType): array
     {
@@ -186,7 +204,10 @@ class AmazonDataTransformer
             case 'APPAREL':
                 // Ensure department is set for apparel
                 if (! isset($amazonData['department_name']) && isset($amazonData['target_audience'])) {
-                    $amazonData['department_name'] = $this->mapTargetAudienceToDepartment($amazonData['target_audience']);
+                    $audience = $amazonData['target_audience'];
+                    if (is_scalar($audience) || (is_object($audience) && method_exists($audience, '__toString'))) {
+                        $amazonData['department_name'] = $this->mapTargetAudienceToDepartment((string) $audience);
+                    }
                 }
                 break;
 
@@ -210,6 +231,9 @@ class AmazonDataTransformer
 
     /**
      * Ensure required Amazon fields are present.
+     *
+     * @param  array<string, mixed>  $amazonData
+     * @return array<string, mixed>
      */
     protected function ensureRequiredAmazonFields(array $amazonData, AmazonListing $listing): array
     {
@@ -272,6 +296,9 @@ class AmazonDataTransformer
         $amazonData = $this->transformToAmazonFormat($listing, 'json');
 
         $jsonContent = json_encode($amazonData, JSON_PRETTY_PRINT);
+        if ($jsonContent === false) {
+            throw new \RuntimeException('Failed to encode Amazon data to JSON');
+        }
 
         $filename = $this->generateFilename($listing, 'json');
         $path = "amazon-listings/{$filename}";
@@ -288,6 +315,8 @@ class AmazonDataTransformer
 
     /**
      * Get CSV headers for product type.
+     *
+     * @return array<int, string>
      */
     protected function getCsvHeaders(string $productType): array
     {
@@ -333,10 +362,16 @@ class AmazonDataTransformer
 
     /**
      * Convert array to CSV format.
+     *
+     * @param  array<int, string>  $headers
+     * @param  array<int, array<string, mixed>>  $data
      */
     protected function arrayToCsv(array $headers, array $data): string
     {
         $output = fopen('php://temp', 'r+');
+        if ($output === false) {
+            throw new \RuntimeException('Unable to open temp file for CSV generation');
+        }
 
         // Write headers
         fputcsv($output, $headers);
@@ -345,22 +380,24 @@ class AmazonDataTransformer
         foreach ($data as $row) {
             $csvRow = [];
             foreach ($headers as $header) {
-                $csvRow[] = $row[$header] ?? '';
+                $value = $row[$header] ?? '';
+                $csvRow[] = is_scalar($value) ? (string) $value : '';
             }
             fputcsv($output, $csvRow);
         }
 
         rewind($output);
         $csvContent = stream_get_contents($output);
+        if ($csvContent === false) {
+            fclose($output);
+            throw new \RuntimeException('Failed to read CSV content from temp file');
+        }
         fclose($output);
 
         return $csvContent;
     }
 
-    /**
-     * Helper methods
-     */
-    protected function shouldIncludeField(string $fieldName, $value): bool
+    protected function shouldIncludeField(string $fieldName, mixed $value): bool
     {
         // Always include these fields even if empty
         $alwaysInclude = ['product_id', 'product_id_type', 'condition_note'];
@@ -368,19 +405,25 @@ class AmazonDataTransformer
         return ! empty($value) || in_array($fieldName, $alwaysInclude);
     }
 
-    protected function transformFieldValue(string $fieldName, $value): string
+    protected function transformFieldValue(string $fieldName, mixed $value): string
     {
         if (is_array($value)) {
             return implode('|', $value);
         }
 
-        return (string) $value;
+        if (is_scalar($value) || (is_object($value) && method_exists($value, '__toString'))) {
+            return (string) $value;
+        }
+
+        return '';
     }
 
     protected function cleanSku(string $sku): string
     {
         // Amazon SKU requirements: 1-40 characters, alphanumeric plus - _ .
-        return preg_replace('/[^a-zA-Z0-9\-_\.]/', '', substr($sku, 0, 40));
+        $cleaned = preg_replace('/[^a-zA-Z0-9\-_\.]/', '', substr($sku, 0, 40));
+
+        return $cleaned ?? '';
     }
 
     protected function mapTargetAudienceToDepartment(string $audience): string

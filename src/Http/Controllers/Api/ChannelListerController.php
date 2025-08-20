@@ -331,13 +331,14 @@ class ChannelListerController extends Controller
 
         $fileInfo = Cache::get($key);
 
-        if (! $fileInfo) {
+        if (! $fileInfo || ! is_array($fileInfo) || ! isset($fileInfo['file_path']) || ! isset($fileInfo['original_name'])) {
             return response()->json([
                 'error' => 'Invalid or expired download token',
             ], 404);
         }
 
-        $storage = Storage::disk(config('channel-lister.downloads.disk', 'local'));
+        $diskName = config('channel-lister.downloads.disk', 'local');
+        $storage = Storage::disk(is_string($diskName) ? $diskName : 'local');
 
         // Check if file exists
         if (! $storage->exists($fileInfo['file_path'])) {
@@ -362,7 +363,10 @@ class ChannelListerController extends Controller
                 Cache::forget("download_token:{$token}");
             }
 
-            return Storage::download($fileInfo['file_path'], $fileInfo['original_name']);
+            $filePath = is_string($fileInfo['file_path']) ? $fileInfo['file_path'] : '';
+            $originalName = is_string($fileInfo['original_name']) ? $fileInfo['original_name'] : 'download';
+
+            return Storage::download($filePath, $originalName);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'Failed to download file: '.$e->getMessage(),
@@ -395,12 +399,12 @@ class ChannelListerController extends Controller
 
         logger("generateDownloadToken $token generated key $key");
 
-        Cache::put($key, $fileInfo, now()->addMinutes($tokenTtl));
+        Cache::put($key, $fileInfo, now()->addMinutes(is_numeric($tokenTtl) ? (int) $tokenTtl : 60));
 
         return $token;
     }
 
-    protected function cacheKey($key): string
+    protected function cacheKey(string $key): string
     {
         return config('channel-lister.cache_prefix')."_$key";
     }

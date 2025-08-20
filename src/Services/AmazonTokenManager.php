@@ -49,6 +49,9 @@ class AmazonTokenManager
     /**
      * Refresh the access token using the refresh token.
      */
+    /**
+     * @return array<string, mixed>|null
+     */
     public function refreshAccessToken(): ?array
     {
         try {
@@ -68,11 +71,19 @@ class AmazonTokenManager
                 return null;
             }
 
-            $tokenData = $response->json();
+            $responseData = $response->json();
+            if (! is_array($responseData)) {
+                Log::error('Amazon SP-API token refresh returned invalid data');
+
+                return null;
+            }
+
+            $tokenData = $responseData;
 
             // Add timestamp for expiration tracking
             $tokenData['obtained_at'] = Carbon::now()->timestamp;
-            $tokenData['expires_at'] = Carbon::now()->addSeconds($tokenData['expires_in'] ?? 3600)->timestamp;
+            $expiresIn = is_numeric($tokenData['expires_in'] ?? null) ? (int) $tokenData['expires_in'] : 3600;
+            $tokenData['expires_at'] = Carbon::now()->addSeconds($expiresIn)->timestamp;
 
             // Cache the new token
             $this->cacheToken($tokenData);
@@ -113,6 +124,8 @@ class AmazonTokenManager
 
     /**
      * Get token information for debugging/monitoring.
+     *
+     * @return array<string, mixed>|null
      */
     public function getTokenInfo(): ?array
     {
@@ -134,14 +147,20 @@ class AmazonTokenManager
 
     /**
      * Get cached token data.
+     *
+     * @return array<string, mixed>|null
      */
     protected function getCachedToken(): ?array
     {
-        return Cache::get($this->getCacheKey());
+        $cached = Cache::get($this->getCacheKey());
+
+        return is_array($cached) ? $cached : null;
     }
 
     /**
      * Cache the token data.
+     *
+     * @param  array<string, mixed>  $tokenData
      */
     protected function cacheToken(array $tokenData): void
     {
@@ -154,6 +173,8 @@ class AmazonTokenManager
 
     /**
      * Check if token is expiring soon (within 10 minutes).
+     *
+     * @param  array<string, mixed>  $tokenData
      */
     protected function isTokenExpiringSoon(array $tokenData): bool
     {
@@ -177,6 +198,8 @@ class AmazonTokenManager
 
     /**
      * Validate configuration.
+     *
+     * @return array<int, string>
      */
     public function validateConfiguration(): array
     {
@@ -199,17 +222,23 @@ class AmazonTokenManager
 
     protected function clientId(): string
     {
-        return $this->clientId ??= config('channel-lister.amazon.client_id') ?: '';
+        $configValue = config('channel-lister.amazon.client_id');
+
+        return $this->clientId ??= is_string($configValue) ? $configValue : '';
     }
 
     protected function clientSecret(): string
     {
-        return $this->clientSecret ??= config('channel-lister.amazon.client_secret') ?: '';
+        $configValue = config('channel-lister.amazon.client_secret');
+
+        return $this->clientSecret ??= is_string($configValue) ? $configValue : '';
     }
 
     protected function refreshToken(): string
     {
-        return $this->refreshToken ??= config('channel-lister.amazon.refresh_token') ?: '';
+        $configValue = config('channel-lister.amazon.refresh_token');
+
+        return $this->refreshToken ??= is_string($configValue) ? $configValue : '';
     }
 
     protected function cachePrefix(): string

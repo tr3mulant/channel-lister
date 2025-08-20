@@ -10,6 +10,7 @@ class AmazonSpApiException extends Exception
         string $message = '',
         int $code = 0,
         ?Exception $previous = null,
+        /** @var array<string, mixed> */
         protected array $context = [],
         protected ?string $amazonErrorCode = null,
         protected ?string $amazonErrorType = null
@@ -17,6 +18,9 @@ class AmazonSpApiException extends Exception
         parent::__construct($message, $code, $previous);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getContext(): array
     {
         return $this->context;
@@ -34,6 +38,8 @@ class AmazonSpApiException extends Exception
 
     /**
      * Create exception from Amazon SP-API error response.
+     *
+     * @param  array<string, mixed>  $response
      */
     public static function fromApiResponse(array $response, int $statusCode = 0): self
     {
@@ -42,14 +48,16 @@ class AmazonSpApiException extends Exception
         $amazonErrorType = null;
 
         // Parse Amazon error format
-        if (isset($response['errors']) && is_array($response['errors']) && (isset($response['errors']) && $response['errors'] !== [])) {
+        if (isset($response['errors']) && is_array($response['errors']) && $response['errors'] !== []) {
             $firstError = $response['errors'][0];
-            $message = $firstError['message'] ?? $message;
-            $amazonErrorCode = $firstError['code'] ?? null;
-            $amazonErrorType = $firstError['type'] ?? null;
+            $message = is_string($firstError['message'] ?? null) ? $firstError['message'] : $message;
+            $amazonErrorCode = is_string($firstError['code'] ?? null) ? $firstError['code'] : null;
+            $amazonErrorType = is_string($firstError['type'] ?? null) ? $firstError['type'] : null;
         } elseif (isset($response['error'])) {
-            $message = $response['error_description'] ?? $response['error'] ?? $message;
-            $amazonErrorCode = $response['error'] ?? null;
+            $errorDescription = $response['error_description'] ?? null;
+            $error = $response['error'];
+            $message = is_string($errorDescription) ? $errorDescription : (is_string($error) ? $error : $message);
+            $amazonErrorCode = is_string($error) ? $error : null;
         }
 
         return new self(

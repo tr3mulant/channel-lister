@@ -17,6 +17,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $sku
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder<ProductDraft> byStatus(string $status)
+ * @method static \Illuminate\Database\Eloquent\Builder<ProductDraft> recent(int $days = 7)
+ * @method static ProductDraft findOrFail(mixed $id)
+ * @method static ProductDraft create(array $attributes)
  */
 class ProductDraft extends Model
 {
@@ -36,6 +41,9 @@ class ProductDraft extends Model
         'sku',
     ];
 
+    /**
+     * @var array<string, string>
+     */
     protected $casts = [
         'form_data' => 'array',
         'validation_errors' => 'array',
@@ -84,6 +92,8 @@ class ProductDraft extends Model
 
     /**
      * Get form data for a specific marketplace.
+     *
+     * @return array<string, mixed>
      */
     public function getMarketplaceData(string $marketplace): array
     {
@@ -92,6 +102,8 @@ class ProductDraft extends Model
 
     /**
      * Set form data for a specific marketplace.
+     *
+     * @param  array<string, mixed>  $data
      */
     public function setMarketplaceData(string $marketplace, array $data): void
     {
@@ -102,6 +114,8 @@ class ProductDraft extends Model
 
     /**
      * Get common/shared form data.
+     *
+     * @return array<string, mixed>
      */
     public function getCommonData(): array
     {
@@ -110,6 +124,8 @@ class ProductDraft extends Model
 
     /**
      * Get Amazon-specific form data.
+     *
+     * @return array<string, mixed>
      */
     public function getAmazonData(): array
     {
@@ -123,13 +139,13 @@ class ProductDraft extends Model
     {
         // Try common data first
         $commonData = $this->getCommonData();
-        if (! empty($commonData['Auction Title'])) {
+        if (! empty($commonData['Auction Title']) && is_string($commonData['Auction Title'])) {
             return $commonData['Auction Title'];
         }
 
         // Try Amazon data
         $amazonData = $this->getAmazonData();
-        if (! empty($amazonData['item_name'])) {
+        if (! empty($amazonData['item_name']) && is_string($amazonData['item_name'])) {
             return $amazonData['item_name'];
         }
 
@@ -143,13 +159,13 @@ class ProductDraft extends Model
     {
         // Try common data first
         $commonData = $this->getCommonData();
-        if (! empty($commonData['Inventory Number'])) {
+        if (! empty($commonData['Inventory Number']) && is_string($commonData['Inventory Number'])) {
             return $commonData['Inventory Number'];
         }
 
         // Try Amazon data
         $amazonData = $this->getAmazonData();
-        if (! empty($amazonData['seller_sku'])) {
+        if (! empty($amazonData['seller_sku']) && is_string($amazonData['seller_sku'])) {
             return $amazonData['seller_sku'];
         }
 
@@ -168,6 +184,8 @@ class ProductDraft extends Model
     /**
      * Get all custom attributes for Rithum export.
      * This includes marketplace-specific data that should be exported as custom attributes.
+     *
+     * @return array<string, mixed>
      */
     public function getCustomAttributes(): array
     {
@@ -197,6 +215,9 @@ class ProductDraft extends Model
 
     /**
      * Scope to filter by status.
+     *
+     * @param  Builder<ProductDraft>  $query
+     * @return Builder<ProductDraft>
      */
     public function scopeByStatus(Builder $query, string $status): Builder
     {
@@ -205,6 +226,9 @@ class ProductDraft extends Model
 
     /**
      * Scope to get recent drafts.
+     *
+     * @param  Builder<ProductDraft>  $query
+     * @return Builder<ProductDraft>
      */
     public function scopeRecent(Builder $query, int $days = 7): Builder
     {

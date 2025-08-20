@@ -13,6 +13,8 @@ class AmazonListingFormProcessor
 
     /**
      * Process and save form data for Amazon listing.
+     *
+     * @param  array<string, mixed>  $formData
      */
     public function processFormSubmission(array $formData, string $productType, string $marketplaceId, ?int $listingId = null): AmazonListing
     {
@@ -37,6 +39,8 @@ class AmazonListingFormProcessor
 
     /**
      * Create or update a listing record.
+     *
+     * @param  array<string, mixed>  $formData
      */
     protected function createOrUpdateListing(array $formData, string $productType, string $marketplaceId, ?int $listingId = null): AmazonListing
     {
@@ -91,6 +95,9 @@ class AmazonListingFormProcessor
 
     /**
      * Validate form data against Amazon requirements.
+     *
+     * @param  array<int, array<string, mixed>>  $requirements
+     * @return array<string, mixed>
      */
     public function validateFormData(AmazonListing $listing, array $requirements): array
     {
@@ -132,8 +139,10 @@ class AmazonListingFormProcessor
 
     /**
      * Validate individual field based on its requirements.
+     *
+     * @param  array<string, mixed>  $requirement
      */
-    protected function validateField(string $fieldName, $value, array $requirement): ?string
+    protected function validateField(string $fieldName, mixed $value, array $requirement): ?string
     {
         $rules = [];
         $customMessages = [];

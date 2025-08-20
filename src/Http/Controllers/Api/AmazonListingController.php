@@ -70,20 +70,21 @@ class AmazonListingController extends Controller
             $validated['identifier_type']
         );
 
-        if ($listing === null || $listing === []) {
+        if ($listing === null) {
             return response()->json([
                 'error' => 'Listing not found for the provided identifier',
             ], 404);
         }
 
         // Get product type from existing listing and fetch requirements
-        $productTypes = $listing['productTypes'] ?? [];
+        $productTypes = $listing['productTypes'];
         $requirements = [];
         $formFields = collect();
+        $primaryProductType = null;
 
         if (! empty($productTypes)) {
-            $primaryProductType = $productTypes[0]['name'] ?? null;
-            if ($primaryProductType) {
+            $primaryProductType = $productTypes[0]; // Already string[] per PHPDoc
+            if ($primaryProductType !== '' && $primaryProductType !== '0') {
                 $requirements = $this->amazonService->getListingRequirements($primaryProductType);
                 $formFields = $this->amazonService->generateFormFields($requirements);
             }
@@ -99,6 +100,9 @@ class AmazonListingController extends Controller
         ]);
     }
 
+    /**
+     * @param  array<int, array<string, mixed>>  $productTypes
+     */
     protected function buildProductTypeTable(array $productTypes): string
     {
         if ($productTypes === []) {
@@ -110,11 +114,13 @@ class AmazonListingController extends Controller
         $html .= '<tbody>';
 
         foreach ($productTypes as $productType) {
-            $description = $productType['description'] ? htmlspecialchars((string) $productType['description']) : '';
+            $description = isset($productType['description']) && is_string($productType['description'])
+                ? htmlspecialchars($productType['description'])
+                : '';
             $html .= sprintf(
                 '<tr style="cursor: pointer;"><td>%s</td><td>%s</td><td>%s</td></tr>',
-                htmlspecialchars((string) $productType['id']),
-                htmlspecialchars((string) $productType['name']),
+                htmlspecialchars(is_string($productType['id']) ? $productType['id'] : ''),
+                htmlspecialchars(is_string($productType['name']) ? $productType['name'] : ''),
                 $description
             );
         }
@@ -122,6 +128,9 @@ class AmazonListingController extends Controller
         return $html.'</tbody></table>';
     }
 
+    /**
+     * @param  \Illuminate\Support\Collection<int, \IGE\ChannelLister\Models\ChannelListerField>  $formFields
+     */
     protected function buildFormFieldsHtml($formFields): string
     {
         $html = '';
@@ -172,7 +181,7 @@ class AmazonListingController extends Controller
         return $html;
     }
 
-    protected function renderFormField($field): string
+    protected function renderFormField(\IGE\ChannelLister\Models\ChannelListerField $field): string
     {
         $requiredAttr = $field->required ? 'required' : '';
         $requiredClass = $field->required ? 'required' : '';
@@ -186,7 +195,7 @@ class AmazonListingController extends Controller
         $html .= sprintf(
             '<label for="%s" class="col-form-label">%s</label>',
             $fieldId,
-            htmlspecialchars($field->display_name)
+            htmlspecialchars($field->display_name ?? '')
         );
 
         match ($field->input_type->value) {
@@ -213,7 +222,7 @@ class AmazonListingController extends Controller
         return $html.'</div>';
     }
 
-    protected function renderSelectField($field, string $fieldId, string $requiredAttr): string
+    protected function renderSelectField(\IGE\ChannelLister\Models\ChannelListerField $field, string $fieldId, string $requiredAttr): string
     {
         $options = $field->getInputTypeAuxOptions();
         $html = sprintf(
@@ -248,7 +257,7 @@ class AmazonListingController extends Controller
         return $html.'</select>';
     }
 
-    protected function renderTextareaField($field, string $fieldId, string $requiredAttr): string
+    protected function renderTextareaField(\IGE\ChannelLister\Models\ChannelListerField $field, string $fieldId, string $requiredAttr): string
     {
         return sprintf(
             '<textarea name="%s" id="%s" class="form-control" rows="3" %s placeholder="%s"></textarea>',
@@ -259,7 +268,7 @@ class AmazonListingController extends Controller
         );
     }
 
-    protected function renderCheckboxField($field, string $fieldId): string
+    protected function renderCheckboxField(\IGE\ChannelLister\Models\ChannelListerField $field, string $fieldId): string
     {
         return sprintf(
             '<div class="form-check"><input type="checkbox" name="%s" id="%s" class="form-check-input" value="1"><label for="%s" class="form-check-label">Yes</label></div>',
@@ -269,7 +278,7 @@ class AmazonListingController extends Controller
         );
     }
 
-    protected function renderTextInputField($field, string $fieldId, string $requiredAttr): string
+    protected function renderTextInputField(\IGE\ChannelLister\Models\ChannelListerField $field, string $fieldId, string $requiredAttr): string
     {
         return sprintf(
             '<input type="text" name="%s" id="%s" class="form-control" %s placeholder="%s">',
@@ -375,6 +384,7 @@ class AmazonListingController extends Controller
             $filePath = match ($format) {
                 'csv' => $this->dataTransformer->generateCsvFile($listing),
                 'json' => $this->dataTransformer->generateJsonFile($listing),
+                default => throw new \InvalidArgumentException("Unsupported format: {$format}"),
             };
 
             return response()->json([
@@ -404,7 +414,7 @@ class AmazonListingController extends Controller
         $filename = basename($listing->file_path);
 
         return Storage::disk('local')->download($listing->file_path, $filename, [
-            'Content-Type' => $this->getContentType($listing->file_format),
+            'Content-Type' => $this->getContentType($listing->file_format ?? 'csv'),
         ]);
     }
 
