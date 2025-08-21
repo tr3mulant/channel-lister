@@ -490,22 +490,6 @@ function selectEasterEgg(egg) {
       easterEggRunSpeed = 5;
       submitButton.prop("value", "Submit right meow.");
       break;
-    case "rocket":
-      submitButton.prop("value", "Launch (to the database)");
-      submitButton.on("click", function () {
-        if ($("#user_input").valid()) {
-          $("#launchbutton").remove();
-          let html = `<br class='clearfloat'>
-				<div class="row d-flex justify-content-center">
-					<div class="col">
-						<a id=\"launchbutton\" href=\"javascript:var%20KICKASSVERSION='2.0';var%20s%20=%20document.createElement('script');s.type='text/javascript';document.body.appendChild(s);s.src='listings_lib/kickass_rocket.js';void(0);\">Launch Kickass Rocket</a>
-					</div>
-				</div>
-				<br class='clearfloat'>`;
-          $("form").after(html);
-        }
-      });
-      break;
     case "batman":
       easterEgg.addClass("batman_robin");
       submitButton.prop("value", "To the Database, Robin!");
@@ -528,10 +512,8 @@ function randomizeEasterEgg() {
     selectEasterEgg("nyan");
   } else if (r < 0.96) {
     selectEasterEgg("carlton");
-  } else if (r < 0.99) {
-    selectEasterEgg("rick");
   } else {
-    selectEasterEgg("rocket");
+    selectEasterEgg("rick");
   }
 }
 
@@ -594,7 +576,7 @@ function rickAndMorty() {
   $("#rick-div").css({ float: "left", width: "100%" });
   $("#rick-div").append(
     $("<img>")
-      .prop("src", "images/portal.gif")
+      .prop("src", "vendor/channel-lister/images/portal.gif")
       .prop("id", "portal1")
       .css({
         position: "relative",
@@ -618,7 +600,7 @@ function rickAndMorty() {
     function () {
       $("#rick-div").append(
         $("<img>")
-          .prop("src", "images/rick-morty.gif")
+          .prop("src", "vendor/channel-lister/images/rick-morty.gif")
           .prop("id", "rick")
           .css({
             position: "absolute",
@@ -656,7 +638,7 @@ function addPortal() {
   var div_width = $("#rick-div").width();
   $("#rick-div").append(
     $("<img>")
-      .prop("src", "images/portal.gif")
+      .prop("src", "vendor/channel-lister/images/portal.gif")
       .prop("id", "portal2")
       .css({
         width: "10px",
@@ -684,7 +666,7 @@ function addPortal() {
 window.modal; //global variable used for the forms in the update data table
 
 $(document).ready(function () {
-  var validator = $("#user_input").validate({
+  $("#user_input").validate({
     ignore: "",
     rules: {
       UPC: {
@@ -700,7 +682,10 @@ $(document).ready(function () {
     },
     invalidHandler: function (event, validator) {
       var err_el_id = validator.invalidElements()[0].id;
-      console.log(err_el_id);
+      console.log({
+        err_el_id: err_el_id,
+        validator: validator,
+      });
       var platform = $("[id='" + err_el_id + "']")
         .closest(".platform-container")
         .attr("id");
@@ -711,24 +696,15 @@ $(document).ready(function () {
       event.preventDefault();
       $.ajax({
         method: "POST",
-        url: "api/channel-lister/submit-product-data",
+        url: "api/channel-lister",
         data: $(form)
           .serialize()
-          //.replace(/(^|&)drafts-[a-zA-Z0-9\-\_]+=\d+(&|$)/, ""), //ditch the stupid drafts table named fields
           .replace(/(^|&)drafts-[a-zA-Z0-9_-]+=\d+(&|$)/, ""),
+        dataType: "json",
       })
         .done(function (response) {
-          let r = JSON.parse(response);
-          if (r.status !== "success") {
-            console.log(r);
-            alert(`Something went wrong!\n\n${r.message}`);
-            return false;
-          }
-          let html = "";
-          for (const [key, value] of Object.entries(r.data)) {
-            html += value;
-          }
-          $("#databaseResponse").append(html);
+          console.log(response);
+          window.open(response.download_url, "_blank");
         })
         .fail(function (response) {
           console.log(response);
@@ -991,7 +967,7 @@ $(document).ready(function () {
       $("#country_of_origin_3_digit-id").val("");
       return;
     }
-    $.getJSON("api/channel-lister/getCountryCodeOptions/" + country + "/2")
+    $.getJSON("api/channel-lister/country-code-options/" + country + "/2")
       .done(function (response) {
         var digit2 = response.data;
         $("#country_of_origin_2_digit-id").val(digit2.trim());
@@ -1000,7 +976,7 @@ $(document).ready(function () {
         console.log(response);
         alert(response.responseText);
       });
-    $.getJSON("api/channel-lister/getCountryCodeOptions/" + country + "/3")
+    $.getJSON("api/channel-lister/country-code-options/" + country + "/3")
       .done(function (response) {
         var digit3 = response.data;
         $("#country_of_origin_3_digit-id").val(digit3.trim());
@@ -1280,7 +1256,7 @@ $(document).ready(function () {
     $("#supplier_code-id").val(supplier_code);
   }
 
-  $('[id="Relationship Name-id"]').parent().parent().addClass("d-none");
+  $('[id="Vary By-id"]').parent().addClass("d-none");
   $('[id="Parent SKU-id"]').parent().addClass("d-none");
 
   //checks for the change in the sku type dropdown menu
@@ -1289,6 +1265,7 @@ $(document).ready(function () {
   $(`#${skuTypeSelector}`).on("change", function () {
     console.log("SKU Type changed to " + $(this).val());
     if ($(this).val() == "bundle") {
+      console.log("displaying Bundle Components sections");
       $("#bundle-components-container").removeClass("d-none");
       $("#bundled-id").removeClass("d-none");
       $("[id='Bundle Components-id']").prop("required", true);
@@ -1304,26 +1281,23 @@ $(document).ready(function () {
       }
       $("[id='Bundle Components-id']").removeProp("required").trigger("change");
       $("#bundled-id").removeClass("required");
-      $("[id='Bundle Components-id'").parent().removeClass("required");
+      $("[id='Bundle Components-id']").parent().removeClass("required");
       $("#supplier_code-id").removeProp("readonly");
       $("#supplier_code-id").val("");
     }
 
     if ($(this).val() == "child" || $(this).val() == "parent") {
-      $('[id="Relationship Name-id"]').parent().parent().removeClass("d-none");
+      $('[id="Vary By-id"]').parent().removeClass("d-none");
       $('[id="Parent SKU-id"]').parent().removeClass("d-none");
-      $('[id="Relationship Name-id"]').prop("required", true);
-      $("[id='Relationship Name-id']").parent().parent().addClass("required");
+      $('[id="Vary By-id"]').prop("required", true);
+      $("[id='Vary By-id']").parent().addClass("required");
       $("[id='Parent SKU-id']").parent().addClass("required");
       $('[id="Parent SKU-id"]').prop("required", true);
     } else {
-      $('[id="Relationship Name-id"]').parent().parent().addClass("d-none");
+      $('[id="Vary By-id"]').parent().addClass("d-none");
       $('[id="Parent SKU-id"]').parent().addClass("d-none");
-      $('[id="Relationship Name-id"]').removeProp("required");
-      $("[id='Relationship Name-id']")
-        .parent()
-        .parent()
-        .removeClass("required");
+      $('[id="Vary By-id"]').removeProp("required");
+      $("[id='Vary By-id']").parent().removeClass("required");
       $('[id="Parent SKU-id"]').removeProp("required");
       $('[id="Parent SKU-id"]').parent().removeClass("required");
     }
@@ -1381,95 +1355,110 @@ $(document).ready(function () {
   });
 
   // ===== UNIFIED DRAFT SYSTEM INTEGRATION =====
-  
+
   // Global namespace for unified draft functions
   window.ChannelListerUnified = {
-    
     // Enhanced form data collection that works across all tabs
-    collectAllTabData: function() {
+    collectAllTabData: function () {
       const data = {
         common: {},
-        marketplaces: {}
+        marketplaces: {},
       };
-      
+
       // Get all visible marketplace tabs
       const openTabs = getOpenPlataformTabs();
-      
-      openTabs.forEach(function(tab) {
+
+      openTabs.forEach(function (tab) {
         const tabData = {};
-        const tabSelector = '#' + tab;
-        
+        const tabSelector = "#" + tab;
+
         // Collect form data from this tab
-        $(tabSelector + ' input, ' + tabSelector + ' select, ' + tabSelector + ' textarea').each(function() {
+        $(
+          tabSelector +
+            " input, " +
+            tabSelector +
+            " select, " +
+            tabSelector +
+            " textarea"
+        ).each(function () {
           const field = $(this);
-          const name = field.attr('name');
+          const name = field.attr("name");
           let value = field.val();
-          
-          if (name && value !== '') {
-            if (field.is(':checkbox')) {
-              value = field.is(':checked') ? '1' : '0';
-            } else if (field.is(':radio') && !field.is(':checked')) {
+
+          if (name && value !== "") {
+            if (field.is(":checkbox")) {
+              value = field.is(":checked") ? "1" : "0";
+            } else if (field.is(":radio") && !field.is(":checked")) {
               return; // Skip unchecked radio buttons
             }
-            
-            if (tab === 'common') {
+
+            if (tab === "common") {
               data.common[name] = value;
             } else {
               tabData[name] = value;
             }
           }
         });
-        
+
         // Store marketplace data
-        if (tab !== 'common' && Object.keys(tabData).length > 0) {
+        if (tab !== "common" && Object.keys(tabData).length > 0) {
           data.marketplaces[tab] = tabData;
         }
       });
-      
+
       // Add Amazon data if it exists and has been modified
-      if (typeof window.currentProductType !== 'undefined' && window.currentProductType) {
+      if (
+        typeof window.currentProductType !== "undefined" &&
+        window.currentProductType
+      ) {
         const amazonData = {};
-        $('.amazon-generated-panel input, .amazon-generated-panel select, .amazon-generated-panel textarea').each(function() {
+        $(
+          ".amazon-generated-panel input, .amazon-generated-panel select, .amazon-generated-panel textarea"
+        ).each(function () {
           const field = $(this);
-          const name = field.attr('name');
+          const name = field.attr("name");
           let value = field.val();
-          
-          if (name && value !== '') {
-            if (field.is(':checkbox')) {
-              value = field.is(':checked') ? '1' : '0';
+
+          if (name && value !== "") {
+            if (field.is(":checkbox")) {
+              value = field.is(":checked") ? "1" : "0";
             }
             amazonData[name] = value;
           }
         });
-        
+
         if (Object.keys(amazonData).length > 0) {
           amazonData.product_type = window.currentProductType;
-          amazonData.marketplace_id = window.currentMarketplaceId || 'ATVPDKIKX0DER';
+          amazonData.marketplace_id =
+            window.currentMarketplaceId || "ATVPDKIKX0DER";
           data.marketplaces.amazon = amazonData;
         }
       }
-      
+
       return data;
     },
-    
+
     // Enhanced form population that works across all tabs
-    populateAllTabData: function(formData) {
+    populateAllTabData: function (formData) {
       // Populate common tab
       if (formData.common) {
-        this.populateTabFields('#common', formData.common);
+        this.populateTabFields("#common", formData.common);
       }
-      
+
       // Populate marketplace tabs
       if (formData.marketplaces) {
         Object.keys(formData.marketplaces).forEach((marketplace) => {
-          if (marketplace === 'amazon') {
+          if (marketplace === "amazon") {
             // Handle Amazon tab specially
             this.populateAmazonTab(formData.marketplaces.amazon);
           } else {
             // Handle other marketplace tabs
-            const tabSelector = '#' + marketplace;
+            const tabSelector = "#" + marketplace;
             if ($(tabSelector).length > 0) {
-              this.populateTabFields(tabSelector, formData.marketplaces[marketplace]);
+              this.populateTabFields(
+                tabSelector,
+                formData.marketplaces[marketplace]
+              );
               // Make sure the tab is visible
               showPlatformTab(marketplace, false);
             }
@@ -1477,124 +1466,144 @@ $(document).ready(function () {
         });
       }
     },
-    
+
     // Populate fields in a specific tab
-    populateTabFields: function(tabSelector, data) {
+    populateTabFields: function (tabSelector, data) {
       Object.keys(data).forEach((fieldName) => {
         const field = $(tabSelector + ' [name="' + fieldName + '"]');
         const value = data[fieldName];
-        
-        if (field.length > 0 && value !== null && value !== '') {
-          if (field.is('select')) {
+
+        if (field.length > 0 && value !== null && value !== "") {
+          if (field.is("select")) {
             field.val(value);
-          } else if (field.is(':checkbox')) {
-            field.prop('checked', value === 'true' || value === '1' || value === true);
-          } else if (field.is(':radio')) {
-            field.filter('[value="' + value + '"]').prop('checked', true);
+          } else if (field.is(":checkbox")) {
+            field.prop(
+              "checked",
+              value === "true" || value === "1" || value === true
+            );
+          } else if (field.is(":radio")) {
+            field.filter('[value="' + value + '"]').prop("checked", true);
           } else {
             field.val(value);
           }
-          field.trigger('change');
+          field.trigger("change");
         }
       });
     },
-    
+
     // Special handling for Amazon tab population
-    populateAmazonTab: function(amazonData) {
+    populateAmazonTab: function (amazonData) {
       if (!amazonData || !amazonData.product_type) return;
-      
+
       // Show Amazon tab if it exists
-      if ($('#liamazon').length > 0) {
-        showPlatformTab('amazon', false);
-        gotoPlatformTab('amazon');
+      if ($("#liamazon").length > 0) {
+        showPlatformTab("amazon", false);
+        gotoPlatformTab("amazon");
       }
-      
+
       // If Amazon product type search exists, use it
-      if (typeof window.getAmazonListingRequirements === 'function') {
-        $('#amazon_product_type-id').val(amazonData.product_type);
-        $('#amazon_product_type-searchbox').val(amazonData.product_type);
-        
+      if (typeof window.getAmazonListingRequirements === "function") {
+        $("#amazon_product_type-id").val(amazonData.product_type);
+        $("#amazon_product_type-searchbox").val(amazonData.product_type);
+
         // Load Amazon requirements and then populate
-        window.getAmazonListingRequirements(amazonData.product_type).done(() => {
-          setTimeout(() => {
-            this.populateTabFields('.amazon-generated-panel', amazonData);
-            
-            // Update Amazon draft system variables if they exist
-            if (typeof window.currentProductType !== 'undefined') {
-              window.currentProductType = amazonData.product_type;
-              window.currentMarketplaceId = amazonData.marketplace_id || 'ATVPDKIKX0DER';
-            }
-          }, 1000);
-        });
+        window
+          .getAmazonListingRequirements(amazonData.product_type)
+          .done(() => {
+            setTimeout(() => {
+              this.populateTabFields(".amazon-generated-panel", amazonData);
+
+              // Update Amazon draft system variables if they exist
+              if (typeof window.currentProductType !== "undefined") {
+                window.currentProductType = amazonData.product_type;
+                window.currentMarketplaceId =
+                  amazonData.marketplace_id || "ATVPDKIKX0DER";
+              }
+            }, 1000);
+          });
       }
     },
-    
+
     // Get summary of data across all tabs for display
-    getDataSummary: function() {
+    getDataSummary: function () {
       const data = this.collectAllTabData();
       const summary = {
         commonFields: Object.keys(data.common).length,
         marketplaceFields: 0,
-        marketplaces: []
+        marketplaces: [],
       };
-      
+
       Object.keys(data.marketplaces).forEach((marketplace) => {
         const fieldCount = Object.keys(data.marketplaces[marketplace]).length;
         summary.marketplaceFields += fieldCount;
         summary.marketplaces.push({
           name: marketplace,
-          fields: fieldCount
+          fields: fieldCount,
         });
       });
-      
+
       return summary;
     },
-    
+
     // Check if form has significant data
-    hasSignificantData: function() {
+    hasSignificantData: function () {
       const summary = this.getDataSummary();
       return summary.commonFields > 0 || summary.marketplaceFields > 0;
     },
-    
+
     // Clear all form data (for loading new drafts)
-    clearAllForms: function() {
+    clearAllForms: function () {
       // Clear common tab
-      $('#common input, #common select, #common textarea').each(function() {
+      $("#common input, #common select, #common textarea").each(function () {
         const field = $(this);
-        if (field.is(':checkbox') || field.is(':radio')) {
-          field.prop('checked', false);
+        if (field.is(":checkbox") || field.is(":radio")) {
+          field.prop("checked", false);
         } else {
-          field.val('');
+          field.val("");
         }
       });
-      
+
       // Clear marketplace tabs
-      $('.platform-container:not(#common) input, .platform-container:not(#common) select, .platform-container:not(#common) textarea').each(function() {
+      $(
+        ".platform-container:not(#common) input, .platform-container:not(#common) select, .platform-container:not(#common) textarea"
+      ).each(function () {
         const field = $(this);
-        if (field.is(':checkbox') || field.is(':radio')) {
-          field.prop('checked', false);
+        if (field.is(":checkbox") || field.is(":radio")) {
+          field.prop("checked", false);
         } else {
-          field.val('');
+          field.val("");
         }
       });
-      
+
       // Clear Amazon generated panels
-      $('.amazon-generated-panel').remove();
-      
+      $(".amazon-generated-panel").remove();
+
       // Reset Amazon variables
-      if (typeof window.currentProductType !== 'undefined') {
+      if (typeof window.currentProductType !== "undefined") {
         window.currentProductType = null;
         window.currentListingId = null;
       }
-    }
+    },
   };
-  
+
   // Make unified functions available globally for the unified draft controls
-  window.collectAllTabData = window.ChannelListerUnified.collectAllTabData.bind(window.ChannelListerUnified);
-  window.populateAllTabData = window.ChannelListerUnified.populateAllTabData.bind(window.ChannelListerUnified);
-  window.clearAllForms = window.ChannelListerUnified.clearAllForms.bind(window.ChannelListerUnified);
-  window.getDataSummary = window.ChannelListerUnified.getDataSummary.bind(window.ChannelListerUnified);
-  window.hasSignificantData = window.ChannelListerUnified.hasSignificantData.bind(window.ChannelListerUnified);
+  window.collectAllTabData = window.ChannelListerUnified.collectAllTabData.bind(
+    window.ChannelListerUnified
+  );
+  window.populateAllTabData =
+    window.ChannelListerUnified.populateAllTabData.bind(
+      window.ChannelListerUnified
+    );
+  window.clearAllForms = window.ChannelListerUnified.clearAllForms.bind(
+    window.ChannelListerUnified
+  );
+  window.getDataSummary = window.ChannelListerUnified.getDataSummary.bind(
+    window.ChannelListerUnified
+  );
+  window.hasSignificantData =
+    window.ChannelListerUnified.hasSignificantData.bind(
+      window.ChannelListerUnified
+    );
 
   $("#loading").hide();
 });

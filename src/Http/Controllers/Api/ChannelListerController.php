@@ -76,7 +76,7 @@ class ChannelListerController extends Controller
             'UPC' => 'required|string',
         ]);
 
-        return response()->json(['UPC' => ChannelLister::isValidUpc($validated['UPC'])]);
+        return response()->json(ChannelLister::isValidUpc($validated['UPC']));
     }
 
     public function addBundleComponentRow(): JsonResponse
@@ -102,7 +102,7 @@ class ChannelListerController extends Controller
         return response()->json(['data' => $countryCode]);
     }
 
-    public function submitProductData(Request $request): JsonResponse
+    public function submitProductData(Request $request): StreamedResponse|JsonResponse
     {
         $validated = $request->validate([
             // Basic validation for form data structure
@@ -125,18 +125,13 @@ class ChannelListerController extends Controller
             'sku_bundle_quantity_*' => 'nullable|integer|min:1|max:999999',
         ]);
 
-        // For backward compatibility, continue using the original CSV method
-        // when data comes directly from form submission (legacy workflow)
-        $filename = ChannelLister::csv($validated);
+        $filePath = ChannelLister::csv($validated);
+
+        $downloadToken = $this->generateDownloadToken($filePath, 'channel_lister_export.csv', 'text/csv');
 
         return response()->json([
-            'success' => true,
-            'download_url' => $filename,
+            'download_url' => url("/api/channel-lister/download/{$downloadToken}"),
         ]);
-
-        // This return works when the return type is BinaryFileResponse
-        // return response()->download($filename, 'channel_lister_export.csv');
-
     }
 
     // ===== UNIFIED DRAFT SYSTEM METHODS =====

@@ -270,3 +270,35 @@ div.fixed-bottom-right {
 .form-text code {
   color: #89b1c9;
 }
+
+.batman_robin {
+  background: url("vendor/channel-lister/images/batman_robin.gif");
+  height: 30px;
+  width: 60px;
+  position: relative;
+  left: -60px;
+}
+.pikachu {
+  background: url("vendor/channel-lister/images/pikachu.gif");
+  background-size: 45px 31px;
+  position: relative;
+  width: 45px;
+  height: 31px;
+  left: -45px;
+}
+.nyan {
+  background: url("vendor/channel-lister/images/nyan.gif");
+  background-size: 60px 65px;
+  position: relative;
+  width: 60px;
+  height: 60px;
+  left: -45px;
+}
+.carlton {
+  background: url("vendor/channel-lister/images/8-bit-carlton.gif");
+  background-size: 96px 90px;
+  position: relative;
+  width: 96px;
+  height: 90px;
+  left: -45px;
+}

@@ -584,7 +584,7 @@ class ChannelLister
         foreach ($data as $input_name => $input_val) {
             // map to proper names
             $proper_name = $field_map[str_replace([' ', '_'], '', $input_name)] ?? $input_name;
-            $input_val = trim($input_val);
+            $input_val = trim((string) $input_val);
             // $key = in_array($proper_name, $fields->field_name) ? 'channeladvisor' : 'custom';
             if ($custom === true && self::isValidCustomField($fields, $input_name, $input_val)) {
                 // some browsers seem to be replacing spaces in field names with underscores, this seemed like the easiest fix for now

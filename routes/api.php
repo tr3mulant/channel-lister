@@ -20,7 +20,7 @@ Route::prefix('channel-lister')->name('api.channel-lister.')->group(function () 
 
     Route::get('add-bundle-component-row', [ChannelListerController::class, 'addBundleComponentRow'])->name('add-bundle-component-row');
 
-    Route::get('getCountryCodeOptions/{country}/{digits}', [ChannelListerController::class, 'getCountryCodeOptions'])->name('get-country-code-options');
+    Route::get('country-code-options/{country}/{digits}', [ChannelListerController::class, 'getCountryCodeOptions'])->name('get-country-code-options');
 
     // Legacy endpoint (backward compatibility)
     Route::post('/', [ChannelListerController::class, 'submitProductData'])->name('submit-product-data');
