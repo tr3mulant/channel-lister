@@ -31,7 +31,8 @@ class AmazonListingFormProcessor
         if ($validationResult['isValid']) {
             $listing->markAsValidated();
         } else {
-            $listing->markAsError($validationResult['errors']);
+            $errors = is_array($validationResult['errors']) ? $validationResult['errors'] : [];
+            $listing->markAsError($errors);
         }
 
         return $listing;
@@ -70,6 +71,8 @@ class AmazonListingFormProcessor
         // Try to find existing draft by SKU or create new
         $sku = $this->extractSku($formData);
 
+        /** @var AmazonListing|null $listing */
+        $listing = null;
         if ($sku !== null && $sku !== '' && $sku !== '0') {
             $listing = AmazonListing::where('marketplace_id', $marketplaceId)
                 ->where('status', AmazonListing::STATUS_DRAFT)
@@ -77,9 +80,11 @@ class AmazonListingFormProcessor
                 ->first();
         }
 
-        if (! isset($listing)) {
+        if ($listing === null) {
             $listing = new AmazonListing;
         }
+
+        assert($listing instanceof AmazonListing);
 
         $listing->fill([
             'status' => AmazonListing::STATUS_DRAFT,
@@ -105,12 +110,17 @@ class AmazonListingFormProcessor
         $formData = $listing->form_data;
 
         foreach ($requirements as $requirement) {
-            $fieldName = $requirement['name'];
+            if (! is_array($requirement)) {
+                continue;
+            }
+
+            $fieldName = isset($requirement['name']) ? (string) $requirement['name'] : '';
             $value = data_get($formData, $fieldName);
 
             // Check required fields
             if (($requirement['required'] ?? false) && empty($value)) {
-                $errors[$fieldName] = "The {$requirement['displayName']} field is required.";
+                $displayName = isset($requirement['displayName']) ? (string) $requirement['displayName'] : $fieldName;
+                $errors[$fieldName] = "The {$displayName} field is required.";
 
                 continue;
             }
@@ -163,22 +173,25 @@ class AmazonListingFormProcessor
 
         // Length constraints
         if (isset($requirement['minLength'])) {
-            $rules[] = "min:{$requirement['minLength']}";
+            $rules[] = 'min:'.$requirement['minLength'];
         }
         if (isset($requirement['maxLength'])) {
-            $rules[] = "max:{$requirement['maxLength']}";
+            $rules[] = 'max:'.$requirement['maxLength'];
         }
 
         // Pattern validation
         if (isset($requirement['pattern'])) {
-            $rules[] = "regex:/{$requirement['pattern']}/";
-            $customMessages[$fieldName.'.regex'] = "The {$requirement['displayName']} format is invalid.";
+            $pattern = (string) $requirement['pattern'];
+            $displayName = isset($requirement['displayName']) ? (string) $requirement['displayName'] : $fieldName;
+            $rules[] = "regex:/{$pattern}/";
+            $customMessages[$fieldName.'.regex'] = "The {$displayName} format is invalid.";
         }
 
         // Enum validation
         if (isset($requirement['enum']) && is_array($requirement['enum'])) {
+            $displayName = isset($requirement['displayName']) ? (string) $requirement['displayName'] : $fieldName;
             $rules[] = 'in:'.implode(',', $requirement['enum']);
-            $customMessages[$fieldName.'.in'] = "The {$requirement['displayName']} must be one of: ".implode(', ', $requirement['enum']);
+            $customMessages[$fieldName.'.in'] = "The {$displayName} must be one of: ".implode(', ', $requirement['enum']);
         }
 
         // Additional Amazon-specific validations
@@ -203,6 +216,9 @@ class AmazonListingFormProcessor
 
     /**
      * Get Amazon-specific validation rules.
+     *
+     * @param  array<string, mixed>  $requirement
+     * @return array<string>
      */
     protected function getAmazonSpecificRules(string $fieldName, array $requirement): array
     {
@@ -246,6 +262,9 @@ class AmazonListingFormProcessor
 
     /**
      * Validate business rules for the listing.
+     */
+    /**
+     * @return array<string, string>
      */
     protected function validateBusinessRules(AmazonListing $listing): array
     {
@@ -294,12 +313,15 @@ class AmazonListingFormProcessor
     /**
      * Extract SKU from form data.
      */
+    /**
+     * @param  array<string, mixed>  $formData
+     */
     protected function extractSku(array $formData): ?string
     {
         $skuFields = ['seller_sku', 'sku', 'merchant_sku', 'external_product_id'];
 
         foreach ($skuFields as $field) {
-            if (! empty($formData[$field])) {
+            if (! empty($formData[$field]) && is_string($formData[$field])) {
                 return $formData[$field];
             }
         }
@@ -309,6 +331,10 @@ class AmazonListingFormProcessor
 
     /**
      * Extract numeric value from form data using multiple possible field names.
+     */
+    /**
+     * @param  array<string, mixed>  $formData
+     * @param  array<string>  $possibleFields
      */
     protected function extractNumericValue(array $formData, array $possibleFields): ?float
     {
@@ -323,6 +349,9 @@ class AmazonListingFormProcessor
 
     /**
      * Get validation summary for a listing.
+     */
+    /**
+     * @return array<string, mixed>
      */
     public function getValidationSummary(AmazonListing $listing): array
     {
@@ -357,14 +386,16 @@ class AmazonListingFormProcessor
             $listing->update(['requirements' => $requirements]);
         }
 
-        $validationResult = $this->validateFormData($listing, $listing->requirements);
+        $requirements = $listing->requirements ?? [];
+        $validationResult = $this->validateFormData($listing, $requirements);
 
         if ($validationResult['isValid']) {
             $listing->markAsValidated();
         } else {
-            $listing->markAsError($validationResult['errors']);
+            $errors = is_array($validationResult['errors']) ? $validationResult['errors'] : [];
+            $listing->markAsError($errors);
         }
 
-        return $listing->fresh();
+        return $listing->fresh() ?? $listing;
     }
 }

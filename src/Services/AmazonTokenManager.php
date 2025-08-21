@@ -33,7 +33,7 @@ class AmazonTokenManager
         $cachedToken = $this->getCachedToken();
 
         if ($cachedToken && ! $this->isTokenExpiringSoon($cachedToken)) {
-            return $cachedToken['access_token'];
+            return isset($cachedToken['access_token']) ? (string) $cachedToken['access_token'] : '';
         }
 
         // Token is missing or expiring soon, refresh it
@@ -43,7 +43,7 @@ class AmazonTokenManager
             throw new \RuntimeException('Failed to obtain valid Amazon SP-API access token');
         }
 
-        return $newToken['access_token'];
+        return isset($newToken['access_token']) ? (string) $newToken['access_token'] : '';
     }
 
     /**
@@ -137,9 +137,9 @@ class AmazonTokenManager
 
         return [
             'has_token' => true,
-            'obtained_at' => Carbon::createFromTimestamp($cachedToken['obtained_at'] ?? 0)->toDateTimeString(),
-            'expires_at' => Carbon::createFromTimestamp($cachedToken['expires_at'] ?? 0)->toDateTimeString(),
-            'expires_in_seconds' => ($cachedToken['expires_at'] ?? 0) - Carbon::now()->timestamp,
+            'obtained_at' => Carbon::createFromTimestamp(isset($cachedToken['obtained_at']) ? (int) $cachedToken['obtained_at'] : 0)->toDateTimeString(),
+            'expires_at' => Carbon::createFromTimestamp(isset($cachedToken['expires_at']) ? (int) $cachedToken['expires_at'] : 0)->toDateTimeString(),
+            'expires_in_seconds' => (isset($cachedToken['expires_at']) ? (int) $cachedToken['expires_at'] : 0) - Carbon::now()->timestamp,
             'is_valid' => $this->isTokenValid(),
             'token_type' => $cachedToken['token_type'] ?? 'bearer',
         ];
@@ -182,7 +182,7 @@ class AmazonTokenManager
             return true; // Consider invalid if no expiry info
         }
 
-        $expiresAt = Carbon::createFromTimestamp($tokenData['expires_at']);
+        $expiresAt = Carbon::createFromTimestamp((int) $tokenData['expires_at']);
         $bufferTime = Carbon::now()->addMinutes(10);
 
         return $expiresAt->lte($bufferTime);

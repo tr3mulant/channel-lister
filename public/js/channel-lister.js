@@ -1305,16 +1305,19 @@ $(document).ready(function () {
 
   // Validates form before submission
   $("#submit_button").click(function (e) {
-    if ($("#prop65-id option:selected").val() === "true") {
-      let newValue = $("#prop65_warn_type-id option:selected").html();
-      let oldValue = $("#prop65_warn_type-id option:selected").val();
-      $("#prop65_warn_type-id option:selected").val(newValue);
-      if ($("#user_input").valid()) {
-        showEasterEgg();
-      } else {
-        $("#prop65_warn_type-id option:selected").val(oldValue);
-      }
+    if ($("#user_input").valid()) {
+      showEasterEgg();
     }
+    // if ($("#prop65-id option:selected").val() === "true") {
+    //   let newValue = $("#prop65_warn_type-id option:selected").html();
+    //   let oldValue = $("#prop65_warn_type-id option:selected").val();
+    //   $("#prop65_warn_type-id option:selected").val(newValue);
+    //   if ($("#user_input").valid()) {
+    //     showEasterEgg();
+    //   } else {
+    //     $("#prop65_warn_type-id option:selected").val(oldValue);
+    //   }
+    // }
   });
 
   var ebayCatVarExclusions = null;

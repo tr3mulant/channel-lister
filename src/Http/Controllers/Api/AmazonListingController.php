@@ -405,7 +405,7 @@ class AmazonListingController extends Controller
         }
     }
 
-    public function downloadFile(Request $request, AmazonListing $listing): \Symfony\Component\HttpFoundation\StreamedResponse
+    public function downloadFile(Request $request, AmazonListing $listing): \Symfony\Component\HttpFoundation\BinaryFileResponse
     {
         if (! $listing->file_path || ! Storage::disk('local')->exists($listing->file_path)) {
             abort(404, 'File not found');
@@ -413,9 +413,13 @@ class AmazonListingController extends Controller
 
         $filename = basename($listing->file_path);
 
-        return Storage::disk('local')->download($listing->file_path, $filename, [
-            'Content-Type' => $this->getContentType($listing->file_format ?? 'csv'),
-        ]);
+        return response()->download(
+            storage_path('app/'.$listing->file_path),
+            $filename,
+            [
+                'Content-Type' => $this->getContentType($listing->file_format ?? 'csv'),
+            ]
+        );
     }
 
     public function getListingStatus(Request $request, AmazonListing $listing): JsonResponse
@@ -451,11 +455,11 @@ class AmazonListingController extends Controller
         $query = AmazonListing::query();
 
         if (! empty($validated['status'])) {
-            $query->byStatus($validated['status']);
+            $query->where('status', $validated['status']);
         }
 
         if (! empty($validated['product_type'])) {
-            $query->byProductType($validated['product_type']);
+            $query->where('product_type', $validated['product_type']);
         }
 
         $listings = $query->latest()

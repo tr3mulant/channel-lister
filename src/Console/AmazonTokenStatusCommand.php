@@ -29,7 +29,7 @@ class AmazonTokenStatusCommand extends Command
         if ($configErrors !== []) {
             $this->error('Configuration errors:');
             foreach ($configErrors as $error) {
-                $this->error("  - {$error}");
+                $this->error('  - '.$error);
             }
 
             return self::FAILURE;
@@ -70,11 +70,11 @@ class AmazonTokenStatusCommand extends Command
 
         if ($tokenInfo !== null && $tokenInfo !== []) {
             $this->info('Token Information:');
-            $this->info("  Obtained at: {$tokenInfo['obtained_at']}");
-            $this->info("  Expires at: {$tokenInfo['expires_at']}");
-            $this->info("  Expires in: {$tokenInfo['expires_in_seconds']} seconds");
+            $this->info('  Obtained at: '.$tokenInfo['obtained_at']);
+            $this->info('  Expires at: '.$tokenInfo['expires_at']);
+            $this->info('  Expires in: '.$tokenInfo['expires_in_seconds'].' seconds');
             $this->info('  Valid: '.($tokenInfo['is_valid'] ? 'Yes' : 'No'));
-            $this->info("  Type: {$tokenInfo['token_type']}");
+            $this->info('  Type: '.$tokenInfo['token_type']);
 
             if (! $tokenInfo['is_valid']) {
                 $this->warn('⚠ Token is expired or expiring soon');

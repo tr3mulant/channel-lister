@@ -219,7 +219,7 @@ class ChannelListerController extends Controller
         $query = ProductDraft::query();
 
         if (! empty($validated['status'])) {
-            $query->byStatus($validated['status']);
+            $query->where('status', $validated['status']);
         }
 
         $drafts = $query->latest()

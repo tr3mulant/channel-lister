@@ -21,15 +21,19 @@ class AmazonSpApiService implements MarketplaceListingProvider
     public function __construct(
         protected AmazonTokenManager $tokenManager
     ) {
-        $this->baseUrl = config('channel-lister.amazon.sp_api_base_url', 'https://sellingpartnerapi-na.amazon.com');
-        $this->marketplaceId = config('channel-lister.amazon.marketplace_id', 'ATVPDKIKX0DER'); // US marketplace
+        $baseUrl = config('channel-lister.amazon.sp_api_base_url', 'https://sellingpartnerapi-na.amazon.com');
+        $this->baseUrl = is_string($baseUrl) ? $baseUrl : 'https://sellingpartnerapi-na.amazon.com';
+
+        $marketplaceId = config('channel-lister.amazon.marketplace_id', 'ATVPDKIKX0DER');
+        $this->marketplaceId = is_string($marketplaceId) ? $marketplaceId : 'ATVPDKIKX0DER';
     }
 
     public function searchProductTypes(string $query): array
     {
         // Cache product type searches with configurable TTL
         $cacheKey = 'amazon_product_types_search_'.md5($query.$this->marketplaceId);
-        $ttl = config('channel-lister.amazon.cache.ttl.product_types_search', 3600);
+        $ttlValue = config('channel-lister.amazon.cache.ttl.product_types_search', 3600);
+        $ttl = is_int($ttlValue) ? $ttlValue : 3600;
 
         return cache()->remember($cacheKey, $ttl, function () use ($query): array {
             try {
@@ -60,7 +64,8 @@ class AmazonSpApiService implements MarketplaceListingProvider
     {
         // Create cache key with marketplace and locale for specificity
         $cacheKey = "amazon_listing_requirements_{$productType}_{$this->marketplaceId}_en_US";
-        $ttl = config('channel-lister.amazon.cache.ttl.listing_requirements', 86400);
+        $ttlValue = config('channel-lister.amazon.cache.ttl.listing_requirements', 86400);
+        $ttl = is_int($ttlValue) ? $ttlValue : 86400;
 
         // Try to get from cache first with configurable TTL
         $cached = cache()->remember($cacheKey, $ttl, function () use ($productType): array {
@@ -600,6 +605,9 @@ class AmazonSpApiService implements MarketplaceListingProvider
 
     /**
      * Make an authenticated API call to Amazon SP-API.
+     *
+     * @param  array<string, mixed>  $params
+     * @return array<string, mixed>
      */
     protected function makeApiCall(string $method, string $endpoint, array $params = []): array
     {
@@ -624,12 +632,15 @@ class AmazonSpApiService implements MarketplaceListingProvider
             };
 
             if ($response->successful()) {
-                return $response->json();
+                $jsonData = $response->json();
+
+                return is_array($jsonData) ? $jsonData : [];
             }
 
             // Handle specific error cases
             $responseData = $response->json();
-            throw AmazonSpApiException::fromApiResponse($responseData, $response->status());
+            $errorData = is_array($responseData) ? $responseData : [];
+            throw AmazonSpApiException::fromApiResponse($errorData, $response->status());
         } catch (AmazonSpApiException $e) {
             throw $e;
         } catch (\Exception $e) {
@@ -655,6 +666,9 @@ class AmazonSpApiService implements MarketplaceListingProvider
     /**
      * Get token information for debugging.
      */
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getTokenInfo(): ?array
     {
         return $this->tokenManager->getTokenInfo();
@@ -662,6 +676,9 @@ class AmazonSpApiService implements MarketplaceListingProvider
 
     /**
      * Validate the service configuration.
+     */
+    /**
+     * @return array<int, string>
      */
     public function validateConfiguration(): array
     {
@@ -680,13 +697,15 @@ class AmazonSpApiService implements MarketplaceListingProvider
 
     /**
      * Get cached schema data from URL with multi-level caching strategy.
+     *
+     * @return array<string, mixed>|null
      */
     protected function getCachedSchema(string $schemaUrl): ?array
     {
         // Get configurable cache settings
-        $disk = config('channel-lister.amazon.cache.disk', 'local');
-        $ttl = config('channel-lister.amazon.cache.ttl.schema_files', 604800);
-        $schemaPath = config('channel-lister.amazon.cache.schema_path', 'amazon-schemas');
+        $disk = (string) config('channel-lister.amazon.cache.disk', 'local');
+        $ttl = (int) config('channel-lister.amazon.cache.ttl.schema_files', 604800);
+        $schemaPath = (string) config('channel-lister.amazon.cache.schema_path', 'amazon-schemas');
 
         // Create cache key from URL hash
         $urlHash = md5($schemaUrl);
@@ -699,7 +718,7 @@ class AmazonSpApiService implements MarketplaceListingProvider
             if (Storage::disk($disk)->exists($diskPath)) {
                 try {
                     $diskData = Storage::disk($disk)->get($diskPath);
-                    $schemaData = json_decode($diskData, true);
+                    $schemaData = $diskData !== null ? json_decode($diskData, true) : null;
 
                     if ($schemaData) {
                         Log::info('Amazon schema loaded from disk cache', [
@@ -732,7 +751,10 @@ class AmazonSpApiService implements MarketplaceListingProvider
 
                     // Store to disk for persistence
                     try {
-                        Storage::disk($disk)->put($diskPath, json_encode($schemaData));
+                        $jsonData = json_encode($schemaData);
+                        if ($jsonData !== false) {
+                            Storage::disk($disk)->put($diskPath, $jsonData);
+                        }
                         Log::info('Amazon schema cached to disk', [
                             'url' => $schemaUrl,
                             'disk' => $disk,
@@ -764,7 +786,7 @@ class AmazonSpApiService implements MarketplaceListingProvider
             }
         });
 
-        return $cached;
+        return is_array($cached) ? $cached : null;
     }
 
     /**
@@ -772,13 +794,17 @@ class AmazonSpApiService implements MarketplaceListingProvider
      */
     public function clearSchemaCache(): void
     {
-        $disk = config('channel-lister.amazon.cache.disk', 'local');
-        $schemaPath = config('channel-lister.amazon.cache.schema_path', 'amazon-schemas');
+        $disk = (string) config('channel-lister.amazon.cache.disk', 'local');
+        $schemaPath = (string) config('channel-lister.amazon.cache.schema_path', 'amazon-schemas');
 
         // Clear Laravel cache
         $keys = cache()->get('amazon_schema_keys', []);
-        foreach ($keys as $key) {
-            cache()->forget($key);
+        if (is_array($keys)) {
+            foreach ($keys as $key) {
+                if (is_string($key)) {
+                    cache()->forget($key);
+                }
+            }
         }
         cache()->forget('amazon_schema_keys');
 
