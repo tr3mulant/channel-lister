@@ -3,6 +3,7 @@
 namespace IGE\ChannelLister\Models;
 
 use IGE\ChannelLister\Database\Factories\Prop65ChemicalDataFactory;
+use IGE\ChannelLister\Models\Concerns\HasConfigurableConnection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -19,6 +20,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Prop65ChemicalData extends Model
 {
+    use HasConfigurableConnection;
+
     /** @use HasFactory<Prop65ChemicalDataFactory> */
     use HasFactory;
 

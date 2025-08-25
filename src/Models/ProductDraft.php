@@ -2,6 +2,7 @@
 
 namespace IGE\ChannelLister\Models;
 
+use IGE\ChannelLister\Models\Concerns\HasConfigurableConnection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,6 +26,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ProductDraft extends Model
 {
+    use HasConfigurableConnection;
+
     /**
      * The table associated with the model.
      *
