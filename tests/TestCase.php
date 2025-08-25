@@ -81,6 +81,8 @@ abstract class TestCase extends TestbenchTestCase
             // Ensure channel-lister config is enabled and middleware is configured
             $config->set('channel-lister.enabled', true);
             $config->set('channel-lister.middleware', ['web']);
+
+            $config->set('channel-lister.database.connection', 'testbench');
         });
     }
 }

@@ -244,27 +244,6 @@ class ChannelListerFieldsTest extends TestCase
         $this->assertEquals('amazon', $viewData['marketplace']);
     }
 
-    /* Tests DealsOnly, not sure if I need this one anymore, save for later */
-    // /**
-    //  * Test component with custom class string.
-    //  */
-    // public function test_component_with_custom_class_string(): void
-    // {
-    //     ChannelListerField::factory()->create([
-    //         'marketplace' => 'dealsonly',
-    //         'grouping' => 'test',
-    //         'ordering' => 1,
-    //     ]);
-
-    //     $view = $this->blade(
-    //         '<x-channel-lister::channel-lister-fields marketplace="dealsonly" class-str-default="custom-panel-class" />',
-    //         []
-    //     );
-
-    //     $view->assertSee('custom-panel-class', false);
-    //     $view->assertDontSee('panel-group', false);
-    // }
-
     /**
      * Test component renders correctly when no fields exist for marketplace.
      */

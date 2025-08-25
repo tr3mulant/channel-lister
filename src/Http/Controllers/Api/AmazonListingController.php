@@ -83,7 +83,7 @@ class AmazonListingController extends Controller
         $primaryProductType = null;
 
         if (! empty($productTypes)) {
-            $primaryProductType = $productTypes[0]['productType'] ?? '';
+            $primaryProductType = $productTypes[0] ?? '';
             if ($primaryProductType !== '' && $primaryProductType !== '0') {
                 $requirements = $this->amazonService->getListingRequirements($primaryProductType);
                 $formFields = $this->amazonService->generateFormFields($requirements);

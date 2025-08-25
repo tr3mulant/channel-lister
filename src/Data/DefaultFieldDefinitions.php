@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IGE\ChannelLister\Data;
 
+use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
 
 class DefaultFieldDefinitions
@@ -13,13 +14,19 @@ class DefaultFieldDefinitions
      */
     public static function getDatabaseConnection(): ?string
     {
-        return config('channel-lister.database.connection');
+        $connection = config('channel-lister.database.connection');
+
+        if (is_string($connection)) {
+            return $connection;
+        }
+
+        return null;
     }
 
     /**
      * Get the database connection instance for Channel Lister operations.
      */
-    public static function getConnection()
+    public static function getConnection(): Connection
     {
         $connection = self::getDatabaseConnection();
 
@@ -86,10 +93,10 @@ class DefaultFieldDefinitions
                 'field_name' => 'Brand',
                 'display_name' => '',
                 'tooltip' => 'Brand name as we want it to appear on listings',
-                'example' => 'ASR Outdoor',
+                'example' => 'Sony',
                 'marketplace' => 'common',
                 'input_type' => 'select',
-                'input_type_aux' => 'ASR Federal||ASR Outdoor||ASR Tactical||Kidplokio||Brandon Dallas||Creative Covers||Disney||Disney Co.||EverTek||Fisher Price||Flatline Ops||Garret||Gear Aid||Heininger||Hitchmate||Hornungs||KidPlay Products||Kipsun Destination Lifestyle||Mattel||McNett||Mitsuba||Nickelodeon||Peppa Pig||PJ Masks||Think Tank Technology||Universal||Universal Hobby||Universal Outdoor||Universal Tool||Zak Tool||__OTHER__',
+                'input_type_aux' => null,
                 'required' => 1,
                 'grouping' => 'Details and Stats',
                 'type' => 'channeladvisor',

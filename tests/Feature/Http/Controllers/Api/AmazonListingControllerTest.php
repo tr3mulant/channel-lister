@@ -199,7 +199,7 @@ describe('AmazonListingController Api', function (): void {
                 'asin' => 'B123456789',
                 'title' => 'Blue Suitcase',
                 'productTypes' => [
-                    ['productType' => 'LUGGAGE'],
+                    'LUGGAGE',
                 ],
                 'attributes' => [],
                 'salesRank' => [],

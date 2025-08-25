@@ -14,3 +14,4 @@
 !.env.example
 workbench/storage
 /.CLAUDE.md
+.devdbrc

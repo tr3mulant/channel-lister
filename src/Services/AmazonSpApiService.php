@@ -615,8 +615,8 @@ class AmazonSpApiService implements MarketplaceListingProvider
                 foreach ($item['productTypes'] as $productType) {
                     if (is_string($productType)) {
                         $productTypes[] = $productType;
-                    } elseif (is_array($productType) && isset($productType['name']) && is_string($productType['name'])) {
-                        $productTypes[] = $productType['name'];
+                    } elseif (is_array($productType) && isset($productType['productType']) && is_string($productType['productType'])) {
+                        $productTypes[] = $productType['productType'];
                     }
                 }
             }

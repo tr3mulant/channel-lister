@@ -283,12 +283,12 @@ class TextFormInputTest extends TestCase
             'required' => false,
         ]);
 
-        $this->blade(
+        $view = $this->blade(
             '<x-channel-lister::text-form-input :params="$field" class-str-default="form-control" />',
             ['field' => $field]
         );
 
-        // No assertions since view variable was removed
+        $view->assertSee("pattern=\"{$field->input_type_aux}\"", false);
     }
 
     /**

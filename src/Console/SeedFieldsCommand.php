@@ -75,6 +75,8 @@ class SeedFieldsCommand extends Command
 
     /**
      * Get the default field data to seed.
+     *
+     * @return array<int, array<string, mixed>>
      */
     protected function getFieldData(): array
     {
