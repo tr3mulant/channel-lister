@@ -72,7 +72,10 @@
       "Composer\\Config::disableProcessTimeout",
       "pest --colors=always --coverage --min=80"
     ],
-    "test:unit:coverage-html": "pest --colors=always --min=80 --coverage-html tests/coverage",
+    "test:unit:coverage-html": [
+      "Composer\\Config::disableProcessTimeout",
+      "pest --colors=always --min=80 --coverage-html tests/coverage"
+    ],
     "test": [
       "@test:refacto",
       "@test:lint",
