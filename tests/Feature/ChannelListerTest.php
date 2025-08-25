@@ -3,8 +3,12 @@
 declare(strict_types=1);
 
 use IGE\ChannelLister\ChannelLister;
+use IGE\ChannelLister\Enums\InputType;
+use IGE\ChannelLister\Enums\Type;
+use IGE\ChannelLister\Models\ChannelListerField;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Storage;
 
 describe('ChannelLister', function (): void {
     describe('css()', function (): void {
@@ -239,4 +243,521 @@ describe('ChannelLister', function (): void {
                 ->toBeEmpty();
         });
     });
+
+    describe('getCountryCode()', function (): void {
+        it('returns correct 2-digit country codes', function (): void {
+            expect(ChannelLister::getCountryCode('United States', 2))->toBe('US');
+            expect(ChannelLister::getCountryCode('Canada', 2))->toBe('CA');
+            expect(ChannelLister::getCountryCode('Germany', 2))->toBe('DE');
+            expect(ChannelLister::getCountryCode('Japan', 2))->toBe('JP');
+            expect(ChannelLister::getCountryCode('Australia', 2))->toBe('AU');
+        });
+
+        it('returns correct 3-digit country codes', function (): void {
+            expect(ChannelLister::getCountryCode('United States', 3))->toBe('USA');
+            expect(ChannelLister::getCountryCode('Canada', 3))->toBe('CAN');
+            expect(ChannelLister::getCountryCode('Germany', 3))->toBe('DEU');
+            expect(ChannelLister::getCountryCode('Japan', 3))->toBe('JPN');
+            expect(ChannelLister::getCountryCode('Australia', 3))->toBe('AUS');
+        });
+
+        it('returns null for non-existent countries', function (): void {
+            expect(ChannelLister::getCountryCode('Non-Existent Country', 2))->toBeNull();
+            expect(ChannelLister::getCountryCode('Non-Existent Country', 3))->toBeNull();
+        });
+
+        it('handles edge cases', function (): void {
+            expect(ChannelLister::getCountryCode('Afghanistan', 2))->toBe('AF');
+            expect(ChannelLister::getCountryCode('Zimbabwe', 2))->toBe('ZW');
+            expect(ChannelLister::getCountryCode('Afghanistan', 3))->toBe('AFG');
+            expect(ChannelLister::getCountryCode('Zimbabwe', 3))->toBe('ZWE');
+        });
+    });
+
+    describe('csv()', function (): void {
+        beforeEach(function (): void {
+            // Set up test configuration
+            Config::set('channel-lister.downloads.disk', 'local');
+            Config::set('channel-lister.downloads.path', 'test-exports');
+            Config::set('channel-lister.default_warehouse', 'MAIN');
+
+            // Create test fields in database
+            ChannelListerField::factory()->create([
+                'field_name' => 'SKU',
+                'type' => Type::CHANNEL_ADVISOR,
+                'input_type' => InputType::TEXT,
+            ]);
+            ChannelListerField::factory()->create([
+                'field_name' => 'Product Title',
+                'type' => Type::CHANNEL_ADVISOR,
+                'input_type' => InputType::TEXT,
+            ]);
+            ChannelListerField::factory()->create([
+                'field_name' => 'Total Quantity',
+                'type' => Type::CHANNEL_ADVISOR,
+                'input_type' => InputType::INTEGER,
+            ]);
+            ChannelListerField::factory()->create([
+                'field_name' => 'Custom Field',
+                'type' => Type::CUSTOM,
+                'input_type' => InputType::TEXT,
+            ]);
+        });
+
+        afterEach(function (): void {
+            // Clean up any created files
+            Storage::disk('local')->deleteDirectory('test-exports');
+        });
+
+        it('generates csv file path for basic data', function (): void {
+            $data = [
+                'SKU' => 'TEST-123',
+                'Product Title' => 'Test Product',
+                'custom_attribute' => 'custom_value',
+            ];
+
+            $result = ChannelLister::csv($data);
+
+            expect($result)->toBeString();
+            expect($result)->toContain('test-exports/');
+            expect($result)->toContain('.csv');
+            expect(Storage::disk('local')->exists($result))->toBeTrue();
+        });
+
+        it('handles quantity fields properly', function (): void {
+            $data = [
+                'SKU' => 'TEST-123',
+                'Total Quantity' => '50',
+            ];
+
+            $result = ChannelLister::csv($data);
+
+            expect(Storage::disk('local')->exists($result))->toBeTrue();
+
+            $content = Storage::disk('local')->get($result);
+            expect($content)->toContain('Quantity Update Type');
+            expect($content)->toContain('DC Quantity');
+            expect($content)->toContain('MAIN=50');
+        });
+
+        it('handles image fields', function (): void {
+            $data = [
+                'SKU' => 'TEST-123',
+                'image1' => 'https://example.com/image1.jpg',
+                'image2' => 'https://example.com/image2.jpg',
+                'image1_alt' => 'Alt text',
+            ];
+
+            $result = ChannelLister::csv($data);
+
+            $content = Storage::disk('local')->get($result);
+            expect($content)->toContain('Picture URLs');
+            expect($content)->toContain('https://example.com/image1.jpg,https://example.com/image2.jpg');
+        });
+    });
+
+    describe('csvFromUnifiedData()', function (): void {
+        beforeEach(function (): void {
+            Config::set('channel-lister.downloads.disk', 'local');
+            Config::set('channel-lister.downloads.path', 'test-exports');
+            Config::set('channel-lister.default_warehouse', 'MAIN');
+
+            ChannelListerField::factory()->create([
+                'field_name' => 'SKU',
+                'type' => Type::CHANNEL_ADVISOR,
+                'input_type' => InputType::TEXT,
+            ]);
+            ChannelListerField::factory()->create([
+                'field_name' => 'Product Title',
+                'type' => Type::CHANNEL_ADVISOR,
+                'input_type' => InputType::TEXT,
+            ]);
+        });
+
+        afterEach(function (): void {
+            Storage::disk('local')->deleteDirectory('test-exports');
+        });
+
+        it('generates csv from unified export data', function (): void {
+            $exportData = [
+                'SKU' => 'UNIFIED-123',
+                'Product Title' => 'Unified Product',
+                'Amazon Category' => 'Electronics',
+                'Custom Attribute' => 'Custom Value',
+            ];
+
+            $result = ChannelLister::csvFromUnifiedData($exportData);
+
+            expect($result)->toBeString();
+            expect($result)->toContain('test-exports/');
+            expect($result)->toContain('.csv');
+            expect(Storage::disk('local')->exists($result))->toBeTrue();
+        });
+
+        it('separates channel advisor and custom fields correctly', function (): void {
+            $exportData = [
+                'SKU' => 'UNIFIED-123',
+                'Product Title' => 'Unified Product',
+                'Amazon Brand' => 'Test Brand',
+                'Amazon Color' => 'Blue',
+            ];
+
+            $result = ChannelLister::csvFromUnifiedData($exportData);
+
+            $content = Storage::disk('local')->get($result);
+            expect($content)->toContain('SKU');
+            expect($content)->toContain('Product Title');
+            expect($content)->toContain('Attribute1Name');
+            expect($content)->toContain('Attribute1Value');
+        });
+    });
+
+    describe('extractChannelAdvisorFields()', function (): void {
+        beforeEach(function (): void {
+            Config::set('channel-lister.default_warehouse', 'WAREHOUSE1');
+
+            ChannelListerField::factory()->create([
+                'field_name' => 'SKU',
+                'type' => Type::CHANNEL_ADVISOR,
+                'input_type' => InputType::TEXT,
+            ]);
+            ChannelListerField::factory()->create([
+                'field_name' => 'Product Title',
+                'type' => Type::CHANNEL_ADVISOR,
+                'input_type' => InputType::TEXT,
+            ]);
+            ChannelListerField::factory()->create([
+                'field_name' => 'Total Quantity',
+                'type' => Type::CHANNEL_ADVISOR,
+                'input_type' => InputType::INTEGER,
+            ]);
+        });
+
+        it('extracts only channel advisor fields', function (): void {
+            $exportData = [
+                'SKU' => 'CA-123',
+                'Product Title' => 'Channel Advisor Product',
+                'Amazon Brand' => 'Test Brand',
+                'Custom Field' => 'Custom Value',
+            ];
+
+            $result = callProtectedMethod(ChannelLister::class, 'extractChannelAdvisorFields', [$exportData]);
+
+            expect($result)->toHaveKey('SKU');
+            expect($result)->toHaveKey('Product Title');
+            expect($result)->toHaveKey('Picture URLs');
+            expect($result)->not->toHaveKey('Amazon Brand');
+            expect($result)->not->toHaveKey('Custom Field');
+        });
+
+        it('handles quantity updates correctly', function (): void {
+            $exportData = [
+                'SKU' => 'CA-123',
+                'Total Quantity' => '25',
+            ];
+
+            $result = callProtectedMethod(ChannelLister::class, 'extractChannelAdvisorFields', [$exportData]);
+
+            expect($result)->toHaveKey('Quantity Update Type');
+            expect($result)->toHaveKey('DC Quantity');
+            expect($result)->toHaveKey('DC Quantity Update Type');
+            expect($result['Quantity Update Type'])->toBe('UNSHIPPED');
+            expect($result['DC Quantity'])->toBe('WAREHOUSE1=25');
+            expect($result['DC Quantity Update Type'])->toBe('partial dc list');
+            expect($result)->not->toHaveKey('Total Quantity');
+        });
+
+        it('ignores empty and zero values', function (): void {
+            $exportData = [
+                'SKU' => 'CA-123',
+                'Product Title' => '',
+                'Amazon Brand' => '0',
+                'Valid Field' => 'Valid Value',
+            ];
+
+            $result = callProtectedMethod(ChannelLister::class, 'extractChannelAdvisorFields', [$exportData]);
+
+            expect($result)->toHaveKey('SKU');
+            expect($result)->not->toHaveKey('Product Title');
+            expect($result)->not->toHaveKey('Amazon Brand');
+        });
+
+        it('handles image preparation', function (): void {
+            $exportData = [
+                'SKU' => 'CA-123',
+                'image1' => 'https://example.com/img1.jpg',
+                'image2' => 'https://example.com/img2.jpg',
+                'image1_alt' => 'Alt text',
+            ];
+
+            $result = callProtectedMethod(ChannelLister::class, 'extractChannelAdvisorFields', [$exportData]);
+
+            expect($result)->toHaveKey('Picture URLs');
+            expect($result['Picture URLs'])->toBe('https://example.com/img1.jpg,https://example.com/img2.jpg');
+        });
+    });
+
+    describe('extractData()', function (): void {
+        beforeEach(function (): void {
+            Config::set('channel-lister.default_warehouse', 'TEST_WAREHOUSE');
+
+            // Create ChannelAdvisor fields
+            ChannelListerField::factory()->create([
+                'field_name' => 'SKU',
+                'type' => Type::CHANNEL_ADVISOR,
+                'input_type' => InputType::TEXT,
+            ]);
+            ChannelListerField::factory()->create([
+                'field_name' => 'Product Title',
+                'type' => Type::CHANNEL_ADVISOR,
+                'input_type' => InputType::TEXT,
+            ]);
+            ChannelListerField::factory()->create([
+                'field_name' => 'Total Quantity',
+                'type' => Type::CHANNEL_ADVISOR,
+                'input_type' => InputType::INTEGER,
+            ]);
+            ChannelListerField::factory()->create([
+                'field_name' => 'Is Available',
+                'type' => Type::CHANNEL_ADVISOR,
+                'input_type' => InputType::CHECKBOX,
+            ]);
+            ChannelListerField::factory()->create([
+                'field_name' => 'Price',
+                'type' => Type::CHANNEL_ADVISOR,
+                'input_type' => InputType::CURRENCY,
+            ]);
+        });
+
+        describe('when extracting ChannelAdvisor fields (custom = false)', function (): void {
+            it('extracts valid ChannelAdvisor fields only', function (): void {
+                $data = [
+                    'SKU' => 'TEST-123',
+                    'Product Title' => 'Test Product',
+                    'Price' => '19.99',
+                    'unknown_field' => 'should_be_ignored',
+                    'empty_field' => '',
+                ];
+
+                $result = callProtectedMethod(ChannelLister::class, 'extractData', [$data, false]);
+
+                expect($result)->toHaveKey('SKU');
+                expect($result)->toHaveKey('Product Title');
+                expect($result)->toHaveKey('Price');
+                expect($result)->toHaveKey('Picture URLs');
+                expect($result)->not->toHaveKey('unknown_field');
+                expect($result)->not->toHaveKey('empty_field');
+            });
+
+            it('handles checkbox fields correctly', function (): void {
+                $data = [
+                    'SKU' => 'TEST-123',
+                    'Is Available' => 'on',
+                ];
+
+                $result = callProtectedMethod(ChannelLister::class, 'extractData', [$data, false]);
+
+                expect($result['Is Available'])->toBe('true');
+            });
+
+            it('handles checkbox fields when off', function (): void {
+                $data = [
+                    'SKU' => 'TEST-123',
+                    'Is Available' => 'off',
+                ];
+
+                $result = callProtectedMethod(ChannelLister::class, 'extractData', [$data, false]);
+
+                expect($result['Is Available'])->toBe('false');
+            });
+
+            it('handles quantity fields with warehouse mapping', function (): void {
+                $data = [
+                    'SKU' => 'TEST-123',
+                    'Total Quantity' => '100',
+                ];
+
+                $result = callProtectedMethod(ChannelLister::class, 'extractData', [$data, false]);
+
+                expect($result)->toHaveKey('Quantity Update Type');
+                expect($result)->toHaveKey('DC Quantity');
+                expect($result)->toHaveKey('DC Quantity Update Type');
+                expect($result['Quantity Update Type'])->toBe('UNSHIPPED');
+                expect($result['DC Quantity'])->toBe('TEST_WAREHOUSE=100');
+                expect($result['DC Quantity Update Type'])->toBe('partial dc list');
+                expect($result)->not->toHaveKey('Total Quantity');
+            });
+
+            it('processes image fields for Picture URLs', function (): void {
+                $data = [
+                    'SKU' => 'TEST-123',
+                    'image1' => 'https://example.com/image1.jpg',
+                    'image2' => 'https://example.com/image2.jpg',
+                    'image3' => '',
+                    'image1_alt' => 'Alt text 1',
+                ];
+
+                $result = callProtectedMethod(ChannelLister::class, 'extractData', [$data, false]);
+
+                expect($result['Picture URLs'])->toBe('https://example.com/image1.jpg,https://example.com/image2.jpg');
+            });
+
+            it('handles field name mapping with spaces and underscores', function (): void {
+                ChannelListerField::factory()->create([
+                    'field_name' => 'Long Field Name',
+                    'type' => Type::CHANNEL_ADVISOR,
+                    'input_type' => InputType::TEXT,
+                ]);
+
+                $data = [
+                    'Long Field Name' => 'test1',
+                    'Long_Field_Name' => 'test2',
+                    'LongFieldName' => 'test3',
+                ];
+
+                $result = callProtectedMethod(ChannelLister::class, 'extractData', [$data, false]);
+
+                // Should map all variations to the proper field name
+                expect($result)->toHaveKey('Long Field Name');
+            });
+
+            it('trims whitespace from values', function (): void {
+                $data = [
+                    'SKU' => '  TEST-123  ',
+                    'Product Title' => "\t Test Product \n",
+                ];
+
+                $result = callProtectedMethod(ChannelLister::class, 'extractData', [$data, false]);
+
+                expect($result['SKU'])->toBe('TEST-123');
+                expect($result['Product Title'])->toBe('Test Product');
+            });
+        });
+
+        describe('when extracting custom fields (custom = true)', function (): void {
+            it('extracts only non-ChannelAdvisor fields', function (): void {
+                $data = [
+                    'SKU' => 'TEST-123',
+                    'Product Title' => 'Test Product',
+                    'Custom Field 1' => 'Custom Value 1',
+                    'Custom Field 2' => 'Custom Value 2',
+                    'empty_custom' => '',
+                ];
+
+                $result = callProtectedMethod(ChannelLister::class, 'extractData', [$data, true]);
+
+                expect($result)->not->toHaveKey('SKU');
+                expect($result)->not->toHaveKey('Product Title');
+                expect($result)->toHaveKey('Custom Field 1');
+                expect($result)->toHaveKey('Custom Field 2');
+                expect($result)->not->toHaveKey('empty_custom');
+            });
+
+            it('handles checkbox fields backfill when custom = true', function (): void {
+                // Create a checkbox field that won't be in the form data
+                ChannelListerField::factory()->create([
+                    'field_name' => 'Missing Checkbox',
+                    'type' => Type::CHANNEL_ADVISOR,
+                    'input_type' => InputType::CHECKBOX,
+                ]);
+
+                $data = [
+                    'Custom Field' => 'Custom Value',
+                ];
+
+                $result = callProtectedMethod(ChannelLister::class, 'extractData', [$data, true]);
+
+                expect($result)->toHaveKey('Custom Field');
+                expect($result)->toHaveKey('Missing Checkbox');
+                expect($result['Missing Checkbox'])->toBe('false');
+            });
+
+            it('processes checkbox fields correctly when custom = true', function (): void {
+                $data = [
+                    'Is Available' => 'on',
+                    'Custom Field' => 'Custom Value',
+                ];
+
+                $result = callProtectedMethod(ChannelLister::class, 'extractData', [$data, true]);
+
+                // Checkbox fields are processed regardless of custom flag due to special logic
+                expect($result)->toHaveKey('Is Available');
+                expect($result['Is Available'])->toBe('true');
+                expect($result)->toHaveKey('Custom Field');
+            });
+        });
+
+        describe('edge cases', function (): void {
+            it('handles empty data array', function (): void {
+                $result = callProtectedMethod(ChannelLister::class, 'extractData', [[], false]);
+
+                expect($result)->toBeArray();
+                expect($result)->toHaveKey('Picture URLs');
+                expect($result['Picture URLs'])->toBe('');
+            });
+
+            it('handles data with only whitespace values', function (): void {
+                $data = [
+                    'SKU' => '   ',
+                    'Product Title' => "\t\n",
+                    'Custom Field' => '  custom  ',
+                ];
+
+                $caResult = callProtectedMethod(ChannelLister::class, 'extractData', [$data, false]);
+                $customResult = callProtectedMethod(ChannelLister::class, 'extractData', [$data, true]);
+
+                // CA fields should be filtered out due to empty trimmed values
+                expect($caResult)->not->toHaveKey('SKU');
+                expect($caResult)->not->toHaveKey('Product Title');
+
+                // Custom field should be included with trimmed value
+                expect($customResult)->toHaveKey('Custom Field');
+                expect($customResult['Custom Field'])->toBe('custom');
+            });
+
+            it('handles warehouse config as non-string', function (): void {
+                Config::set('channel-lister.default_warehouse', 123);
+
+                $data = [
+                    'SKU' => 'TEST-123',
+                    'Total Quantity' => '50',
+                ];
+
+                $result = callProtectedMethod(ChannelLister::class, 'extractData', [$data, false]);
+
+                expect($result['DC Quantity'])->toBe('=50');
+            });
+
+            it('handles missing warehouse config', function (): void {
+                Config::set('channel-lister.default_warehouse', null);
+
+                $data = [
+                    'SKU' => 'TEST-123',
+                    'Total Quantity' => '50',
+                ];
+
+                $result = callProtectedMethod(ChannelLister::class, 'extractData', [$data, false]);
+
+                expect($result['DC Quantity'])->toBe('=50');
+            });
+        });
+    });
 });
+
+// Helper function to call protected methods for testing
+if (! function_exists('callProtectedMethod')) {
+    function callProtectedMethod($className, $methodName, array $parameters = []): mixed
+    {
+        $reflection = new \ReflectionClass($className);
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+
+        if ($method->isStatic()) {
+            return $method->invokeArgs(null, $parameters);
+        }
+
+        $instance = $reflection->newInstance();
+
+        return $method->invokeArgs($instance, $parameters);
+    }
+}
