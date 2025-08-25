@@ -114,12 +114,12 @@ class AmazonListingFormProcessor
                 continue;
             }
 
-            $fieldName = isset($requirement['name']) ? (string) $requirement['name'] : '';
-            $value = data_get($formData, $fieldName);
+            $fieldName = $requirement['name'] ?? '';
+            $value = data_get($formData, is_string($fieldName) ? $fieldName : '');
 
             // Check required fields
             if (($requirement['required'] ?? false) && empty($value)) {
-                $displayName = isset($requirement['displayName']) ? (string) $requirement['displayName'] : $fieldName;
+                $displayName = isset($requirement['displayName']) && is_string($requirement['displayName']) ? $requirement['displayName'] : (is_string($fieldName) ? $fieldName : 'field');
                 $errors[$fieldName] = "The {$displayName} field is required.";
 
                 continue;
@@ -131,7 +131,7 @@ class AmazonListingFormProcessor
             }
 
             // Validate based on field type and constraints
-            $fieldErrors = $this->validateField($fieldName, $value, $requirement);
+            $fieldErrors = is_string($fieldName) ? $this->validateField($fieldName, $value, $requirement) : null;
             if ($fieldErrors !== null && $fieldErrors !== '' && $fieldErrors !== '0') {
                 $errors[$fieldName] = $fieldErrors;
             }
@@ -180,16 +180,16 @@ class AmazonListingFormProcessor
         }
 
         // Pattern validation
-        if (isset($requirement['pattern'])) {
-            $pattern = (string) $requirement['pattern'];
-            $displayName = isset($requirement['displayName']) ? (string) $requirement['displayName'] : $fieldName;
+        if (isset($requirement['pattern']) && is_string($requirement['pattern'])) {
+            $pattern = $requirement['pattern'];
+            $displayName = isset($requirement['displayName']) && is_string($requirement['displayName']) ? $requirement['displayName'] : $fieldName;
             $rules[] = "regex:/{$pattern}/";
             $customMessages[$fieldName.'.regex'] = "The {$displayName} format is invalid.";
         }
 
         // Enum validation
         if (isset($requirement['enum']) && is_array($requirement['enum'])) {
-            $displayName = isset($requirement['displayName']) ? (string) $requirement['displayName'] : $fieldName;
+            $displayName = isset($requirement['displayName']) && is_string($requirement['displayName']) ? $requirement['displayName'] : $fieldName;
             $rules[] = 'in:'.implode(',', $requirement['enum']);
             $customMessages[$fieldName.'.in'] = "The {$displayName} must be one of: ".implode(', ', $requirement['enum']);
         }

@@ -33,7 +33,7 @@ class AmazonTokenManager
         $cachedToken = $this->getCachedToken();
 
         if ($cachedToken && ! $this->isTokenExpiringSoon($cachedToken)) {
-            return isset($cachedToken['access_token']) ? (string) $cachedToken['access_token'] : '';
+            return isset($cachedToken['access_token']) && is_string($cachedToken['access_token']) ? $cachedToken['access_token'] : '';
         }
 
         // Token is missing or expiring soon, refresh it
@@ -43,7 +43,7 @@ class AmazonTokenManager
             throw new \RuntimeException('Failed to obtain valid Amazon SP-API access token');
         }
 
-        return isset($newToken['access_token']) ? (string) $newToken['access_token'] : '';
+        return isset($newToken['access_token']) && is_string($newToken['access_token']) ? $newToken['access_token'] : '';
     }
 
     /**
@@ -135,11 +135,14 @@ class AmazonTokenManager
             return null;
         }
 
+        $obtainedAt = isset($cachedToken['obtained_at']) && is_numeric($cachedToken['obtained_at']) ? (int) $cachedToken['obtained_at'] : 0;
+        $expiresAt = isset($cachedToken['expires_at']) && is_numeric($cachedToken['expires_at']) ? (int) $cachedToken['expires_at'] : 0;
+
         return [
             'has_token' => true,
-            'obtained_at' => Carbon::createFromTimestamp(isset($cachedToken['obtained_at']) ? (int) $cachedToken['obtained_at'] : 0)->toDateTimeString(),
-            'expires_at' => Carbon::createFromTimestamp(isset($cachedToken['expires_at']) ? (int) $cachedToken['expires_at'] : 0)->toDateTimeString(),
-            'expires_in_seconds' => (isset($cachedToken['expires_at']) ? (int) $cachedToken['expires_at'] : 0) - Carbon::now()->timestamp,
+            'obtained_at' => Carbon::createFromTimestamp($obtainedAt)->toDateTimeString(),
+            'expires_at' => Carbon::createFromTimestamp($expiresAt)->toDateTimeString(),
+            'expires_in_seconds' => $expiresAt - (int) Carbon::now()->timestamp,
             'is_valid' => $this->isTokenValid(),
             'token_type' => $cachedToken['token_type'] ?? 'bearer',
         ];
@@ -178,11 +181,12 @@ class AmazonTokenManager
      */
     protected function isTokenExpiringSoon(array $tokenData): bool
     {
-        if (! isset($tokenData['expires_at'])) {
+        if (! is_numeric($tokenData['expires_at'] ?? null)) {
             return true; // Consider invalid if no expiry info
         }
 
-        $expiresAt = Carbon::createFromTimestamp((int) $tokenData['expires_at']);
+        $expiresAtTimestamp = (int) $tokenData['expires_at'];
+        $expiresAt = Carbon::createFromTimestamp($expiresAtTimestamp);
         $bufferTime = Carbon::now()->addMinutes(10);
 
         return $expiresAt->lte($bufferTime);
