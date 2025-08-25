@@ -76,7 +76,7 @@ class ChannelListerController extends Controller
             'UPC' => 'required|string',
         ]);
 
-        return response()->json(ChannelLister::isValidUpc($validated['UPC']));
+        return response()->json(['UPC' => ChannelLister::isValidUpc($validated['UPC'])]);
     }
 
     public function addBundleComponentRow(): JsonResponse

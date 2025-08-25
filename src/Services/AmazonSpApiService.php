@@ -609,10 +609,22 @@ class AmazonSpApiService implements MarketplaceListingProvider
                 $title = $item['attributes']['item_name'][0]['value'];
             }
 
+            // Process productTypes to extract string values
+            $productTypes = [];
+            if (isset($item['productTypes']) && is_array($item['productTypes'])) {
+                foreach ($item['productTypes'] as $productType) {
+                    if (is_string($productType)) {
+                        $productTypes[] = $productType;
+                    } elseif (is_array($productType) && isset($productType['name']) && is_string($productType['name'])) {
+                        $productTypes[] = $productType['name'];
+                    }
+                }
+            }
+
             $listing = [
                 'asin' => is_string($item['asin'] ?? null) ? $item['asin'] : null,
                 'title' => $title,
-                'productTypes' => is_array($item['productTypes'] ?? null) ? $item['productTypes'] : [],
+                'productTypes' => $productTypes,
                 'attributes' => is_array($item['attributes'] ?? null) ? $item['attributes'] : [],
                 'salesRank' => is_array($item['salesRanks'] ?? null) ? $item['salesRanks'] : [],
             ];

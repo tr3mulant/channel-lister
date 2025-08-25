@@ -198,7 +198,7 @@ describe('AmazonListingController', function (): void {
             $mockListing = [
                 'asin' => 'B123456789',
                 'title' => 'Blue Suitcase',
-                'productTypes' => [['name' => 'LUGGAGE']],
+                'productTypes' => ['LUGGAGE'], // Should be array of strings, not objects
                 'attributes' => [],
                 'salesRank' => [],
             ];

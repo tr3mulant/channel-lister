@@ -172,6 +172,10 @@ class AmazonListingController extends Controller
 
             // Render all fields for this grouping
             foreach ($fields as $field) {
+                // Convert stdClass to ChannelListerField if necessary (for testing)
+                if (! $field instanceof \IGE\ChannelLister\Models\ChannelListerField) {
+                    $field = new \IGE\ChannelLister\Models\ChannelListerField((array) $field);
+                }
                 $html .= $this->renderFormField($field);
             }
 
