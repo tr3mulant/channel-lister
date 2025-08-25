@@ -21,7 +21,7 @@ beforeEach(function (): void {
     $this->app->instance(AmazonDataTransformer::class, $this->dataTransformer);
 });
 
-describe('AmazonListingController', function (): void {
+describe('AmazonListingController Api', function (): void {
     describe('searchProductTypes', function (): void {
         it('can search product types', function (): void {
             $this->amazonService
@@ -137,22 +137,22 @@ describe('AmazonListingController', function (): void {
             ];
 
             $mockFields = collect([
-                (object) [
+                ChannelListerField::make([
                     'field_name' => 'item_name',
                     'display_name' => 'Product Title',
                     'tooltip' => 'The title of your product',
                     'required' => true,
                     'input_type' => \IGE\ChannelLister\Enums\InputType::TEXT,
                     'grouping' => 'Product Details',
-                ],
-                (object) [
+                ]),
+                ChannelListerField::make([
                     'field_name' => 'brand',
                     'display_name' => 'Brand Name',
                     'tooltip' => 'The brand of your product',
                     'required' => true,
                     'input_type' => \IGE\ChannelLister\Enums\InputType::TEXT,
                     'grouping' => 'Product Details',
-                ],
+                ]),
             ]);
 
             $this->amazonService
@@ -198,7 +198,9 @@ describe('AmazonListingController', function (): void {
             $mockListing = [
                 'asin' => 'B123456789',
                 'title' => 'Blue Suitcase',
-                'productTypes' => ['LUGGAGE'], // Should be array of strings, not objects
+                'productTypes' => [
+                    ['productType' => 'LUGGAGE'],
+                ],
                 'attributes' => [],
                 'salesRank' => [],
             ];

@@ -183,30 +183,22 @@ describe('ChannelListerController API', function (): void {
     describe('isUpcValid', function (): void {
         it('validates correct UPC', function (): void {
             // First generate a valid UPC
-            $upcResponse = $this->getJson(route('api.channel-lister.build-upc'));
+            $upcResponse = $this->get(route('api.channel-lister.build-upc'));
             $validUpc = $upcResponse->json('data');
 
-            $response = $this->getJson(route('api.channel-lister.is-upc-valid', ['UPC' => $validUpc]));
+            $response = $this->getJson(route('api.channel-lister.is-upc-valid', ['UPC' => $validUpc]))
+                ->assertStatus(200);
 
-            $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'UPC',
-                ]);
-
-            expect($response->json('UPC'))->toBeBool();
+            expect($response->json())->toBeBool();
         });
 
         it('validates known invalid UPC', function (): void {
             $invalidUpc = '123456789012'; // Invalid checksum
 
-            $response = $this->getJson(route('api.channel-lister.is-upc-valid', ['UPC' => $invalidUpc]));
+            $response = $this->getJson(route('api.channel-lister.is-upc-valid', ['UPC' => $invalidUpc]))
+                ->assertStatus(200);
 
-            $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'UPC',
-                ]);
-
-            expect($response->json('UPC'))->toBeBool();
+            expect($response->json())->toBeBool();
         });
 
         it('requires UPC parameter', function (): void {
@@ -225,22 +217,20 @@ describe('ChannelListerController API', function (): void {
 
         it('handles various UPC formats', function (): void {
             $testCases = [
-                '123456789012',
-                '000000000000',
-                '999999999999',
-                '12345678901', // 11 digits
-                '1234567890123', // 13 digits
+                '123456789012' => true,
+                '000000000000' => true,
+                '999999999999' => false,
+                '12345678901' => false, // 11 digits
+                '1234567890123' => false, // 13 digits
             ];
 
-            foreach ($testCases as $upc) {
-                $response = $this->getJson(route('api.channel-lister.is-upc-valid', ['UPC' => $upc]));
+            foreach ($testCases as $upc => $expected) {
+                $response = $this->getJson(route('api.channel-lister.is-upc-valid', ['UPC' => $upc]))
+                    ->assertStatus(200);
 
-                $response->assertStatus(200)
-                    ->assertJsonStructure([
-                        'UPC',
-                    ]);
+                $actual = filter_var($response->getContent(), FILTER_VALIDATE_BOOLEAN);
 
-                expect($response->json('UPC'))->toBeBool();
+                expect($actual)->toBe($expected);
             }
         });
     });
@@ -280,7 +270,7 @@ describe('ChannelListerController API', function (): void {
             $validateResponse = $this->getJson(route('api.channel-lister.is-upc-valid', ['UPC' => $upc]));
             $validateResponse->assertStatus(200);
 
-            expect($validateResponse->json('UPC'))->toBeTrue();
+            expect($validateResponse->json())->toBeTrue();
         });
 
         it('can get form data for all available platforms', function (): void {
