@@ -3,6 +3,7 @@
 namespace IGE\ChannelLister\Models;
 
 use IGE\ChannelLister\Database\Factories\WishBrandDirectoryFactory;
+use IGE\ChannelLister\Models\Concerns\HasConfigurableConnection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,6 +18,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class WishBrandDirectory extends Model
 {
+    use HasConfigurableConnection;
+
     /** @use HasFactory<WishBrandDirectoryFactory> */
     use HasFactory;
 

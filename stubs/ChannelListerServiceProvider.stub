@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use IGE\ChannelLister\Console\AmazonTokenStatusCommand;
+use IGE\ChannelLister\Console\SeedFieldsCommand;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -36,7 +37,10 @@ class ChannelListerServiceProvider extends ServiceProvider
 
     protected function registerCommands(): void
     {
-        $this->commands([AmazonTokenStatusCommand::class]);
+        $this->commands([
+            AmazonTokenStatusCommand::class,
+            SeedFieldsCommand::class,
+        ]);
     }
 
 }

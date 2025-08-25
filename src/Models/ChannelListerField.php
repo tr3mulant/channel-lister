@@ -5,6 +5,7 @@ namespace IGE\ChannelLister\Models;
 use IGE\ChannelLister\Database\Factories\ChannelListerFieldFactory;
 use IGE\ChannelLister\Enums\InputType;
 use IGE\ChannelLister\Enums\Type;
+use IGE\ChannelLister\Models\Concerns\HasConfigurableConnection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,6 +30,8 @@ use Illuminate\Support\Str;
  */
 class ChannelListerField extends Model
 {
+    use HasConfigurableConnection;
+
     /** @use HasFactory<ChannelListerFieldFactory> */
     use HasFactory;
 
@@ -195,35 +198,6 @@ class ChannelListerField extends Model
         return $input_type_aux;
     }
 
-    // public function render(): Htmlable
-    // {
-    //     if (! isset($params['type'])) {
-    //         throw new \RuntimeException("Params missing required field 'type'");
-    //     }
-    //     try {
-    //         $html = match ($params['input_type']) {
-    //             'alert' => $this->buildAlertMessage($params),
-    //             'checkbox' => $this->buildCheckboxFormInput($params),
-    //             'clonesite-tags' => $this->buildCloneSiteTagsHtml($params),
-    //             'clonesite-cats' => $this->buildCloneSiteCategoryHtml($params),
-    //             'commaseparated' => $this->buildCommaSeparatedFormInput($params),
-    //             'currency' => $this->buildCurrencyFormInput($params),
-    //             'custom' => $this->buildCustomFormInput($params),
-    //             'decimal' => $this->buildDecimalFormInput($params),
-    //             'integer' => $this->buildIntegerFormInput($params),
-    //             'select' => $this->buildSelectFormInput($params),
-    //             'text' => $this->buildTextFormInput($params),
-    //             'textarea' => $this->buildTextareaFormInput($params),
-    //             'url' => $this->buildUrlFormInput($params),
-    //             default => throw new \RuntimeException("Unrecognized input_type: '{$params['input_type']}'"),
-    //         };
-    //     } catch (\Exception $e) {
-    //         $html = $this->exceptionToAlert($e);
-    //     }
-
-    //     return $html;
-    // }
-
     /**
      * Get the parsed input_type_aux as an array. And
      * Set the input_type_aux from an array.
@@ -231,17 +205,6 @@ class ChannelListerField extends Model
     protected function inputTypeAux(): Attribute
     {
         return Attribute::make(
-            // get: function (?string $value): null|string|array {
-            //     if ($value === null || $value === '' || $value === '0') {
-            //         return null;
-            //     }
-
-            //     if (str_contains($value, '||')) {
-            //         return explode('||', $value);
-            //     }
-
-            //     return $value;
-            // },
             set: fn (null|string|array $value): ?string => is_array($value) ? implode('||', $value) : $value
         );
     }

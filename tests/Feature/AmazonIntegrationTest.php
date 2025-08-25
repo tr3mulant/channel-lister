@@ -181,6 +181,17 @@ it('can complete full amazon listing workflow', function (): void {
 
 it('can lookup existing amazon listing', function (): void {
     Http::fake([
+        'sellingpartnerapi-na.amazon.com/definitions/2020-09-01/productTypes/LUGGAGE*' => Http::response([
+            'schema' => [
+                'properties' => [
+                    'item_name' => [
+                        'title' => 'Title',
+                        'type' => 'string',
+                    ],
+                ],
+                'required' => ['item_name'],
+            ],
+        ], 200),
         'sellingpartnerapi-na.amazon.com/catalog/2022-04-01/items*' => Http::response([
             'items' => [
                 [
@@ -194,22 +205,10 @@ it('can lookup existing amazon listing', function (): void {
                         ],
                     ],
                     'productTypes' => [
-                        ['name' => 'LUGGAGE'],
+                        ['productType' => 'LUGGAGE'],
                     ],
                     'salesRanks' => [],
                 ],
-            ],
-        ], 200),
-
-        'sellingpartnerapi-na.amazon.com/definitions/2020-09-01/productTypes/LUGGAGE*' => Http::response([
-            'schema' => [
-                'properties' => [
-                    'item_name' => [
-                        'title' => 'Title',
-                        'type' => 'string',
-                    ],
-                ],
-                'required' => ['item_name'],
             ],
         ], 200),
     ]);

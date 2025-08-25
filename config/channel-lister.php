@@ -71,6 +71,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Database Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configure which database connection Channel Lister should use for its
+    | operations. If null, it will use Laravel's default database connection.
+    |
+    */
+    'database' => [
+        'connection' => env('CHANNEL_LISTER_DB_CONNECTION', null),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Amazon SP-API Configuration
     |--------------------------------------------------------------------------
     |

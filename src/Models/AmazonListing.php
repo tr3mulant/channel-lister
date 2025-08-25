@@ -3,6 +3,7 @@
 namespace IGE\ChannelLister\Models;
 
 use IGE\ChannelLister\Database\Factories\AmazonListingFactory;
+use IGE\ChannelLister\Models\Concerns\HasConfigurableConnection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -31,6 +32,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class AmazonListing extends Model
 {
+    use HasConfigurableConnection;
+
     /** @use HasFactory<AmazonListingFactory> */
     use HasFactory;
 
