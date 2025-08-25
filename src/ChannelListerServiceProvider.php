@@ -6,6 +6,7 @@ namespace IGE\ChannelLister;
 
 use IGE\ChannelLister\Console\AmazonTokenStatusCommand;
 use IGE\ChannelLister\Console\InstallCommand;
+use IGE\ChannelLister\Console\SeedFieldsCommand;
 use IGE\ChannelLister\Contracts\MarketplaceListingProvider;
 use IGE\ChannelLister\Http\Middleware\AmazonSpApiAuth;
 use IGE\ChannelLister\Services\AmazonDataTransformer;
@@ -115,6 +116,7 @@ class ChannelListerServiceProvider extends ServiceProvider
         $this->commands([
             InstallCommand::class,
             AmazonTokenStatusCommand::class,
+            SeedFieldsCommand::class,
         ]);
     }
 
