@@ -1,8 +1,10 @@
 laravel: "@testbench"
 
+env:
+  - CACHE_STORE=file
+
 providers:
   - IGE\ChannelLister\ChannelListerServiceProvider
-  - Workbench\App\Providers\ChannelListerServiceProvider
 
 migrations:
   - workbench/database/migrations
@@ -11,7 +13,6 @@ migrations:
 seeders:
   - Workbench\Database\Seeders\DatabaseSeeder
 
-# Add factory paths
 factories:
   - database/factories
 
@@ -32,6 +33,8 @@ workbench:
     - create-sqlite-db
     - db-wipe
     - migrate-fresh
+    - view-clear
+    - asset-clear
   assets:
     - laravel-assets
   sync:

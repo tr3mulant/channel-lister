@@ -32,7 +32,7 @@ class ChannelListerFieldFactory extends Factory
             'example' => $this->faker->word(),
             'marketplace' => $this->faker->word(),
             'input_type' => $this->faker->randomElement(InputType::cases()),
-            'input_type_aux' => $this->faker->word(),
+            'input_type_aux' => $this->faker->randomElement(['success', 'info', 'warning', 'danger']),
             'required' => $this->faker->boolean(),
             'grouping' => $this->faker->word(),
             'type' => $this->faker->randomElement(Type::cases()),

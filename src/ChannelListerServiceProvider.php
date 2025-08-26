@@ -4,7 +4,16 @@ declare(strict_types=1);
 
 namespace IGE\ChannelLister;
 
+use IGE\ChannelLister\Console\AmazonTokenStatusCommand;
 use IGE\ChannelLister\Console\InstallCommand;
+use IGE\ChannelLister\Console\SeedFieldsCommand;
+use IGE\ChannelLister\Contracts\MarketplaceListingProvider;
+use IGE\ChannelLister\Http\Middleware\AmazonSpApiAuth;
+use IGE\ChannelLister\Services\AmazonDataTransformer;
+use IGE\ChannelLister\Services\AmazonListingFormProcessor;
+use IGE\ChannelLister\Services\AmazonSpApiService;
+use IGE\ChannelLister\Services\AmazonTokenManager;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -22,14 +31,10 @@ class ChannelListerServiceProvider extends ServiceProvider
             return;
         }
 
+        $this->registerMiddleware();
         $this->registerRoutes();
         $this->registerResources();
-
-        /**
-         * @var array<string, string> $middleware
-         */
-        $middleware = config('channel-lister.middleware', []);
-        Route::middlewareGroup('channel-lister', $middleware);
+        $this->registerBladeComponents();
     }
 
     /**
@@ -38,6 +43,41 @@ class ChannelListerServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/channel-lister.php', 'channel-lister');
+
+        $this->registerServices();
+    }
+
+    protected function registerServices(): void
+    {
+        // Register token manager
+        $this->app->singleton(AmazonTokenManager::class, fn ($app): AmazonTokenManager => new AmazonTokenManager);
+
+        // Register Amazon SP-API service
+        $this->app->singleton(AmazonSpApiService::class, fn ($app): AmazonSpApiService => new AmazonSpApiService($app->make(AmazonTokenManager::class)));
+
+        // Bind the marketplace provider interface
+        $this->app->bind(MarketplaceListingProvider::class, AmazonSpApiService::class);
+
+        // Register form processor
+        $this->app->singleton(AmazonListingFormProcessor::class, fn ($app): AmazonListingFormProcessor => new AmazonListingFormProcessor($app->make(AmazonSpApiService::class)));
+
+        // Register data transformer
+        $this->app->singleton(AmazonDataTransformer::class, fn ($app): AmazonDataTransformer => new AmazonDataTransformer);
+
+        // Register middleware
+        $this->app->singleton(AmazonSpApiAuth::class, fn ($app): AmazonSpApiAuth => new AmazonSpApiAuth($app->make(AmazonTokenManager::class)));
+
+        // Register shipping calculator service
+        $this->app->singleton(\IGE\ChannelLister\Services\ShippingCalculatorService::class);
+    }
+
+    protected function registerMiddleware(): void
+    {
+        /**
+         * @var array<string, string> $middleware
+         */
+        $middleware = config('channel-lister.middleware', []);
+        Route::middlewareGroup('channel-lister', $middleware);
     }
 
     protected function registerRoutes(): void
@@ -50,6 +90,15 @@ class ChannelListerServiceProvider extends ServiceProvider
         ], function (): void {
             $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         });
+
+        Route::group([
+            'domain' => config('channel-lister.domain', null),
+            'namespace' => 'IGE\ChannelLister\Http\Controllers\Api',
+            'prefix' => config('channel-lister.api_path'),
+            'middleware' => 'api',
+        ], function (): void {
+            $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+        });
     }
 
     protected function registerResources(): void
@@ -57,10 +106,17 @@ class ChannelListerServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'channel-lister');
     }
 
+    protected function registerBladeComponents(): void
+    {
+        Blade::componentNamespace('IGE\\ChannelLister\\View\\Components', 'channel-lister');
+    }
+
     protected function registerCommands(): void
     {
         $this->commands([
             InstallCommand::class,
+            AmazonTokenStatusCommand::class,
+            SeedFieldsCommand::class,
         ]);
     }
 
@@ -80,6 +136,18 @@ class ChannelListerServiceProvider extends ServiceProvider
                 __DIR__.'/../database/migrations' => database_path('migrations'),
             ], 'channel-lister-migrations');
 
+            // Granular publishing - Views only
+            $this->publishes([
+                __DIR__.'/../resources/views' => resource_path('views/vendor/channel-lister'),
+            ], 'channel-lister-views');
+
+            // Granular publishing - Frontend assets only (CSS/JS)
+            $this->publishes([
+                __DIR__.'/../resources/css' => resource_path('css/vendor/channel-lister'),
+                __DIR__.'/../resources/js' => resource_path('js/vendor/channel-lister'),
+            ], 'channel-lister-frontend-assets');
+
+            // Combined publishing - Everything (backward compatibility)
             $this->publishes([
                 __DIR__.'/../resources' => resource_path('vendor/channel-lister'),
             ], ['channel-lister-resources', 'laravel-resources']);

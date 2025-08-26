@@ -28,7 +28,6 @@ function htmlEntities(str) {
  * @param  {bool} [allowRemoval=true] Allow the tab to removed after showing it (ie show the remove button)
  */
 function showPlatformTab(platform, allowRemoval) {
-  // console.log('show '+platform);
   $("#li" + platform).css("display", "");
   if (typeof allowRemoval === "undefined" || allowRemoval === true) {
     $("#li" + platform)
@@ -49,12 +48,7 @@ function showPlatformTab(platform, allowRemoval) {
  * @param  {string} platform name of the platform tab
  */
 function gotoPlatformTab(platform) {
-  // console.log('goto '+platform);
   showPlatformTab(platform);
-  $(".tab-pane").removeClass("active");
-  $(".nav > li").removeClass("active");
-  $("#" + platform).addClass("active");
-  $("#li" + platform).addClass("active");
 }
 
 /**
@@ -62,7 +56,6 @@ function gotoPlatformTab(platform) {
  * @param  {string} platform name of the platform tab to close
  */
 function closePlatformTab(platform) {
-  // console.log('close '+platform);
   $("#li" + platform).css("display", "none");
   var emptyPlatformList = $("#dropdown li > a")
     .toArray()
@@ -94,12 +87,7 @@ function getOpenPlataformTabs() {
  * @param  {Boolean} is_disabled true to disable, false to enable
  */
 function toggleDisableFormElementsByPlatform(platform, is_disabled) {
-  //console.log(platform);
-  //console.log(is_disabled);
-  $("#" + platform + " .form-control").attr("disabled", is_disabled);
-  $("#" + platform + " .select-picker")
-    .selectpicker("destroy")
-    .selectpicker();
+  $("#" + platform + " .form-group").attr("disabled", is_disabled);
 }
 
 /**
@@ -125,94 +113,6 @@ function getBootstrapError(message) {
 }
 
 /**
- * Takes the api response from ASDF and maps them to form fields
- * Passes images to api request to build image mapping modal
- */
-function mapNpiResponseToFormFields(data) {
-  var images = [];
-  var supplier_name = "";
-  var supplier_id = "";
-  var supplier_title = "";
-  var brand = "";
-  var upc_real = "";
-  var seller_cost = "";
-  var location = "";
-  var ship_weight = "";
-  var ship_length = "";
-  var ship_height = "";
-  var ship_width = "";
-  var ship_packaging = "";
-
-  supplier_name = data.data.supplier;
-  supplier_id = data.data.supplierID;
-  supplier_title = data.data.title;
-  brand = data.data.brand;
-  upc_real = data.data.upc_real;
-  seller_cost = data.data.seller_cost;
-  location = data.data.location;
-  ship_weight = data.data.ship_weight;
-  ship_length = data.data.ship_length;
-  ship_height = data.data.ship_height;
-  ship_width = data.data.ship_width;
-  ship_packaging = data.data.ship_packaging;
-
-  $('[id="Supplier Code-id"] option')
-    .filter(function () {
-      return $(this).html() == supplier_name;
-    })
-    .prop("selected", true)
-    .trigger("change");
-  $("#supplier_code-id").val(supplier_id);
-  $("#Item-id").val(supplier_title);
-  $('[id="Warehouse Location-id"]').val(data.data.location);
-  $('[id="Total Quantity-id').val(data.data.in_house_quantity);
-  if (Number(data.data.seller_cost) != 0) {
-    $('[id="Seller Cost-id"]').val(Number(data.data.seller_cost));
-  }
-  $("#Brand-id").val(brand);
-  $("#upc_real").val(upc_real);
-  $("#ship_weight-id").val(ship_weight);
-  $("#ship_length-id").val(ship_length);
-  $("#ship_height-id").val(ship_height);
-  $("#ship_width-id").val(ship_width);
-  $("select[id=ship_packaging-id]").val(ship_packaging.toLowerCase());
-  $("select[id=ship_packaging-id]").change();
-
-  $.getJSON("api/NewProductInterface/getImages", { id: data.data.id }).done(
-    function (response) {
-      if (response.status == "success") {
-        for (var i = 0; i < response.data.length; i++) {
-          images.push(response.data[i].data.url);
-        }
-        $.ajax({
-          type: "POST",
-          url: "api/ChannelLister/getImageMapperModal",
-          data: {
-            images: images,
-          },
-          dataType: "json",
-        })
-          .success(function (response) {
-            var modal = $(response.data);
-            modal.modal();
-            modal.find("button.close").click(function () {
-              modal.modal("hide");
-              window.setTimeout(() => modal.delay(2000).remove(), 1000);
-            });
-          })
-          .error(function (response) {
-            console.log(response);
-            alert(response.responseText);
-          });
-      } else {
-        console.log(response);
-        alert(response.responseText);
-      }
-    }
-  );
-}
-
-/**
  * Puts the starting UPC value into the upc_seed input based on the selected dropdown value
  * @param  {string} platform name of the platform
  * @param  {string} value    starting UPC digits
@@ -228,26 +128,22 @@ function seedUPC(platform, value) {
  */
 function fillUPC(platform) {
   //generate a new random upc and add it to the UPC form field
-  var seed_field = $("#" + platform + "_upc_seed");
-  var upc_field = $("#" + platform + "_upc");
+  var seed_field = $(`#${platform}_upc_seed`);
+  var upc_field = $(`#${platform}_upc`);
   var seed = seed_field.val();
-  /*if (seed.length < 5) {
-		alert('Our UPC operating procedure is now to utilize the first 5 real upc digits. Please double check you made a UPC using 5 starting digits.');
-	}*/
-  $.getJSON("api/Products/makeUpc", { upc_start: seed }).done(function (
-    response
-  ) {
-    if (response.status == "success") {
-      upc_field.val(response.data);
-      $("#" + platform + "_upc").trigger("change");
-    } else {
-      alert(response.message);
-    }
-  });
+
+  $.getJSON("api/channel-lister/build-upc", { prefix: seed })
+    .done((response) => {
+      upc_field.val(response.data).trigger("change");
+    })
+    .fail((response) => {
+      console.error(response);
+      alert(response.responseText);
+    });
 }
 
 function getAndSetProductTypeOptions(category) {
-  return $.getJSON("api/ChannelLister/getAmazonProductTypeOptions/" + category)
+  return $.getJSON("api/channel-lister/getAmazonProductTypeOptions/" + category)
     .done(function (response) {
       $("#product_type_amazon-id").html(response.data);
       if (category == "Clothing") {
@@ -272,8 +168,8 @@ function getAndSetProductTypeOptions(category) {
  */
 function setProductTypeOptions(category) {
   if (typeof category == "string") {
-    $.getJSON("api/ChannelLister/getAmazonProductTypeOptions/" + category)
-      .success(function (response) {
+    $.getJSON("api/channel-lister/getAmazonProductTypeOptions/" + category)
+      .done(function (response) {
         $("#product_type_amazon-id").html(response.data);
         if (category == "Clothing") {
           $("#product_type_amazon-id").removeProp("required");
@@ -284,7 +180,7 @@ function setProductTypeOptions(category) {
           .selectpicker("destroy")
           .selectpicker({ liveSearch: true });
       })
-      .error(function (response) {
+      .fail(function (response) {
         $("#product_type_amazon-id").html(
           "<option>Unable to get options for" + category + "</option>"
         );
@@ -364,7 +260,7 @@ function updateShipCost() {
     // gets shipping rate and service from api
     $.ajax({
       type: "POST",
-      url: "api/ChannelLister/calculateShippingCost",
+      url: "api/channel-lister/calculateShippingCost",
       data: {
         weight: weight,
         length: length,
@@ -375,7 +271,7 @@ function updateShipCost() {
       },
       dataType: "json",
     })
-      .success(function (response) {
+      .done(function (response) {
         var rate = response.data;
         console.log(rate);
         $("#cost_shipping-api-error").hide();
@@ -423,7 +319,7 @@ function updateShipCost() {
         }
         $("#calculated_shipping_service-id").val(rate[1]);
       })
-      .error(function (response) {
+      .fail(function (response) {
         console.log(response);
         alert(response.responseText);
       });
@@ -432,409 +328,6 @@ function updateShipCost() {
     $("#calculated_shipping_service-id").val("");
   }
 }
-
-/**
- * Makes the channel lister fields table editable using the button after clicking on a row
- */
-function editCamlUpdate(e, dt, node, config) {
-  let id = dt.row({ selected: true }).id();
-  let row_data = dt.row({ selected: true }).data();
-
-  let submitcb = function () {
-    return confirm("Do you want to submit?");
-  };
-
-  let deleterow = function (row) {
-    $("#caml-update-table").DataTable().draw(false);
-    $(".modal button.close").trigger("click");
-    return false;
-  };
-
-  let form = FormMaker.from_database(
-    "caml_edit_form",
-    "product_listings",
-    "channel_lister_fields",
-    submitcb,
-    deleterow
-  );
-
-  form.done(function (form) {
-    form.fill(row_data);
-    form.edit_field("id", id);
-    form.disable_field("id");
-    form.disable_field("ordering");
-    let modal = $(window.modal);
-    modal.find("h4.modal-title").text("Edit Channel Lister Field");
-    modal.find("div.modal-body").html(form);
-    modal.modal();
-    modal.find("button.close").click(function () {
-      modal.modal("hide");
-      window.setTimeout(() => modal.delay(2000).remove(), 1000);
-    });
-  });
-}
-
-/**
- * Can add new rows to the channel lister fields table depending on where is clicked
- */
-function addCamlUpdate(e, dt, node, config) {
-  let id = dt.row({ selected: true }).id();
-  let row_data = dt.row({ selected: true }).data();
-  let field_name = row_data.field_name;
-  let ordering = row_data.ordering;
-  let marketplace = row_data.marketplace;
-  let grouping = row_data.grouping;
-
-  let add_caml_update = function (form_info) {
-    if (form_info == null) {
-      return false;
-    }
-    $.each(form_info, function (i, item) {
-      if (item == "[<NULL>]") form_info[i] = null;
-    });
-    $.ajax({
-      type: "POST",
-      url: "api/ChannelLister/addChannelListerFields",
-      data: form_info,
-      dataType: "json",
-    })
-      .done(function (response) {
-        console.log(response);
-        if (response.status == "success") {
-          $("#caml-update-table").DataTable().draw(false);
-          $(".modal button.close").trigger("click");
-        } else {
-          console.error(response);
-          alert(response.message);
-        }
-      })
-      .fail(function (response) {
-        console.error(response);
-        alert(response.responseText);
-      });
-    return false;
-  };
-
-  let location_column = {
-    name: "location",
-    type: "enum(" + `Before ${field_name}` + "," + `After ${field_name}` + ")",
-  };
-
-  let form = FormMaker.from_database(
-    "add_caml_form",
-    "product_listings",
-    "channel_lister_fields",
-    add_caml_update
-  );
-  form.done(function (form) {
-    form.fill(row_data);
-    form.edit_field("id", id);
-    form.disable_field("id");
-    form.edit_field("ordering", ordering);
-    form.disable_field("ordering");
-    form.edit_field("field_name", "");
-    form.edit_field("display_name", "");
-    form.edit_field("tooltip", "");
-    form.edit_field("example", "");
-    form.edit_field("input_type", "");
-    form.edit_field("input_type_aux", "");
-    form.edit_field("type", "");
-
-    form.add_form_group(id, location_column, 2);
-    form
-      .find('[name="location"]')
-      .append(
-        `<p class="help-block">Selecting 'After' will place the new field AFTER ${field_name} in table</p>`
-      );
-
-    let modal = $(window.modal);
-    modal.find("h4.modal-title").text("Add Channel Lister Field");
-
-    modal.find("div.modal-body").html(form);
-    modal.modal();
-    modal.find("button.close").click(function () {
-      modal.modal("hide");
-      window.setTimeout(() => modal.delay(2000).remove(), 1000);
-    });
-  });
-}
-
-/**
- * Makes the channel lister fields row removable using the button after clicking on a row
- */
-function removeCamlUpdate(e, dt, node, config) {
-  var id = dt.row({ selected: true }).id();
-  var row_data = dt.row({ selected: true }).data();
-  var field_name = row_data.field_name;
-  var ordering = row_data.ordering;
-  var data = {
-    ordering: ordering,
-  };
-
-  if (confirm(`Would you like to remove field: ${field_name}?`)) {
-    $.ajax({
-      type: "POST",
-      url: "api/ChannelLister/removeChannelListerFields",
-      data: data,
-      dataType: "json",
-    })
-      .done(function (response) {
-        if (response.status == "success") {
-          $("#caml-update-table").DataTable().draw(false);
-        } else {
-          console.error(response);
-        }
-      })
-      .fail(function (response) {
-        console.error(response);
-        alert(response.responseText);
-      });
-  }
-}
-
-/**
- * Makes the channel lister fields table re-orderable using the button after clicking on a row
- */
-function reorderCamlUpdate(e, dt, node, config) {
-  var id = dt.row({ selected: true }).id();
-  var row_data = dt.row({ selected: true }).data();
-  var field_name = row_data.field_name;
-  var ordering = row_data.ordering;
-
-  (function () {
-    $.ajax({
-      type: "GET",
-      url: "api/ChannelLister/getChannelListerFieldNames",
-      dataType: "json",
-    })
-      .done(function (response) {
-        console.log(response);
-        var listing_names = response.data;
-        var dest_field_string = Object.values(listing_names);
-        createReorderForm(dest_field_string);
-      })
-      .fail(function (response) {
-        console.error(response);
-        alert(response.message);
-      });
-  })();
-
-  var reorder_caml = function (form_info) {
-    if (form_info == null) {
-      return false;
-    }
-    $.each(form_info, function (i, item) {
-      console.log(item);
-      if (item == "[<NULL>]") form_info[i] = null;
-    });
-    $.ajax({
-      type: "POST",
-      url: "api/ChannelLister/reorderChannelListerFields",
-      data: form_info,
-      dataType: "json",
-    })
-      .done(function (response) {
-        console.log(response);
-        if (response.status == "success") {
-          $(".modal button.close").trigger("click");
-          $("#caml-update-table").DataTable().draw(false);
-        } else {
-          console.error(response);
-          alert(response.message);
-        }
-      })
-      .fail(function (response) {
-        console.error(response);
-        alert(response.responseText);
-      });
-    return false;
-  };
-
-  function createReorderForm(dropdown_string) {
-    var columns = [
-      {
-        name: "field_to_move",
-        type: "varchar(100)",
-      },
-      {
-        name: "location",
-        type: "enum('Before', 'After')",
-      },
-      {
-        name: "place_around_field",
-        type: `enum(${dropdown_string})`,
-      },
-    ];
-    var form = FormMaker.from_object("fM", columns, reorder_caml);
-
-    var modal = $(window.modal);
-    modal.find("h4.modal-title").text("Reorder Channel Lister Fields");
-
-    modal.find("div.modal-body").html(form);
-
-    form.edit_field(`field_to_move`, field_name);
-    form.disable_field(`field_to_move`);
-    form
-      .find("#fMplace_around_field")
-      .addClass("select-picker")
-      .attr("data-live-search", "true")
-      .selectpicker();
-
-    modal.modal();
-    modal.find("button.close").click(function () {
-      modal.modal("hide");
-      window.setTimeout(() => modal.delay(2000).remove(), 1000);
-    });
-  }
-}
-
-//custom buttons
-$.fn.dataTable.ext.buttons.addCamlUpdate = {
-  text: "Add",
-  extend: "selectedSingle",
-  name: "addCamlUpdate",
-  action: addCamlUpdate,
-};
-$.fn.dataTable.ext.buttons.editCamlUpdate = {
-  text: "Edit",
-  extend: "selectedSingle",
-  name: "editCamlUpdate",
-  action: editCamlUpdate,
-};
-$.fn.dataTable.ext.buttons.removeCamlUpdate = {
-  text: "Remove",
-  extend: "selectedSingle",
-  name: "removeCamlUpdate",
-  action: removeCamlUpdate,
-};
-$.fn.dataTable.ext.buttons.reorderCamlUpdate = {
-  text: "Reorder",
-  extend: "selectedSingle",
-  name: "reorderCamlUpdate",
-  action: reorderCamlUpdate,
-};
-
-function CAMLUpdateTable() {
-  var me = this;
-  me.columns = null;
-  me.init = function () {
-    return $.ajax({
-      type: "GET",
-      url: "api/Datatable/product_listings/channel_lister_fields",
-      data: { action: "heading" },
-      dataType: "json",
-    })
-      .done(function (data) {
-        me.columns = data;
-        me.addColumnDefs();
-        me.addColumnRenders();
-        me.display();
-      })
-      .fail(function (error) {
-        alert("Failed to initialize CAML Update table! (see console)");
-        console.log(error);
-      });
-  };
-
-  /**
-   * controls the default columns to be displayed and adds some css classes for wide content
-   */
-  me.addColumnDefs = function () {
-    let className;
-    me.columns.forEach(function (v, k, a) {
-      className = "";
-      switch (v.data.toLowerCase()) {
-        case "tooltip":
-        case "example":
-        case "input_type_aux":
-          className = "dt-min-w-15";
-          break;
-        default:
-          break;
-      }
-      me.columns[k].className = className;
-    });
-  };
-
-  me.addColumnRenders = function () {
-    let renderFunc;
-    me.columns.forEach(function (v, k, a) {
-      renderFunc = "";
-      switch (v.data.toLowerCase()) {
-        case "tooltip":
-        case "example":
-        case "input_type_aux":
-          renderFunc = function (data, type, row, meta) {
-            if (data == null) {
-              return data;
-            } else {
-              let display =
-                type === "display" && data.length > 75
-                  ? `${data.substr(0, 75)}...`
-                  : data;
-              let template = `<div class='tooltip tt-caml-update-table tt-min-w-5 tt-max-w-50' role='tooltip'><div class='tooltip-arrow'></div><div class='tooltip-inner'></div></div>`;
-              return `<span class="" data-toggle="tooltip" data-placement="top" data-container="body" data-template="${template}" title="${htmlEntities(
-                data
-              )}">
-										${htmlEntities(display)}
-									</span>`;
-            }
-          };
-          break;
-        default:
-          break;
-      }
-      if (renderFunc != "") {
-        me.columns[k].render = renderFunc;
-      }
-    });
-  };
-
-  me.display = function () {
-    return $("#caml-update-table").DataTableExtended({
-      processing: true,
-      serverSide: true,
-      paging: true,
-      ordering: true,
-      ajax: {
-        url: "api/Datatable/product_listings/channel_lister_fields",
-        type: "POST",
-      },
-      scrollX: true,
-      stateSave: true,
-      select: { style: "single" },
-      columns: me.columns,
-      search: { regex: false },
-      searchByColumn: true,
-      downloadCSV: { addCols: ["id"], removeCols: ["ordering"] },
-      buttons: [
-        "addCamlUpdate",
-        "editCamlUpdate",
-        "removeCamlUpdate",
-        "reorderCamlUpdate",
-      ],
-      dom: "Blfrtip",
-    });
-  };
-}
-
-//From http://stackoverflow.com/a/1186309
-/*$.fn.serializeObject = function()
-{
-	var o = {};
-	var a = this.serializeArray();
-	$.each(a, function() {
-		if (o[this.name] !== undefined) {
-			if (!o[this.name].push) {
-				o[this.name] = [o[this.name]];
-			}
-			o[this.name].push(this.value || '');
-		} else {
-			o[this.name] = this.value || '';
-		}
-	});
-	return o;
-};*/
 
 /**
  * Checks to see if url is in proper format
@@ -853,177 +346,15 @@ function isValidUrl(url) {
  * Runs JS functions on form inputs, called when a new tab is added
  */
 function runTabInitFunctions(platform) {
-  $("#" + platform + " .select-picker").selectpicker();
   $("#" + platform + " .editable-select").editableSelect();
-  $("#" + platform + " input.form-control[maxlength]").maxlength({
+  $("#" + platform + " input.form-group[maxlength]").maxlength({
     alwaysShow: true,
   });
 }
 
-/* Begin CAML Draft Functionality */
-
-/**
- * The CAML Draft Table object
- */
-function CamlDraftTable() {
-  let me = this;
-  me.tableId = "drafts-fill-table";
-  me.api = null;
-  me.columns = null;
-
-  me.init = function () {
-    $.ajax({
-      type: "GET",
-      url: "api/Datatable/product_listings/channel_lister_drafts",
-      data: { action: "heading" },
-      dataType: "json",
-    })
-      .done(function (data) {
-        me.columns = data;
-        me.addColumnRenders();
-        me.addColumnDefs();
-        me.display();
-        me.api = $("#" + me.tableId).DataTable();
-      })
-      .fail(function (error) {
-        alert("Failed to get headings");
-        console.log("err", error);
-      });
-
-    $("#" + me.tableId + "-panel").one("shown.bs.collapse", function () {
-      $("#" + me.tableId)
-        .DataTable()
-        .columns.adjust();
-    });
-  };
-
-  me.addColumnRenders = function () {
-    let i = me.columns.indexOfPropertyValue("data", "form_data");
-    me.columns[i].render = function (data, type, row, meta) {
-      return type === "display" && data.length > 50
-        ? data.substr(0, 50) + "..."
-        : data;
-    };
-    i = me.columns.indexOfPropertyValue("data", "last_save");
-    me.columns[i].render = function (data, type, row, meta) {
-      return moment(data).format("lll");
-    };
-  };
-
-  me.addColumnDefs = function () {
-    me.columns[
-      me.columns.indexOfPropertyValue("data", "auction_title")
-    ].className = "dt-min-w-25";
-  };
-
-  me.display = function () {
-    let lastSaveIdx = me.columns.indexOfPropertyValue("data", "last_save");
-    return $("#" + me.tableId).DataTableExtended({
-      pageLength: 10,
-      lengthMenu: [10, 20, 50],
-      processing: true,
-      serverSide: true,
-      paging: true,
-      ordering: true,
-      order: [lastSaveIdx, "desc"],
-      scrollX: true,
-      ajax: {
-        url: "api/Datatable/product_listings/channel_lister_drafts",
-        type: "POST",
-      },
-      select: { toggleable: false },
-      columns: me.columns,
-      search: { regex: false },
-      searchByColumn: true,
-      downloadCSV: { addCols: ["id"] },
-      buttons: ["restoreDraft", "deleteDraft"],
-      dom: "lBftipr",
-    });
-  };
-}
-
-//custom buttons for drafts fill table
-$.fn.dataTable.ext.buttons.restoreDraft = {
-  text: "Restore Draft",
-  titleAttr:
-    "Restore Draft - Click to recover your saved product draft for the CAML",
-  enabled: true,
-  extend: "selectedSingle",
-  name: "restoreDraft",
-  className: "restore-draft",
-  action: restoreDraft,
-};
-
-$.fn.dataTable.ext.buttons.deleteDraft = {
-  text: "Delete Draft",
-  titleAttr: "Delete Draft - Click to delete a previously saved draft",
-  enabled: true,
-  extend: "selectedSingle",
-  name: "deleteDraft",
-  className: "delete-draft",
-  action: deleteDraft,
-};
-
-function restoreDraft(e, dt, type, indexes) {
-  dt.button([".restore-draft"]).processing(true);
-  let rowData = dt.row({ selected: true }).data();
-  getCamlDraft({ id: rowData.DT_RowId }).then(function (response) {
-    if (response.status === "success") {
-      let formData = JSON.parse(response.data);
-      getChannelListerFieldsMarketplaceMap().then(function (data) {
-        let channelListerFields = data.data;
-        processFormDataForDraftRestore(formData, channelListerFields);
-        dt.button([".restore-draft"]).processing(false);
-      });
-    } else {
-      alert("Something went wrong. Check console for details.");
-      console.log(response);
-      dt.button([".restore-draft"]).processing(false);
-    }
-  });
-}
-
-function getCamlDraft(data) {
-  return $.ajax({
-    type: "POST",
-    url: "api/ChannelLister/getCamlDraft",
-    data: data,
-    dataType: "json",
-  }).fail(function (response) {
-    alert("Something went wrong. Check console for details.");
-    console.log(response);
-  });
-}
-
-function deleteDraft(e, dt, type, indexes) {
-  dt.button([".delete-draft"]).processing(true);
-  let rowData = dt.row({ selected: true }).data();
-  $.ajax({
-    type: "POST",
-    url: "api/ChannelLister/deleteCamlDraft",
-    data: { id: rowData.DT_RowId },
-    dataType: "json",
-  })
-    .done(function (response) {
-      if (response.status === "success") {
-        dt.draw(false);
-      } else {
-        alert("Something went wrong. Check console for details.");
-        console.log(response);
-      }
-    })
-    .fail(function (response) {
-      alert("Something went wrong. Check console for details.");
-      console.log(response);
-    })
-    .always(function () {
-      dt.button([".delete-draft"]).processing(false);
-    });
-}
-
 function getChannelListerFieldsMarketplaceMap() {
   return $.ajax({
-    url: "api/ChannelLister/getChannelListerFieldsMarketplaceMap",
+    url: "api/channel-lister/getChannelListerFieldsMarketplaceMap",
     type: "GET",
     dataType: "json",
   }).fail(function (error) {
@@ -1032,169 +363,9 @@ function getChannelListerFieldsMarketplaceMap() {
   });
 }
 
-async function processFormDataForDraftRestore(
-  formData,
-  channelListerFields,
-  retries = 0
-) {
-  if (retries > 9) {
-    console.log("too many retries");
-    console.log(formData);
-    return;
-  }
-  let activeMarketplaces = [];
-  let leftOvers = {};
-  let dropdownMenu = $("#dropdown");
-  let marketplace = null;
-  for (const name in formData) {
-    marketplace = channelListerFields[name];
-    if (
-      marketplace !== undefined &&
-      !activeMarketplaces.includes(marketplace)
-    ) {
-      activeMarketplaces.push(marketplace);
-      dropdownMenu
-        .find("[data-list-id='" + marketplace + "']")
-        .trigger("click");
-    }
-    let value = formData[name];
-    console.log(`starting processing for ${name}`);
-    await processFormElementForDraftRestore(name, value, marketplace).catch(
-      (err) => {
-        leftOvers[err.data.name] = err.data.value;
-      }
-    );
-    console.log("finished processing for " + name);
-  }
-  if (Object.keys(leftOvers).length) {
-    setTimeout(
-      () =>
-        processFormDataForDraftRestore(
-          leftOvers,
-          channelListerFields,
-          ++retries
-        ),
-      500
-    );
-  }
-}
-
-function processFormElementForDraftRestore(name, value, marketplace) {
-  let searchName = null;
-  let searchValue = null;
-  return new Promise(async (resolve, reject) => {
-    let v = value;
-    if (typeof value === "string" && value === "") {
-      return resolve(console.log(`skipping ${name} because it's empty`)); //lets skip empty strings
-    }
-    let hasSearchBox = false;
-    if (typeof value === "object" && value !== null) {
-      hasSearchBox = true;
-      v = value.name;
-      searchName = value.search_name;
-      searchValue = value.search_value;
-    }
-    let element = $(`[name='${name}']`);
-    if (!element.length) {
-      let rejectObj = {
-        data: {
-          name: name,
-          value: value,
-        },
-        status: "fail",
-        message: "element not found",
-      };
-      return reject(rejectObj);
-    }
-    switch (element[0].nodeName.toLowerCase()) {
-      case "input":
-        await handleInputFillForDraftRestore(
-          element,
-          v,
-          searchName,
-          searchValue,
-          marketplace
-        ).catch((err) => {
-          console.log("handleInputFillForDraftRestore error:", err);
-        });
-      case "select":
-        await handleSelectFillForDraftRestore(element, v).catch((err) => {
-          console.log("handleSelectFillForDraftRestore error:", err);
-        });
-      default:
-        element.val(v).change();
-        return resolve();
-    }
-  });
-}
-
-function handleInputFillForDraftRestore(
-  element,
-  v,
-  searchName,
-  searchValue,
-  marketplace
-) {
-  return new Promise((resolve, reject) => {
-    element.val(v).change();
-    let type = element.attr("type");
-    if (type === "checkbox" && v === "on") {
-      element.attr("checked", "");
-    }
-    if (searchName !== null && searchValue !== null) {
-      $(`[id='${searchName}']`).val(searchValue).change();
-      switch (marketplace) {
-        case "amazon":
-          console.log("getAmazonAttributeInput", searchValue);
-          return getAmazonAttributeInput(searchValue).then(resolve());
-        case "sears":
-          return getSearsAttributeInput(v).then(resolve());
-        case "walmart":
-          let subcat = v;
-          let parts = searchValue.split("|");
-          if (parts.length > 1) {
-            let subcat = parts[1];
-          }
-          return getWalmartAttributeInput(v, subcat).then(resolve());
-        default:
-          return resolve();
-      }
-    } else {
-      return resolve();
-    }
-  });
-}
-
-function handleSelectFillForDraftRestore(element, v) {
-  return new Promise(async (resolve, reject) => {
-    let name = element.attr("name");
-    if (name === "amazon_category") {
-      element.val(v);
-      await getAndSetProductTypeOptions(v)
-        .then(getAmazonProductTypeFromAmazonCategory(v))
-        .then(resolve());
-    } else {
-      element.val(v).change();
-    }
-    element.selectpicker("refresh");
-    if (element.val() !== v) {
-      let rejectObj = {
-        data: {
-          name: name,
-          value: v,
-        },
-        status: "fail",
-        message: "element value not set properly",
-      };
-      reject(rejectObj);
-    }
-    resolve();
-  });
-}
-
 function getAmazonProductTypeFromAmazonCategory(category) {
   return $.getJSON(
-    "api/ChannelLister/getAmazonProductTypeRequiredFields/" + category
+    "api/channel-lister/getAmazonProductTypeRequiredFields/" + category
   )
     .done(function (response) {
       var html = response.data;
@@ -1217,26 +388,6 @@ function getAmazonProductTypeFromAmazonCategory(category) {
       console.log(response);
       alert(response.responseText);
     });
-}
-
-function saveCamlDraft(formData) {
-  return new Promise((resolve, reject) => {
-    $.ajax({
-      type: "POST",
-      url: "api/ChannelLister/saveCamlDraft",
-      data: { form: formData },
-      dataType: "json",
-    })
-      .done(function (response) {
-        if (response.status !== "success") {
-          return reject(response);
-        }
-        return resolve(response);
-      })
-      .fail(function (response) {
-        return reject(response);
-      });
-  });
 }
 
 function replaceFields(html, fieldsToRemove, id, targetId, removedFields) {
@@ -1275,7 +426,7 @@ function replaceFields(html, fieldsToRemove, id, targetId, removedFields) {
     removedVals.forEach(function (v, k) {
       $(`[name=${v.name}]`).val(v.value);
     });
-    $(".select-picker").selectpicker();
+    $(".selectpicker").selectpicker();
   }
   console.log("checking for attributes to add back to the dom");
   console.log("removedFields", removedFields);
@@ -1339,25 +490,6 @@ function selectEasterEgg(egg) {
       easterEggRunSpeed = 5;
       submitButton.prop("value", "Submit right meow.");
       break;
-    case "rocket":
-      submitButton.prop("value", "Launch (to the database)");
-      submitButton.on("click", function () {
-        if ($("#user_input").valid()) {
-          $("#launchbutton").remove();
-          let html = `<br class='clearfloat'>
-				<div class="row d-flex justify-content-center">
-					<div class="col">
-						<a id=\"launchbutton\" href=\"javascript:var%20KICKASSVERSION='2.0';var%20s%20=%20document.createElement('script');s.type='text/javascript';document.body.appendChild(s);s.src='listings_lib/kickass_rocket.js';void(0);\">Launch Kickass Rocket</a>
-					</div>
-				</div>
-				<br class='clearfloat'>`;
-          $("form").after(html);
-          // $('form').after("<br class='clearfloat'><a id=\"launchbutton\" href=\"javascript:var%20KICKASSVERSION='2.0';var%20s%20=%20document.createElement('script');s.type='text/javascript';document.body.appendChild(s);s.src='listings_lib/kickass_rocket.js';void(0);\">Launch</a>");
-        }
-        // $("#launchbutton").remove();
-        // $('form').after("<br class='clearfloat'><a id=\"launchbutton\" href=\"javascript:var%20KICKASSVERSION='2.0';var%20s%20=%20document.createElement('script');s.type='text/javascript';document.body.appendChild(s);s.src='listings_lib/kickass_rocket.js';void(0);\">Launch</a>");
-      });
-      break;
     case "batman":
       easterEgg.addClass("batman_robin");
       submitButton.prop("value", "To the Database, Robin!");
@@ -1380,10 +512,8 @@ function randomizeEasterEgg() {
     selectEasterEgg("nyan");
   } else if (r < 0.96) {
     selectEasterEgg("carlton");
-  } else if (r < 0.99) {
-    selectEasterEgg("rick");
   } else {
-    selectEasterEgg("rocket");
+    selectEasterEgg("rick");
   }
 }
 
@@ -1446,7 +576,7 @@ function rickAndMorty() {
   $("#rick-div").css({ float: "left", width: "100%" });
   $("#rick-div").append(
     $("<img>")
-      .prop("src", "images/portal.gif")
+      .prop("src", "vendor/channel-lister/images/portal.gif")
       .prop("id", "portal1")
       .css({
         position: "relative",
@@ -1470,7 +600,7 @@ function rickAndMorty() {
     function () {
       $("#rick-div").append(
         $("<img>")
-          .prop("src", "images/rick-morty.gif")
+          .prop("src", "vendor/channel-lister/images/rick-morty.gif")
           .prop("id", "rick")
           .css({
             position: "absolute",
@@ -1508,7 +638,7 @@ function addPortal() {
   var div_width = $("#rick-div").width();
   $("#rick-div").append(
     $("<img>")
-      .prop("src", "images/portal.gif")
+      .prop("src", "vendor/channel-lister/images/portal.gif")
       .prop("id", "portal2")
       .css({
         width: "10px",
@@ -1536,24 +666,26 @@ function addPortal() {
 window.modal; //global variable used for the forms in the update data table
 
 $(document).ready(function () {
-  var validator = $("#user_input").validate({
+  $("#user_input").validate({
     ignore: "",
     rules: {
       UPC: {
         required: true,
         remote: {
-          url: "api/Products/isValid",
+          url: "api/channel-lister/is-upc-valid",
           type: "GET",
           data: {
-            upc: $(".upc_field").val(),
             sku: $("[id='Inventory Number-id']").val(),
           },
         },
       },
     },
     invalidHandler: function (event, validator) {
-      var err_el_id = $(validator.invalidElements()[0]).context.id;
-      console.log(err_el_id);
+      var err_el_id = validator.invalidElements()[0].id;
+      console.log({
+        err_el_id: err_el_id,
+        validator: validator,
+      });
       var platform = $("[id='" + err_el_id + "']")
         .closest(".platform-container")
         .attr("id");
@@ -1564,25 +696,17 @@ $(document).ready(function () {
       event.preventDefault();
       $.ajax({
         method: "POST",
-        url: "api/ChannelLister/submitProductData",
+        url: "api/channel-lister",
         data: $(form)
           .serialize()
-          .replace(/(^|&)drafts-[a-zA-Z0-9\-\_]+=\d+(&|$)/, ""), //ditch the stupid drafts table named fields
+          .replace(/(^|&)drafts-[a-zA-Z0-9_-]+=\d+(&|$)/, ""),
+        dataType: "json",
       })
-        .success(function (response) {
-          let r = JSON.parse(response);
-          if (r.status !== "success") {
-            console.log(r);
-            alert(`Something went wrong!\n\n${r.message}`);
-            return false;
-          }
-          let html = "";
-          for (const [key, value] of Object.entries(r.data)) {
-            html += value;
-          }
-          $("#databaseResponse").append(html);
+        .done(function (response) {
+          console.log(response);
+          window.open(response.download_url, "_blank");
         })
-        .error(function (response) {
+        .fail(function (response) {
           console.log(response);
           alert(response.responseText);
         });
@@ -1590,91 +714,48 @@ $(document).ready(function () {
     focusInvalid: false,
   });
 
-  $.ajax({
-    type: "GET",
-    url: "api/Modal/buildModalView",
-    dataType: "json",
-  }).done(function (response) {
-    window.modal = response.data;
-    var caml_draft_table = new CamlDraftTable();
-    caml_draft_table.init();
-    var caml_update_table = new CAMLUpdateTable();
-    caml_update_table.init().then(function () {
-      $("body").tooltip({
-        selector: '[data-toggle="tooltip"]',
-      });
-    });
-  });
-
-  $("#save-draft-btn").click(function (e) {
-    let me = $(this);
-    let ogMsg = me.text();
-    me.text("Saving Draft...");
-    me.prop("disabled", true);
-    console.log("disabled button");
-    // let formData = $('#user_input').serializeArray();
-    // formData.shift();//kill the CamlDraftFillTable 1st element that makes its way into the form data
-    let formData = $("#user_input :not([name^='drafts-'])").serializeArray(); //grab all form elements other that stuff starting with drafts in the name prop
-
-    //should iterate over the form list and graph any field-searchbox inputs for the search boxes
-    formData.forEach(function (v, n, form) {
-      if (v.value === "") {
-        return;
-      }
-      let property = v.name + "-searchbox";
-      console.log("searching for searchbox " + property);
-      let element = $("[id='" + property + "']");
-      if (element.length) {
-        console.log("found a searchbox for " + v.name);
-        v.search_name = property;
-        v.search_value = element.val().trim();
-        console.log("v after", v);
-      }
-    });
-    console.log("formData after", formData);
-
-    saveCamlDraft(formData)
-      .then((data) => {
-        $("#drafts-fill-table").DataTable().draw(false);
-      })
-      .catch((error) => {
-        alert("Something went wrong. Check console for details.");
-        console.log(error);
-      })
-      .finally(() => {
-        console.log("enabled button");
-        me.text(ogMsg);
-        me.prop("disabled", false);
-      });
-  });
-
   randomizeEasterEgg();
   var pageLoad = [$.Deferred(), 0];
   var pageReady = pageLoad[0].promise();
   var newListing = true;
 
-  console.log(typeof platforms, platforms);
-
   //add each platform tab
   $.each(platforms, function (k, v) {
     $(v.id).prop("disabled", true);
     var ddadd = $("#dropdownadd").append(
-      format('<li><a data-list-id="{}" href="#">{}</a></li>', v.id, v.name)
+      format(
+        `<li>
+            <a class="dropdown-item" data-list-id="{}" href="#">{}</a>
+        </li>`,
+        v.id,
+        v.name
+      )
     );
     $("#dropdown").before(
       format(
-        '<li id="li{}" style="display: none;"><a href="#{}" class="platform" data-toggle="tab"><span>{}</span><i class="glyphicon glyphicon-ban-circle"></i><i class="glyphicon glyphicon-upload"></i><i class="glyphicon glyphicon-remove"></i></a></li>',
+        `<li id="li{}" class="nav-item" style="display: none;" role="presentation">
+            <a href="#{}" class="nav-link h-100" data-toggle="tab" data-target="#{}" role="tab" aria-controls="{}" aria-expanded="false">
+                {}
+                <i class="text-danger icon-x tab-close-btn" data-toggle="tooltip" title="Remove marketplace"></i>
+            </a>
+        </li>`,
+        v.id,
+        v.id,
         v.id,
         v.id,
         v.name
       )
     );
     $("#pantab").append(
-      format('<div class="tab-pane platform-container" id="{}"></div>', v.id)
+      format(
+        `<div class="tab-pane fade platform-container" id="{}" role="tabpanel" aria-labelledby="li{}">
+        </div>`,
+        v.id,
+        v.id
+      )
     );
-
     $("#li" + v.id)
-      .find("i.glyphicon-remove")
+      .find("i.icon-x")
       .click(function (e) {
         closePlatformTab(v.id);
         e.stopPropagation();
@@ -1695,8 +776,8 @@ $(document).ready(function () {
       .find("i.glyphicon-remove")
       .hide();
 
-    $.getJSON("api/ChannelLister/getFormDataByPlatform/" + v.id)
-      .success(function (d) {
+    $.getJSON("api/channel-lister/get-form-data-by-platform/" + v.id)
+      .done(function (d) {
         d = d.data;
         $("#" + v.id).append(d);
         closePlatformTab(v.id);
@@ -1717,19 +798,19 @@ $(document).ready(function () {
             ) {
               glyphUp.hide();
               glyphBan.show();
-              //console.log($("#"+v.id+" .form-control"));
-              $("#" + v.id + " .form-control").attr("disabled", true);
+              //console.log($("#"+v.id+" .form-group"));
+              $("#" + v.id + " .form-group").attr("disabled", true);
             } else {
               glyphUp.show();
               glyphBan.hide();
-              $("#" + v.id + " .form-control").attr("disabled", false);
+              $("#" + v.id + " .form-group").attr("disabled", false);
             }
             $("[id='action_select_" + v.id + "']").attr("disabled", false);
           }
         );
         runTabInitFunctions(v.id);
       })
-      .error(function (d) {
+      .fail(function (d) {
         console.error("Failed getting lister HTML", v.id, d);
         $("#li" + v.id).hide();
         ddadd.hide();
@@ -1754,8 +835,8 @@ $(document).ready(function () {
       .find("input[type='file']")[0].id;
     let url =
       uploadBtnId === "upload-btn"
-        ? "api/ChannelLister/updateChannelListerFieldsFromCsv"
-        : "api/ChannelLister/reorderChannelListerFieldsFromCsv";
+        ? "api/channel-lister/updateChannelListerFieldsFromCsv"
+        : "api/channel-lister/reorderChannelListerFieldsFromCsv";
     const msg =
       "Updating via csv will can delete fields from the CAML.\nWould you like to proceed?";
     if ($(`#${fileId}`).val() && confirm(msg)) {
@@ -1806,68 +887,6 @@ $(document).ready(function () {
     $(`#${uploadBtnId}`).prop("disabled", false);
     $(`#${uploadBtnId}`).prop("value", "Upload");
   }
-
-  // Disables the Fill from NPI Data button
-  $("#fill_flag_button").prop("disabled", true);
-
-  // Gets NPI options based on selected flag type
-  $("#npi_select").on("change", function () {
-    var selection = $(this).val();
-    $("#fill_flag_button").prop("disabled", true);
-    $("#npi_product_select").html("").selectpicker("destroy");
-    if (typeof selection === "string" && selection.length > 0) {
-      $.getJSON("api/ChannelLister/getNpiOptions/" + selection)
-        .success(function (response) {
-          var html = response.data;
-          $("#npi_product_select").html(html).selectpicker();
-          $("#fill_flag_button").prop("disabled", false);
-        })
-        .error(function (response) {
-          console.log(response);
-          alert(response.responseText);
-        });
-    }
-  });
-
-  // Gets data for selected NPI product, brings up mapping modal
-  $("#fill_flag_button").on("click", function () {
-    var dows_id = $("#npi_product_select").val();
-    $("#fill_flag_button").nextAll("p.help-block:first").html("");
-    $.getJSON("api/ChannelLister/getNpiValues/" + dows_id)
-      .success(function (response) {
-        if (response.status != "success") {
-          var message = getBootstrapError(response.message);
-          $("#fill_flag_button").nextAll("p.help-block:first").html(message);
-          return;
-        }
-        mapNpiResponseToFormFields(response.data);
-      })
-      .error(function (response) {
-        console.log(response);
-        alert(response.responseText);
-      });
-  });
-
-  // Disables the Fill from Draft Data button
-  // $('#fill_draft_button').prop('disabled',true);
-
-  // Gets Draft options based on selected field
-  // $('#draft_select').on('change', function(){
-  // 	var selection = $(this).val();
-  // 	$('#fill_draft_button').prop('disabled',true);
-  // 	$('#draft_product_select').html('').selectpicker('destroy');
-  // 	if (typeof selection === "string" && selection.length > 0) {
-  // 		$.getJSON('api/ChannelLister/getDraftOptions/'+selection)
-  // 			.success(function(response){
-  // 				var html = response.data;
-  // 				$('#draft_product_select').html(html).selectpicker();
-  // 				$('#fill_draft_button').prop('disabled',false);
-  // 			}).error(function(response){
-  // 				console.log(response);
-  // 				alert(response.responseText);
-  // 			});
-  // 	}
-  // });
 
   // Adds platform tab and adjusts labels
   $("#dropdownadd a").click(function (e) {
@@ -1948,21 +967,21 @@ $(document).ready(function () {
       $("#country_of_origin_3_digit-id").val("");
       return;
     }
-    $.getJSON("api/ChannelLister/getCountryCodeOptions/" + country + "/2")
-      .success(function (response) {
+    $.getJSON("api/channel-lister/country-code-options/" + country + "/2")
+      .done(function (response) {
         var digit2 = response.data;
         $("#country_of_origin_2_digit-id").val(digit2.trim());
       })
-      .error(function (response) {
+      .fail(function (response) {
         console.log(response);
         alert(response.responseText);
       });
-    $.getJSON("api/ChannelLister/getCountryCodeOptions/" + country + "/3")
-      .success(function (response) {
+    $.getJSON("api/channel-lister/country-code-options/" + country + "/3")
+      .done(function (response) {
         var digit3 = response.data;
         $("#country_of_origin_3_digit-id").val(digit3.trim());
       })
-      .error(function (response) {
+      .fail(function (response) {
         console.log(response);
         alert(response.responseText);
       });
@@ -1974,9 +993,9 @@ $(document).ready(function () {
     $("#product_type_amazon-required").remove();
     if (typeof selected_cat === "string" && selected_cat.length > 0) {
       $.getJSON(
-        "api/ChannelLister/getAmazonProductTypeRequiredFields/" + selected_cat
+        "api/channel-lister/getAmazonProductTypeRequiredFields/" + selected_cat
       )
-        .success(function (response) {
+        .done(function (response) {
           var html = response.data;
           if (html !== "") {
             $("#amazon_category-id")
@@ -1988,33 +1007,13 @@ $(document).ready(function () {
               );
           }
         })
-        .error(function (response) {
+        .fail(function (response) {
           console.log(response);
           alert(response.responseText);
         });
       setProductTypeOptions(selected_cat);
     }
   });
-
-  /*
-	$('body').on('change', '#item_type_amazon-id', function() {
-		let item_type = $(this).val();
-		if (item_type == '') {return;}
-		// console.log("item_type_amazon = ", item_type);
-		$.ajax({
-			method   : 'GET',
-			url      : 'api/ChannelLister/getAmazonCategoryFromItemType/' + item_type,
-			dataType : 'json',
-		}).done(function(response) {
-			let category = response.data;
-			if (category !== '') {
-				setAmazonCategoryOption(category);
-			}
-		}).fail(function(response) {
-			console.log(response.responseText);
-		});
-	});
-	*/
 
   // Adds comma separated list of values to input from checked boxes for commaseparated input type
   $("body").on(
@@ -2104,27 +1103,23 @@ $(document).ready(function () {
 
   //this handles adding more bundle rows
   $("#add-component-button").on("click", function () {
-    $.getJSON("api/ChannelLister/getBundleComponentLine")
+    $.getJSON("api/channel-lister/add-bundle-component-row")
       .done(function (response) {
-        if (response.status == "success") {
-          $("#bundle-components-div").append(response.data);
-          $(".remove-row").each(function () {
-            $(this).on("click", function () {
-              $(this).parent().parent().remove();
-              buildBundleComponentString();
-              buildSupplierCodeString();
-            });
+        $("#bundle-components-list").append(response.data);
+        $(".remove-row").each(function () {
+          $(this).on("click", function () {
+            $(this).parent().parent().remove();
+            buildBundleComponentString();
+            buildSupplierCodeString();
           });
-        } else {
-          alert("Failed to add bundle line from server.");
-        }
+        });
       })
       .fail(function (response) {
         alert(response.responseText);
       });
   });
 
-  $("#bundle-components-div").on(
+  $("#bundle-components-container").on(
     "change keyup focusout",
     "input.sku-bundle-input, input.sku-bundle-quantity",
     function () {
@@ -2132,95 +1127,13 @@ $(document).ready(function () {
     }
   );
 
-  $("#bundle-components-div").on(
+  $("#bundle-components-container").on(
     "change keyup focusout",
     "input.supplier-code",
     function () {
       buildSupplierCodeString();
     }
   );
-
-  //handles prop65 stuff for amazon, showing and hiding warning name, and chemical type when applicable
-  // for more info see https://sellercentral.amazon.com/gp/help/help.html?ie=UTF8&itemID=G202141960&
-  $("#prop65-id").change(function () {
-    if ($(this).val() == "true") {
-      $("#prop65_warn_type-id").attr("required", true);
-      $("#prop65-warning-type-container").removeClass("hidden");
-      $("#prop65-chemical-name-container").removeClass("hidden");
-      $("#prop65_warn_type-id option[value='default']").prop("selected", true);
-      $("#prop65_warn_type-id").selectpicker("refresh");
-    } else {
-      $("#prop65_warn_type-id").attr("required", false);
-      $("#prop65_chem_name-id").attr("required", false);
-      $("#prop65_warn_type-id option[value='']").prop("selected", true);
-      $("#prop65_chem_name-id option[value='']").prop("selected", true);
-      $("#prop65_warn_type-id").selectpicker("refresh");
-      $("#prop65_chem_name-id").selectpicker("refresh");
-      $("#prop65-warning-type-container").addClass("hidden");
-      $("#prop65-chemical-name-container").addClass("hidden");
-    }
-  });
-
-  /**
-   * Force chem_name warning if a chemical is chosen, by selecting chem_name and
-   * disabling chem_name's siblings. A chemical is required if chem_name value is chosen,
-   * and for some reason this sequence doesn't trigger the warning change event, so we set
-   * that here as well.
-   */
-  $("#prop65_chem_name-id").change(function () {
-    if ($("#prop65_chem_name-id option:selected").val() != "") {
-      $("#prop65_warn_type-id").selectpicker("val", "chem_name");
-      $("#prop65_chem_name-id").attr("required", true);
-      $("#prop65_warn_type-id").selectpicker("refresh");
-    } else {
-      $("#prop65_warn_type-id option[value='default']").prop("selected", true);
-      $("#prop65_chem_name-id").attr("required", false);
-      $("#prop65_warn_type-id").selectpicker("refresh");
-    }
-  });
-
-  /**
-   * Requre a chemical to be chosen if chem_name warning is chosen
-   */
-  $("#prop65_warn_type-id").change(function () {
-    if ($(this).val() == "chem_name") {
-      $("#prop65_chem_name-id").attr("required", true);
-      $("#prop65_chem_name-id-error").show();
-    } else {
-      $("#prop65_chem_name-id option[value='']").prop("selected", true);
-      $("#prop65_chem_name-id").selectpicker("refresh");
-      $("#prop65_chem_name-id").attr("required", false);
-      $("#prop65_chem_name-id-error").hide();
-    }
-  });
-
-  //clonesite tags start
-  function addCloneSiteTag(tag, input_id) {
-    console.log(input_id);
-    var tags_input = $("#" + input_id);
-    if (tags_input.val().length > 0) {
-      tags_input.val(tags_input.val() + ", " + tag);
-    } else {
-      tags_input.val(tag);
-    }
-  }
-  $("body").on("click", ".clonesite_tags", function () {
-    var tag_list = $(this).children(".clonesite_tags_inner");
-    console.log(tag_list);
-    if (tag_list.length > 0) {
-      if (tag_list.is(":visible")) {
-        tag_list.hide();
-      } else {
-        tag_list.show();
-      }
-    }
-  });
-
-  $("body").on("click", ".clonesite_tag", function (event) {
-    addCloneSiteTag(this.innerHTML, this.dataset.inputId);
-    return false;
-  });
-  //clonesite tags end
 
   //Builds the the bundle component strings and places them in the bundle components input text field
   function buildBundleComponentString() {
@@ -2261,48 +1174,48 @@ $(document).ready(function () {
     $("#supplier_code-id").val(supplier_code);
   }
 
-  $('[id="Relationship Name-id"]').parent().parent().addClass("hidden");
-  $('[id="Parent SKU-id"]').parent().addClass("hidden");
+  $('[id="Vary By-id"]').parent().addClass("d-none");
+  $('[id="Parent SKU-id"]').parent().addClass("d-none");
 
   //checks for the change in the sku type dropdown menu
   //Adds the form fields for the selected values
-  $("[id='SKU Type-id']").on("change", function () {
+  const skuTypeSelector = $.escapeSelector("SKU Type-id");
+  $(`#${skuTypeSelector}`).on("change", function () {
+    console.log("SKU Type changed to " + $(this).val());
     if ($(this).val() == "bundle") {
-      $("#bundle-components-div").removeClass("hidden");
-      $("#bundled-id").removeClass("hidden");
+      console.log("displaying Bundle Components sections");
+      $("#bundle-components-container").removeClass("d-none");
+      $("#bundled-id").removeClass("d-none");
       $("[id='Bundle Components-id']").prop("required", true);
       $("[id='Bundle Components-id']").parent().addClass("required");
       $("#supplier_code-id").prop("readonly", true);
       buildBundleComponentString();
       buildSupplierCodeString();
     } else {
-      if (!$("#bundle-components-div").hasClass("hidden")) {
-        $("#bundle-components-div").addClass("hidden");
-        $("#bundled-id").addClass("hidden");
+      if (!$("#bundle-components-container").hasClass("d-none")) {
+        $("#bundle-components-container").addClass("d-none");
+        $("#bundled-id").addClass("d-none");
         $('[id="Bundle Components-id"]').val("");
       }
       $("[id='Bundle Components-id']").removeProp("required").trigger("change");
       $("#bundled-id").removeClass("required");
-      $("[id='Bundle Components-id'").parent().removeClass("required");
+      $("[id='Bundle Components-id']").parent().removeClass("required");
       $("#supplier_code-id").removeProp("readonly");
       $("#supplier_code-id").val("");
     }
 
     if ($(this).val() == "child" || $(this).val() == "parent") {
-      $('[id="Relationship Name-id"]').parent().parent().removeClass("hidden");
-      $('[id="Parent SKU-id"]').parent().removeClass("hidden");
-      $('[id="Relationship Name-id"]').prop("required", true);
-      $("[id='Relationship Name-id']").parent().parent().addClass("required");
+      $('[id="Vary By-id"]').parent().removeClass("d-none");
+      $('[id="Parent SKU-id"]').parent().removeClass("d-none");
+      $('[id="Vary By-id"]').prop("required", true);
+      $("[id='Vary By-id']").parent().addClass("required");
       $("[id='Parent SKU-id']").parent().addClass("required");
       $('[id="Parent SKU-id"]').prop("required", true);
     } else {
-      $('[id="Relationship Name-id"]').parent().parent().addClass("hidden");
-      $('[id="Parent SKU-id"]').parent().addClass("hidden");
-      $('[id="Relationship Name-id"]').removeProp("required");
-      $("[id='Relationship Name-id']")
-        .parent()
-        .parent()
-        .removeClass("required");
+      $('[id="Vary By-id"]').parent().addClass("d-none");
+      $('[id="Parent SKU-id"]').parent().addClass("d-none");
+      $('[id="Vary By-id"]').removeProp("required");
+      $("[id='Vary By-id']").parent().removeClass("required");
       $('[id="Parent SKU-id"]').removeProp("required");
       $('[id="Parent SKU-id"]').parent().removeClass("required");
     }
@@ -2310,15 +1223,8 @@ $(document).ready(function () {
 
   // Validates form before submission
   $("#submit_button").click(function (e) {
-    if ($("#prop65-id option:selected").val() === "true") {
-      let newValue = $("#prop65_warn_type-id option:selected").html();
-      let oldValue = $("#prop65_warn_type-id option:selected").val();
-      $("#prop65_warn_type-id option:selected").val(newValue);
-      if ($("#user_input").valid()) {
-        showEasterEgg();
-      } else {
-        $("#prop65_warn_type-id option:selected").val(oldValue);
-      }
+    if ($("#user_input").valid()) {
+      showEasterEgg();
     }
   });
 
@@ -2331,14 +1237,14 @@ $(document).ready(function () {
     if (ebayCatVarExclusions === null) {
       $.ajax({
         method: "POST",
-        url: "api/ChannelLister/getEbayCategoryVariationExclusions",
+        url: "api/channel-lister/getEbayCategoryVariationExclusions",
         dataType: "json",
       })
-        .success(function (response) {
+        .done(function (response) {
           ebayCatVarExclusions = JSON.parse(response.data);
           eBayCategoryVariationSupported(catId, ebayCatVarExclusions);
         })
-        .error(function (response) {
+        .fail(function (response) {
           console.log(response);
           alert(response.responseText);
         });
@@ -2358,6 +1264,257 @@ $(document).ready(function () {
       return false;
     }
   });
+
+  // ===== UNIFIED DRAFT SYSTEM INTEGRATION =====
+
+  // Global namespace for unified draft functions
+  window.ChannelListerUnified = {
+    // Enhanced form data collection that works across all tabs
+    collectAllTabData: function () {
+      const data = {
+        common: {},
+        marketplaces: {},
+      };
+
+      // Get all visible marketplace tabs
+      const openTabs = getOpenPlataformTabs();
+
+      openTabs.forEach(function (tab) {
+        const tabData = {};
+        const tabSelector = "#" + tab;
+
+        // Collect form data from this tab
+        $(
+          tabSelector +
+            " input, " +
+            tabSelector +
+            " select, " +
+            tabSelector +
+            " textarea"
+        ).each(function () {
+          const field = $(this);
+          const name = field.attr("name");
+          let value = field.val();
+
+          if (name && value !== "") {
+            if (field.is(":checkbox")) {
+              value = field.is(":checked") ? "1" : "0";
+            } else if (field.is(":radio") && !field.is(":checked")) {
+              return; // Skip unchecked radio buttons
+            }
+
+            if (tab === "common") {
+              data.common[name] = value;
+            } else {
+              tabData[name] = value;
+            }
+          }
+        });
+
+        // Store marketplace data
+        if (tab !== "common" && Object.keys(tabData).length > 0) {
+          data.marketplaces[tab] = tabData;
+        }
+      });
+
+      // Add Amazon data if it exists and has been modified
+      if (
+        typeof window.currentProductType !== "undefined" &&
+        window.currentProductType
+      ) {
+        const amazonData = {};
+        $(
+          ".amazon-generated-panel input, .amazon-generated-panel select, .amazon-generated-panel textarea"
+        ).each(function () {
+          const field = $(this);
+          const name = field.attr("name");
+          let value = field.val();
+
+          if (name && value !== "") {
+            if (field.is(":checkbox")) {
+              value = field.is(":checked") ? "1" : "0";
+            }
+            amazonData[name] = value;
+          }
+        });
+
+        if (Object.keys(amazonData).length > 0) {
+          amazonData.product_type = window.currentProductType;
+          amazonData.marketplace_id =
+            window.currentMarketplaceId || "ATVPDKIKX0DER";
+          data.marketplaces.amazon = amazonData;
+        }
+      }
+
+      return data;
+    },
+
+    // Enhanced form population that works across all tabs
+    populateAllTabData: function (formData) {
+      // Populate common tab
+      if (formData.common) {
+        this.populateTabFields("#common", formData.common);
+      }
+
+      // Populate marketplace tabs
+      if (formData.marketplaces) {
+        Object.keys(formData.marketplaces).forEach((marketplace) => {
+          if (marketplace === "amazon") {
+            // Handle Amazon tab specially
+            this.populateAmazonTab(formData.marketplaces.amazon);
+          } else {
+            // Handle other marketplace tabs
+            const tabSelector = "#" + marketplace;
+            if ($(tabSelector).length > 0) {
+              this.populateTabFields(
+                tabSelector,
+                formData.marketplaces[marketplace]
+              );
+              // Make sure the tab is visible
+              showPlatformTab(marketplace, false);
+            }
+          }
+        });
+      }
+    },
+
+    // Populate fields in a specific tab
+    populateTabFields: function (tabSelector, data) {
+      Object.keys(data).forEach((fieldName) => {
+        const field = $(tabSelector + ' [name="' + fieldName + '"]');
+        const value = data[fieldName];
+
+        if (field.length > 0 && value !== null && value !== "") {
+          if (field.is("select")) {
+            field.val(value);
+          } else if (field.is(":checkbox")) {
+            field.prop(
+              "checked",
+              value === "true" || value === "1" || value === true
+            );
+          } else if (field.is(":radio")) {
+            field.filter('[value="' + value + '"]').prop("checked", true);
+          } else {
+            field.val(value);
+          }
+          field.trigger("change");
+        }
+      });
+    },
+
+    // Special handling for Amazon tab population
+    populateAmazonTab: function (amazonData) {
+      if (!amazonData || !amazonData.product_type) return;
+
+      // Show Amazon tab if it exists
+      if ($("#liamazon").length > 0) {
+        showPlatformTab("amazon", false);
+        gotoPlatformTab("amazon");
+      }
+
+      // If Amazon product type search exists, use it
+      if (typeof window.getAmazonListingRequirements === "function") {
+        $("#amazon_product_type-id").val(amazonData.product_type);
+        $("#amazon_product_type-searchbox").val(amazonData.product_type);
+
+        // Load Amazon requirements and then populate
+        window
+          .getAmazonListingRequirements(amazonData.product_type)
+          .done(() => {
+            setTimeout(() => {
+              this.populateTabFields(".amazon-generated-panel", amazonData);
+
+              // Update Amazon draft system variables if they exist
+              if (typeof window.currentProductType !== "undefined") {
+                window.currentProductType = amazonData.product_type;
+                window.currentMarketplaceId =
+                  amazonData.marketplace_id || "ATVPDKIKX0DER";
+              }
+            }, 1000);
+          });
+      }
+    },
+
+    // Get summary of data across all tabs for display
+    getDataSummary: function () {
+      const data = this.collectAllTabData();
+      const summary = {
+        commonFields: Object.keys(data.common).length,
+        marketplaceFields: 0,
+        marketplaces: [],
+      };
+
+      Object.keys(data.marketplaces).forEach((marketplace) => {
+        const fieldCount = Object.keys(data.marketplaces[marketplace]).length;
+        summary.marketplaceFields += fieldCount;
+        summary.marketplaces.push({
+          name: marketplace,
+          fields: fieldCount,
+        });
+      });
+
+      return summary;
+    },
+
+    // Check if form has significant data
+    hasSignificantData: function () {
+      const summary = this.getDataSummary();
+      return summary.commonFields > 0 || summary.marketplaceFields > 0;
+    },
+
+    // Clear all form data (for loading new drafts)
+    clearAllForms: function () {
+      // Clear common tab
+      $("#common input, #common select, #common textarea").each(function () {
+        const field = $(this);
+        if (field.is(":checkbox") || field.is(":radio")) {
+          field.prop("checked", false);
+        } else {
+          field.val("");
+        }
+      });
+
+      // Clear marketplace tabs
+      $(
+        ".platform-container:not(#common) input, .platform-container:not(#common) select, .platform-container:not(#common) textarea"
+      ).each(function () {
+        const field = $(this);
+        if (field.is(":checkbox") || field.is(":radio")) {
+          field.prop("checked", false);
+        } else {
+          field.val("");
+        }
+      });
+
+      // Clear Amazon generated panels
+      $(".amazon-generated-panel").remove();
+
+      // Reset Amazon variables
+      if (typeof window.currentProductType !== "undefined") {
+        window.currentProductType = null;
+        window.currentListingId = null;
+      }
+    },
+  };
+
+  // Make unified functions available globally for the unified draft controls
+  window.collectAllTabData = window.ChannelListerUnified.collectAllTabData.bind(
+    window.ChannelListerUnified
+  );
+  window.populateAllTabData =
+    window.ChannelListerUnified.populateAllTabData.bind(
+      window.ChannelListerUnified
+    );
+  window.clearAllForms = window.ChannelListerUnified.clearAllForms.bind(
+    window.ChannelListerUnified
+  );
+  window.getDataSummary = window.ChannelListerUnified.getDataSummary.bind(
+    window.ChannelListerUnified
+  );
+  window.hasSignificantData =
+    window.ChannelListerUnified.hasSignificantData.bind(
+      window.ChannelListerUnified
+    );
 
   $("#loading").hide();
 });

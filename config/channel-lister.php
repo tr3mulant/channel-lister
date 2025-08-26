@@ -29,6 +29,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Channel Lister API Path
+    |--------------------------------------------------------------------------
+    |
+    | This is the URI path where Channel Lister's API will be accessible from.
+    | Feel free to change this path to anything you like.
+    |
+    */
+    'api_path' => env('CHANNEL_LISTER_API_PATH', 'api'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Channel Lister Route Middleware
     |--------------------------------------------------------------------------
     |
@@ -50,5 +61,107 @@ return [
     */
     'marketplaces' => [
         'disabled' => [],
+    ],
+
+    'upc_prefixes' => [],
+
+    'cache_prefix' => env('CHANNEL_LISTER_CACHE_PREFIX', 'channel-lister'),
+
+    'default_warehouse' => env('CHANNEL_LISTER_DEFAULT_WAREHOUSE', 'channellister'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Database Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configure which database connection Channel Lister should use for its
+    | operations. If null, it will use Laravel's default database connection.
+    |
+    */
+    'database' => [
+        'connection' => env('CHANNEL_LISTER_DB_CONNECTION', null),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Amazon SP-API Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configuration for Amazon Selling Partner API integration. These settings
+    | are used for dynamic listing creation and product type search.
+    |
+    */
+    'amazon' => [
+        'sp_api_base_url' => env('CHANNEL_LISTER_AMAZON_SP_API_BASE_URL', 'https://sellingpartnerapi-na.amazon.com'),
+        'access_token' => env('CHANNEL_LISTER_AMAZON_SP_API_ACCESS_TOKEN'),
+        'marketplace_id' => env('CHANNEL_LISTER_AMAZON_MARKETPLACE_ID', 'ATVPDKIKX0DER'), // US marketplace default
+        'region' => env('CHANNEL_LISTER_AMAZON_SP_API_REGION', 'us-east-1'),
+        'client_id' => env('CHANNEL_LISTER_AMAZON_SP_API_CLIENT_ID'),
+        'client_secret' => env('CHANNEL_LISTER_AMAZON_SP_API_CLIENT_SECRET'),
+        'refresh_token' => env('CHANNEL_LISTER_AMAZON_SP_API_REFRESH_TOKEN'),
+
+        /*
+        |--------------------------------------------------------------------------
+        | Amazon Caching Configuration
+        |--------------------------------------------------------------------------
+        |
+        | Configure caching behavior for Amazon SP-API responses and schema files.
+        | This helps reduce API calls and improve performance.
+        |
+        */
+        'cache' => [
+            // Disk to use for persistent schema caching (local, s3, etc.)
+            'disk' => env('CHANNEL_LISTER_AMAZON_CACHE_DISK', 'local'),
+
+            // Cache TTL in seconds
+            'ttl' => [
+                'product_types_search' => env('CHANNEL_LISTER_AMAZON_CACHE_TTL_PRODUCT_SEARCH', 3600), // 1 hour
+                'listing_requirements' => env('CHANNEL_LISTER_AMAZON_CACHE_TTL_REQUIREMENTS', 86400), // 24 hours
+                'schema_files' => env('CHANNEL_LISTER_AMAZON_CACHE_TTL_SCHEMA', 604800), // 7 days
+            ],
+
+            // Directory path within the disk for schema files
+            'schema_path' => env('CHANNEL_LISTER_AMAZON_CACHE_SCHEMA_PATH', 'amazon-schemas'),
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | File Downloads Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configure how exported files are stored and downloaded. Files are
+    | temporarily stored before download and automatically cleaned up.
+    |
+    */
+    'downloads' => [
+        // Disk to use for temporary file storage (local, s3, etc.)
+        'disk' => env('CHANNEL_LISTER_DOWNLOADS_DISK', 'local'),
+
+        // Directory path within the disk for temporary files
+        'path' => env('CHANNEL_LISTER_DOWNLOADS_PATH', 'channel-lister/exports'),
+
+        // How long download tokens remain valid (in seconds)
+        'token_ttl' => env('CHANNEL_LISTER_DOWNLOADS_TOKEN_TTL', 30),
+
+        // How long files persist on disk (in seconds)
+        'file_ttl' => env('CHANNEL_LISTER_DOWNLOADS_FILE_TTL', 60),
+
+        // Auto-delete files after first download
+        'delete_after_download' => env('CHANNEL_LISTER_DOWNLOADS_DELETE_AFTER', true),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | ShipStation API Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configuration for ShipStation API integration for shipping cost calculation.
+    | If api_key is not set, users will need to enter shipping costs manually.
+    |
+    */
+    'shipstation' => [
+        'api_key' => env('CHANNEL_LISTER_SHIPSTATION_API_KEY'),
+        'base_url' => env('CHANNEL_LISTER_SHIPSTATION_BASE_URL', 'https://api.shipengine.com/v1'),
     ],
 ];

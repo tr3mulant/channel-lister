@@ -3,6 +3,8 @@
 namespace IGE\ChannelLister\Tests;
 
 use IGE\ChannelLister\ChannelListerServiceProvider;
+use IGE\ChannelLister\Services\AmazonSpApiService;
+use IGE\ChannelLister\Services\AmazonTokenManager;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -22,6 +24,22 @@ abstract class TestCase extends TestbenchTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        // Mock the AmazonTokenManager service to avoid real authentication
+        $mockTokenManager = \Mockery::mock(AmazonTokenManager::class);
+        $mockTokenManager->shouldReceive('getAccessToken')->andReturn('fake-access-token');
+        $mockTokenManager->shouldReceive('validateConfiguration')->andReturn([]);
+        $mockTokenManager->shouldReceive('getTokenInfo')->andReturn([
+            'access_token' => 'fake-access-token',
+            'expires_at' => now()->addHour(),
+        ]);
+
+        $this->app->singleton(AmazonTokenManager::class, fn () => $mockTokenManager);
+
+        $this->app->singleton(
+            AmazonSpApiService::class,
+            fn (): \IGE\ChannelLister\Services\AmazonSpApiService => new AmazonSpApiService($this->app->make(AmazonTokenManager::class))
+        );
     }
 
     /**
@@ -53,32 +71,18 @@ abstract class TestCase extends TestbenchTestCase
                 'database' => ':memory:',
                 'prefix' => '',
             ]);
+            $config->set('session.driver', 'array');
+            $config->set('session.cookie', 'testbench_session');
 
             // Setup queue database connections.
             $config->set('queue.batching.database', 'testbench');
             $config->set('queue.failed.database', 'testbench');
+
+            // Ensure channel-lister config is enabled and middleware is configured
+            $config->set('channel-lister.enabled', true);
+            $config->set('channel-lister.middleware', ['web']);
+
+            $config->set('channel-lister.database.connection', 'testbench');
         });
-    }
-
-    /**
-     * Define database migrations.
-     *
-     * @return void
-     */
-    // protected function defineDatabaseMigrations()
-    // {
-    // Load package migrations
-    // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-    // }
-
-    /**
-     * Define routes setup.
-     *
-     * @param  \Illuminate\Routing\Router  $router
-     * @return void
-     */
-    protected function defineRoutes($router)
-    {
-        require __DIR__.'/../routes/web.php';
     }
 }

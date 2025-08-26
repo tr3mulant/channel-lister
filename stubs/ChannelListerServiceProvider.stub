@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use IGE\ChannelLister\Console\InstallCommand;
+use IGE\ChannelLister\Console\AmazonTokenStatusCommand;
+use IGE\ChannelLister\Console\SeedFieldsCommand;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,15 +16,7 @@ class ChannelListerServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->registerPublishing();
         $this->registerCommands();
-
-        if (! config('channel-lister.enabled')) {
-            return;
-        }
-
-        $this->registerRoutes();
-        $this->registerResources();
 
         /**
          * @var array<string, string> $middleware
@@ -37,64 +30,17 @@ class ChannelListerServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/channel-lister.php', 'channel-lister');
+        //
     }
 
-    protected function registerRoutes(): void
-    {
-        Route::group([
-            'domain' => config('channel-lister.domain', null),
-            'namespace' => 'IGE\ChannelLister\Http\Controllers',
-            'prefix' => config('channel-lister.path'),
-            'middleware' => 'channel-lister',
-        ], function (): void {
-            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        });
-    }
 
-    protected function registerResources(): void
-    {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'channel-lister');
-    }
 
     protected function registerCommands(): void
     {
         $this->commands([
-            InstallCommand::class,
+            AmazonTokenStatusCommand::class,
+            SeedFieldsCommand::class,
         ]);
     }
 
-    /**
-     * Register the package's publishable resources.
-     *
-     * @return void
-     */
-    protected function registerPublishing()
-    {
-        if ($this->app->runningInConsole()) {
-            $publishesMigrationsMethod = method_exists($this, 'publishesMigrations')
-                ? 'publishesMigrations'
-                : 'publishes';
-
-            $this->{$publishesMigrationsMethod}([
-                __DIR__.'/../database/migrations' => database_path('migrations'),
-            ], 'channel-lister-migrations');
-
-            $this->publishes([
-                __DIR__.'/../resources' => resource_path('vendor/channel-lister'),
-            ], ['channel-lister-resources', 'laravel-resources']);
-
-            $this->publishes([
-                __DIR__.'/../public' => public_path('vendor/channel-lister'),
-            ], ['channel-lister-assets', 'laravel-assets']);
-
-            $this->publishes([
-                __DIR__.'/../config/channel-lister.php' => config_path('channel-lister.php'),
-            ], 'channel-lister-config');
-
-            $this->publishes([
-                __DIR__.'/../stubs/ChannelListerServiceProvider.stub' => app_path('Providers/ChannelListerServiceProvider.php'),
-            ], 'channel-lister-provider');
-        }
-    }
 }

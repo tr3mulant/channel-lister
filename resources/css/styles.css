@@ -13,3 +13,292 @@ div#loading {
   justify-content: center;
   align-items: center;
 }
+
+#form {
+  min-height: 70vh;
+}
+
+#form h4 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  float: initial;
+  text-decoration: initial;
+  padding: initial;
+  border: initial;
+  color: initial;
+  background: initial;
+}
+
+input.es-input.form-group {
+  background: white;
+}
+
+#pantab {
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: initial;
+  border-radius: initial;
+  resize: initial;
+  height: initial;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Platform flex rules removed - tabs now use consistent layout */
+
+/* Close button positioning for marketplace tabs */
+.nav > li > a {
+  position: relative;
+}
+
+.tab-close-btn {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-size: 14px;
+  line-height: 1;
+  z-index: 10;
+}
+
+/* .nav-tabs.nav-justified > li > a {
+  margin-right: 0;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  text-align: center;
+} */
+
+.nav > li > a:hover,
+.nav > li > a:focus {
+  text-decoration: none;
+  background-color: #eee;
+}
+
+.dropdown-toggle:focus {
+  outline: 0;
+}
+
+.nav-justified > li > a {
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+/* .nav-tabs > li > a {
+    margin-right: 2px;
+    line-height: 1.42857143;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+} */
+
+/* .nav > li > a {
+  position: relative;
+  display: block;
+  padding: 10px 15px; */
+/* } */
+
+.nav > li i.glyphicon {
+  font-size: small;
+  line-height: 1.5;
+}
+
+.nav > li i.glyphicon-upload,
+.nav > li i.glyphicon-ban-circle {
+  margin-right: 5px;
+}
+
+/*.nav > li > a > i {flex-grow: 1;}*/
+
+#pantab > div {
+  padding: 0.5em;
+  height: 100%;
+}
+
+#buttons_div {
+  margin: 1em;
+}
+
+.form-divisor {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 0 1px #ffffff inset;
+  border-color: #e6e6e6 #d4d4d4 #cdcdcd;
+  border-image: none;
+  border-style: solid;
+  border-width: 1px;
+  padding: 1em;
+  margin-bottom: 1em;
+}
+
+#form .panel {
+  min-width: initial;
+}
+
+#form .panel_content {
+  padding: 1em;
+}
+
+.panel-group .panel + .panel {
+  margin-top: 0.5rem;
+}
+
+/* #form ul {
+  padding-left: 0;
+  list-style: none;
+} */
+
+#sears_atts .in_text {
+  float: none;
+  width: 100%;
+  max-width: initial;
+  overflow: initial;
+  display: flex;
+}
+
+#sears_atts input {
+  margin-left: 1em;
+  flex-grow: 1;
+}
+
+#sears_atts select {
+  margin-left: 1em;
+  flex-grow: 1;
+}
+
+#sears_atts br,
+#sears_atts .in_info,
+br.clear {
+  display: none;
+}
+
+.val_error {
+  background-color: red;
+}
+
+.cat_results_wrapper {
+  z-index: 3000;
+}
+
+@media only screen and (max-width: 1588px) {
+  #form {
+    margin-top: 3rem;
+  }
+}
+
+@media only screen and (max-width: 1104px) {
+  #form {
+    margin-top: 6rem;
+  }
+}
+
+div.fixed-bottom-right {
+  z-index: 10;
+  position: fixed;
+  bottom: 1rem;
+  right: 6rem;
+}
+
+.tt-caml-update-table > .tooltip-inner,
+.tt-hoponinator-update-table > .tooltip-inner {
+  background-color: rgba(68, 68, 68, 0.9);
+  overflow-wrap: break-word;
+}
+
+.tt-min-w-5 > .tooltip-inner {
+  min-width: 5vw;
+}
+
+.tt-max-w-50 > .tooltip-inner {
+  max-width: 50vw;
+}
+
+.form-group.required .col-form-label::after {
+  content: "*";
+  color: #89b1c9;
+}
+
+.leading-3 {
+  line-height: 0.75rem; /* 12px */
+}
+
+.leading-4 {
+  line-height: 1rem; /* 16px */
+}
+
+.leading-5 {
+  line-height: 1.25rem; /* 20px */
+}
+
+.leading-5-25 {
+  line-height: 1.375rem; /* 22px */
+}
+
+.leading-6 {
+  line-height: 1.5rem; /* 24px */
+}
+
+.icon-plus::before {
+  content: "+";
+  font-size: 1.5em;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.icon-minus::before {
+  content: "-";
+  font-size: 1.5em;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.icon-x::before {
+  content: "×";
+  font-size: 1.5em;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.dropdown-toggle.icon-plus::after {
+  display: none;
+}
+
+.bundle-component-row + .bundle-component-row {
+  margin-top: 0.5rem;
+}
+
+.error {
+  color: red;
+}
+
+.form-text code {
+  color: #89b1c9;
+}
+
+.batman_robin {
+  background: url("vendor/channel-lister/images/batman_robin.gif");
+  height: 30px;
+  width: 60px;
+  position: relative;
+  left: -60px;
+}
+.pikachu {
+  background: url("vendor/channel-lister/images/pikachu.gif");
+  background-size: 45px 31px;
+  position: relative;
+  width: 45px;
+  height: 31px;
+  left: -45px;
+}
+.nyan {
+  background: url("vendor/channel-lister/images/nyan.gif");
+  background-size: 60px 65px;
+  position: relative;
+  width: 60px;
+  height: 60px;
+  left: -45px;
+}
+.carlton {
+  background: url("vendor/channel-lister/images/8-bit-carlton.gif");
+  background-size: 96px 90px;
+  position: relative;
+  width: 96px;
+  height: 90px;
+  left: -45px;
+}

@@ -93,7 +93,7 @@ describe('ChannelListerField Model', function (): void {
             ->and($field->example)->toBe('example value')
             ->and($field->marketplace)->toBe('amazon')
             ->and($field->input_type)->toBe(InputType::TEXT)
-            ->and($field->input_type_aux)->toBe(['option1', 'option2'])
+            ->and($field->input_type_aux)->toBe('option1||option2')
             ->and($field->required)->toBeTrue()
             ->and($field->grouping)->toBe('basic')
             ->and($field->type)->toBe(Type::CUSTOM);
@@ -240,7 +240,9 @@ describe('ChannelListerField Attributes', function (): void {
             'input_type_aux' => 'option1||option2||option3',
         ]);
 
-        expect($field->input_type_aux)->toBe(['option1', 'option2', 'option3']);
+        expect($field->input_type_aux)->toBe('option1||option2||option3');
+
+        expect($field->getInputTypeAuxOptions())->toBe(['option1', 'option2', 'option3']);
     });
 
     it('handles empty input_type_aux when getting', function (): void {
@@ -248,7 +250,9 @@ describe('ChannelListerField Attributes', function (): void {
             'input_type_aux' => '',
         ]);
 
-        expect($field->input_type_aux)->toBe([]);
+        expect($field->input_type_aux)->toBe('');
+
+        expect($field->getInputTypeAuxOptions())->toBe('');
     });
 
     it('handles zero string input_type_aux when getting', function (): void {
@@ -256,14 +260,18 @@ describe('ChannelListerField Attributes', function (): void {
             'input_type_aux' => '0',
         ]);
 
-        expect($field->input_type_aux)->toBe([]);
+        expect($field->input_type_aux)->toBe('0');
+
+        expect($field->getInputTypeAuxOptions())->toBe('0');
     });
 
     it('converts array to string when setting input_type_aux', function (): void {
         $field = new ChannelListerField;
         $field->input_type_aux = ['option1', 'option2', 'option3'];
 
-        expect($field->getAttributes()['input_type_aux'])->toBe('option1||option2||option3');
+        expect($field->input_type_aux)->toBe('option1||option2||option3');
+
+        expect($field->getInputTypeAuxOptions())->toBe(['option1', 'option2', 'option3']);
     });
 
     it('returns display_name when set', function (): void {

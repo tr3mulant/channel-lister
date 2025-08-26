@@ -8,3 +8,10 @@
 /vendor/
 *.swp
 *.swo
+/tests/coverage
+.env*
+**/.env*/**
+!.env.example
+workbench/storage
+/.CLAUDE.md
+.devdbrc

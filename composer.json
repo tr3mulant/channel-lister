@@ -23,6 +23,7 @@
     "laravel/framework": "^12.19"
   },
   "require-dev": {
+    "barryvdh/laravel-debugbar": "^3.16",
     "laravel/pint": "^1.18.1",
     "orchestra/testbench": "^10.4",
     "pestphp/pest": "^3.5.1",
@@ -67,12 +68,25 @@
     "test:refacto": "rector --dry-run",
     "test:lint": "pint --test",
     "test:types": "phpstan analyse --ansi",
-    "test:unit": "pest --colors=always --coverage --min=80",
+    "test:unit": [
+      "Composer\\Config::disableProcessTimeout",
+      "pest --colors=always --coverage --min=80"
+    ],
+    "test:unit:coverage-html": [
+      "Composer\\Config::disableProcessTimeout",
+      "pest --colors=always --min=80 --coverage-html tests/coverage"
+    ],
     "test": [
       "@test:refacto",
       "@test:lint",
       "@test:types",
       "@test:unit"
+    ],
+    "test:coverage-html": [
+      "@test:refacto",
+      "@test:lint",
+      "@test:types",
+      "@test:unit:coverage-html"
     ],
     "post-autoload-dump": [
       "@clear",
