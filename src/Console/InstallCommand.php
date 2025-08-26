@@ -35,6 +35,9 @@ class InstallCommand extends Command
         $this->comment('Publishing Channel Lister Assets...');
         $this->callSilent('vendor:publish', ['--tag' => 'channel-lister-assets']);
 
+        $this->comment('Publishing Channel Lister Views...');
+        $this->callSilent('vendor:publish', ['--tag' => 'channel-lister-views']);
+
         $this->comment('Publishing Channel Lister Configuration...');
         $this->callSilent('vendor:publish', ['--tag' => 'channel-lister-config']);
 

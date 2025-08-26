@@ -136,6 +136,18 @@ class ChannelListerServiceProvider extends ServiceProvider
                 __DIR__.'/../database/migrations' => database_path('migrations'),
             ], 'channel-lister-migrations');
 
+            // Granular publishing - Views only
+            $this->publishes([
+                __DIR__.'/../resources/views' => resource_path('views/vendor/channel-lister'),
+            ], 'channel-lister-views');
+
+            // Granular publishing - Frontend assets only (CSS/JS)
+            $this->publishes([
+                __DIR__.'/../resources/css' => resource_path('css/vendor/channel-lister'),
+                __DIR__.'/../resources/js' => resource_path('js/vendor/channel-lister'),
+            ], 'channel-lister-frontend-assets');
+
+            // Combined publishing - Everything (backward compatibility)
             $this->publishes([
                 __DIR__.'/../resources' => resource_path('vendor/channel-lister'),
             ], ['channel-lister-resources', 'laravel-resources']);

@@ -41,6 +41,7 @@ php artisan channel-lister:install
 This command will:
 - 📦 Publish the service provider 
 - 🎨 Publish package assets
+- 👁️ Publish customizable views
 - ⚙️ Publish configuration files
 - 🗄️ Publish database migrations
 - 🔧 Automatically register the service provider (supports Laravel 8/9/10/11+)
@@ -51,9 +52,46 @@ After installation, run the migrations:
 php artisan migrate
 ```
 
+### 🎯 Granular Publishing (Advanced)
+
+For more control over what gets published, you can use specific tags:
+
+#### **📋 Views Only** - Customize UI components
+```bash
+php artisan vendor:publish --tag=channel-lister-views
+```
+**Publishes to:** `resources/views/vendor/channel-lister/`  
+**Use case:** Customize field management interface, form components, and layouts
+
+#### **🎨 Frontend Assets Only** - For custom build processes
+```bash
+php artisan vendor:publish --tag=channel-lister-frontend-assets
+```
+**Publishes to:** `resources/css/vendor/channel-lister/` and `resources/js/vendor/channel-lister/`  
+**Use case:** Integrate with Vite, Webpack, or other build tools
+
+#### **📦 Everything** - Complete control
+```bash
+php artisan vendor:publish --tag=channel-lister-resources
+```
+**Publishes to:** `resources/vendor/channel-lister/`  
+**Use case:** Full customization of all resources
+
+#### **🔧 Individual Components**
+```bash
+# Configuration only
+php artisan vendor:publish --tag=channel-lister-config
+
+# Database migrations only
+php artisan vendor:publish --tag=channel-lister-migrations
+
+# Public assets only
+php artisan vendor:publish --tag=channel-lister-assets
+```
+
 ### 🛠️ Manual Installation (Alternative)
 
-Alternatively, you can install manually by publishing the package assets and configuration:
+Alternatively, you can install manually by publishing everything:
 
 ```bash
 php artisan vendor:publish --provider="IGE\ChannelLister\ChannelListerServiceProvider"
