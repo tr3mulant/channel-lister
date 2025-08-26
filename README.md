@@ -30,13 +30,36 @@ Install via Composer:
 composer require ige/channel-lister
 ```
 
-Publish the package assets and configuration:
+### ⚡ Automatic Installation (Recommended)
+
+Use the install command for automatic setup:
+
+```bash
+php artisan channel-lister:install
+```
+
+This command will:
+- 📦 Publish the service provider 
+- 🎨 Publish package assets
+- ⚙️ Publish configuration files
+- 🗄️ Publish database migrations
+- 🔧 Automatically register the service provider (supports Laravel 8/9/10/11+)
+
+After installation, run the migrations:
+
+```bash
+php artisan migrate
+```
+
+### 🛠️ Manual Installation (Alternative)
+
+Alternatively, you can install manually by publishing the package assets and configuration:
 
 ```bash
 php artisan vendor:publish --provider="IGE\ChannelLister\ChannelListerServiceProvider"
 ```
 
-Run the migrations:
+Then run the migrations:
 
 ```bash
 php artisan migrate
