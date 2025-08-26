@@ -338,6 +338,276 @@ The shipping calculator includes comprehensive test coverage and follows Laravel
 
 ---
 
+## 🔧 Form Field Configuration & Customization
+
+Channel Lister provides a powerful and flexible form field system that allows you to fully customize the listing creation experience. You can manage fields for different marketplaces, add new marketplaces, and customize field behavior through the ChannelListerField model and management interface.
+
+### ⚡ Quick Setup with Default Fields
+
+Use the seeding command to populate your database with pre-configured fields for ChannelAdvisor/Rithum and Amazon:
+
+```bash
+php artisan channel-lister:seed-fields
+```
+
+**Command Options:**
+- `--force` - Force seeding even if fields already exist (overwrites existing fields)
+
+**What this command does:**
+- 📦 Seeds 27 default fields for common marketplace operations
+- 🏪 Includes fields for ChannelAdvisor/Rithum integration
+- 🛒 Includes Amazon-specific product type fields
+- ⚙️ Sets up proper field ordering, validation, and grouping
+- 🔄 Handles different input types (text, select, currency, etc.)
+
+### 🎛️ Field Management Interface
+
+Access the field management interface via the `channel-lister-field` routes:
+
+**Available Routes:**
+```php
+// Web interface for field management
+Route::resource('/channel-lister-field', ChannelListerFieldController::class)
+```
+
+**Management Operations:**
+- **📋 List Fields** - `/channel-lister-field` - View all fields with filtering by marketplace
+- **➕ Create Field** - `/channel-lister-field/create` - Add new custom fields
+- **👁️ View Field** - `/channel-lister-field/{id}` - View field details
+- **✏️ Edit Field** - `/channel-lister-field/{id}/edit` - Modify existing fields
+- **🗑️ Delete Field** - `/channel-lister-field/{id}` - Remove fields (with confirmation)
+
+### 📊 ChannelListerField Model
+
+The `ChannelListerField` model is the core of the field system:
+
+#### **Model Attributes:**
+```php
+$field = new ChannelListerField([
+    'ordering' => 1,                    // Display order (integer)
+    'field_name' => 'Product Title',    // Internal field name
+    'display_name' => 'Title',          // User-facing label
+    'tooltip' => 'Enter product title', // Help text
+    'example' => 'Blue Widget Pro',     // Example value
+    'marketplace' => 'amazon',          // Target marketplace
+    'input_type' => 'text',            // Field input type
+    'input_type_aux' => null,          // Additional input options
+    'required' => true,                // Whether field is required
+    'grouping' => 'Product Details',   // Form section grouping
+    'type' => 'custom',               // Field type (custom/channeladvisor)
+]);
+```
+
+#### **Available Input Types:**
+- **`text`** - Standard text input
+- **`textarea`** - Multi-line text input
+- **`select`** - Dropdown selection (uses `input_type_aux` for options)
+- **`checkbox`** - Boolean checkbox
+- **`currency`** - Currency input with formatting
+- **`decimal`** - Decimal number input
+- **`integer`** - Whole number input
+- **`url`** - URL input with validation
+- **`comma-separated`** - Multi-value comma-separated input
+- **`custom`** - Special custom components (UPC generator, shipping calculator, etc.)
+- **`alert`** - Display informational alerts
+
+#### **Field Types:**
+- **`custom`** - User-defined fields for specific business needs
+- **`channeladvisor`** - Fields designed for ChannelAdvisor/Rithum integration
+
+#### **Useful Scopes:**
+```php
+// Get fields for specific marketplace
+ChannelListerField::forMarketplace('amazon')->get();
+
+// Get only required fields
+ChannelListerField::required()->get();
+
+// Get fields by grouping
+ChannelListerField::byGrouping('Product Details')->get();
+
+// Get ordered fields
+ChannelListerField::ordered()->get(); // ascending
+ChannelListerField::ordered('desc')->get(); // descending
+
+// Chain scopes for complex queries
+ChannelListerField::forMarketplace('ebay')
+    ->required()
+    ->ordered()
+    ->get();
+```
+
+### 🛒 Adding New Marketplaces
+
+You can easily add support for new marketplaces by creating fields with custom marketplace keys:
+
+```php
+// Add fields for a new marketplace (e.g., 'etsy')
+ChannelListerField::create([
+    'ordering' => 1,
+    'field_name' => 'Etsy Category',
+    'display_name' => 'Product Category',
+    'marketplace' => 'etsy',           // New marketplace key
+    'input_type' => 'select',
+    'input_type_aux' => 'Clothing||Electronics||Home & Garden',
+    'required' => true,
+    'grouping' => 'Etsy Specific',
+    'type' => 'custom',
+]);
+```
+
+**Marketplace Display Names:**
+
+The system automatically generates display names for marketplaces using the `ChannelLister::marketplaceDisplayName()` method:
+- `amazon` → "Amazon"
+- `ebay` → "eBay" 
+- `walmart` → "Walmart"
+- `custom-marketplace` → "Custom Marketplace"
+
+### 🔧 Advanced Field Configuration
+
+#### **Select Field Options:**
+For select fields, use the `input_type_aux` field to define options:
+
+```php
+// Simple options
+'input_type_aux' => 'Small||Medium||Large'
+
+// Key-value pairs
+'input_type_aux' => 'sm==Small||md==Medium||lg==Large'
+
+// From code
+$field->input_type_aux = ['Option 1', 'Option 2', 'Option 3'];
+```
+
+#### **Custom Field Components:**
+Special custom components are available via the `custom` input type:
+
+```php
+// UPC generator component  
+'input_type' => 'custom',
+'input_type_aux' => '', // UPC generation logic
+
+// Amazon product type search
+'input_type' => 'custom', 
+'input_type_aux' => 'amazon-product-type-search',
+
+// Shipping cost calculator
+'field_name' => 'Cost Shipping',
+'input_type' => 'custom', // Automatically triggers shipping calculator
+```
+
+#### **Validation Patterns:**
+Use `input_type_aux` for regex validation on text fields:
+
+```php
+'input_type' => 'text',
+'input_type_aux' => '^[A-Z0-9-]{5,20}$', // SKU format validation
+```
+
+### 🎯 Practical Examples
+
+#### **Example 1: Adding Shopify Support**
+```php
+// Create Shopify-specific fields
+$fields = [
+    [
+        'ordering' => 1,
+        'field_name' => 'shopify_handle',
+        'display_name' => 'URL Handle', 
+        'marketplace' => 'shopify',
+        'input_type' => 'text',
+        'required' => true,
+        'grouping' => 'Shopify Settings',
+        'type' => 'custom',
+    ],
+    [
+        'ordering' => 2,
+        'field_name' => 'shopify_tags',
+        'display_name' => 'Product Tags',
+        'marketplace' => 'shopify', 
+        'input_type' => 'comma-separated',
+        'required' => false,
+        'grouping' => 'Shopify Settings',
+        'type' => 'custom',
+    ],
+];
+
+foreach ($fields as $field) {
+    ChannelListerField::create($field);
+}
+```
+
+#### **Example 2: Custom Validation Field**
+```php
+ChannelListerField::create([
+    'ordering' => 10,
+    'field_name' => 'model_number',
+    'display_name' => 'Model Number',
+    'tooltip' => 'Enter manufacturer model number (letters, numbers, hyphens only)',
+    'example' => 'ABC-123-XYZ',
+    'marketplace' => 'common',
+    'input_type' => 'text',
+    'input_type_aux' => '^[A-Z0-9-]{3,50}$', // Validation regex
+    'required' => true,
+    'grouping' => 'Product Information',
+    'type' => 'custom',
+]);
+```
+
+#### **Example 3: Dynamic Select Field**
+```php
+ChannelListerField::create([
+    'ordering' => 5,
+    'field_name' => 'condition',
+    'display_name' => 'Product Condition',
+    'marketplace' => 'common',
+    'input_type' => 'select',
+    'input_type_aux' => 'new==New||used-like-new==Used - Like New||used-good==Used - Good||used-acceptable==Used - Acceptable',
+    'required' => true,
+    'grouping' => 'Product Details',
+    'type' => 'custom',
+]);
+```
+
+### 🔍 Field Management Best Practices
+
+1. **📋 Consistent Ordering** - Use meaningful ordering values (10, 20, 30) to allow easy insertion
+2. **🏷️ Clear Naming** - Use descriptive `field_name` and `display_name` values
+3. **📝 Helpful Tooltips** - Provide context and examples for complex fields
+4. **🎯 Logical Grouping** - Group related fields together for better UX
+5. **✅ Proper Validation** - Use appropriate input types and validation patterns
+6. **🌍 Marketplace Specific** - Use marketplace keys consistently across your application
+
+### 🔧 Programmatic Field Management
+
+```php
+// Create fields programmatically
+$marketplaceFields = [
+    'tiktok' => [
+        ['field_name' => 'tiktok_category', 'display_name' => 'TikTok Category'],
+        ['field_name' => 'tiktok_hashtags', 'display_name' => 'Hashtags'],
+    ]
+];
+
+foreach ($marketplaceFields as $marketplace => $fields) {
+    foreach ($fields as $index => $fieldData) {
+        ChannelListerField::create(array_merge($fieldData, [
+            'marketplace' => $marketplace,
+            'ordering' => ($index + 1) * 10,
+            'input_type' => 'text',
+            'required' => false,
+            'grouping' => ucfirst($marketplace) . ' Settings',
+            'type' => 'custom',
+        ]));
+    }
+}
+```
+
+This flexible field system allows you to adapt Channel Lister to any marketplace or business requirement while maintaining a consistent, user-friendly interface.
+
+---
+
 ## 📄 License
 
 This package is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
