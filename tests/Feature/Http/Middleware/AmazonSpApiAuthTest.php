@@ -5,10 +5,9 @@ use IGE\ChannelLister\Services\AmazonTokenManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Mockery;
 
 beforeEach(function (): void {
-    $this->tokenManager = Mockery::mock(AmazonTokenManager::class);
+    $this->tokenManager = \Mockery::mock(AmazonTokenManager::class);
     $this->middleware = new AmazonSpApiAuth($this->tokenManager);
     $this->request = new Request;
 
@@ -17,7 +16,7 @@ beforeEach(function (): void {
 });
 
 afterEach(function (): void {
-    Mockery::close();
+    \Mockery::close();
 });
 
 describe('AmazonSpApiAuth Middleware', function (): void {

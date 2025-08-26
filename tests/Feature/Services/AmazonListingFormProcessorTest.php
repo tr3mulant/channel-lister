@@ -3,7 +3,6 @@
 use IGE\ChannelLister\Models\AmazonListing;
 use IGE\ChannelLister\Services\AmazonListingFormProcessor;
 use IGE\ChannelLister\Services\AmazonSpApiService;
-use Mockery;
 
 /**
  * Small helper to create a persisted AmazonListing without touching non-existent columns.
@@ -31,12 +30,12 @@ function makeAmazonListing(array $attrs = []): AmazonListing
 }
 
 beforeEach(function (): void {
-    $this->amazon = Mockery::mock(AmazonSpApiService::class);
+    $this->amazon = \Mockery::mock(AmazonSpApiService::class);
     $this->processor = new AmazonListingFormProcessor($this->amazon);
 });
 
 afterEach(function (): void {
-    Mockery::close();
+    \Mockery::close();
 });
 
 describe('AmazonListingFormProcessor', function (): void {
