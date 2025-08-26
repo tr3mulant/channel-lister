@@ -1135,88 +1135,6 @@ $(document).ready(function () {
     }
   );
 
-  //handles prop65 stuff for amazon, showing and hiding warning name, and chemical type when applicable
-  // for more info see https://sellercentral.amazon.com/gp/help/help.html?ie=UTF8&itemID=G202141960&
-  $("#prop65-id").change(function () {
-    if ($(this).val() == "true") {
-      $("#prop65_warn_type-id").attr("required", true);
-      $("#prop65-warning-type-container").removeClass("d-none");
-      $("#prop65-chemical-name-container").removeClass("d-none");
-      $("#prop65_warn_type-id option[value='default']").prop("selected", true);
-      $("#prop65_warn_type-id").selectpicker("refresh");
-    } else {
-      $("#prop65_warn_type-id").attr("required", false);
-      $("#prop65_chem_name-id").attr("required", false);
-      $("#prop65_warn_type-id option[value='']").prop("selected", true);
-      $("#prop65_chem_name-id option[value='']").prop("selected", true);
-      $("#prop65_warn_type-id").selectpicker("refresh");
-      $("#prop65_chem_name-id").selectpicker("refresh");
-      $("#prop65-warning-type-container").addClass("d-none");
-      $("#prop65-chemical-name-container").addClass("d-none");
-    }
-  });
-
-  /**
-   * Force chem_name warning if a chemical is chosen, by selecting chem_name and
-   * disabling chem_name's siblings. A chemical is required if chem_name value is chosen,
-   * and for some reason this sequence doesn't trigger the warning change event, so we set
-   * that here as well.
-   */
-  $("#prop65_chem_name-id").change(function () {
-    if ($("#prop65_chem_name-id option:selected").val() != "") {
-      $("#prop65_warn_type-id").selectpicker("val", "chem_name");
-      $("#prop65_chem_name-id").attr("required", true);
-      $("#prop65_warn_type-id").selectpicker("refresh");
-    } else {
-      $("#prop65_warn_type-id option[value='default']").prop("selected", true);
-      $("#prop65_chem_name-id").attr("required", false);
-      $("#prop65_warn_type-id").selectpicker("refresh");
-    }
-  });
-
-  /**
-   * Requre a chemical to be chosen if chem_name warning is chosen
-   */
-  $("#prop65_warn_type-id").change(function () {
-    if ($(this).val() == "chem_name") {
-      $("#prop65_chem_name-id").attr("required", true);
-      $("#prop65_chem_name-id-error").show();
-    } else {
-      $("#prop65_chem_name-id option[value='']").prop("selected", true);
-      $("#prop65_chem_name-id").selectpicker("refresh");
-      $("#prop65_chem_name-id").attr("required", false);
-      $("#prop65_chem_name-id-error").hide();
-    }
-  });
-
-  //clonesite tags start
-  function addCloneSiteTag(tag, input_id) {
-    console.log(input_id);
-    var tags_input = $("#" + input_id);
-    if (tags_input.val().length > 0) {
-      tags_input.val(tags_input.val() + ", " + tag);
-    } else {
-      tags_input.val(tag);
-    }
-  }
-  $("body").on("click", ".clonesite_tags", function () {
-    var tag_list = $(this).children(".clonesite_tags_inner");
-    console.log(tag_list);
-    if (tag_list.length > 0) {
-      if (tag_list.is(":visible")) {
-        tag_list.hide();
-      } else {
-        tag_list.show();
-      }
-    }
-  });
-
-  $("body").on("click", ".clonesite_tag", function (event) {
-    addCloneSiteTag(this.innerHTML, this.dataset.inputId);
-    return false;
-  });
-  //clonesite tags end
-
   //Builds the the bundle component strings and places them in the bundle components input text field
   function buildBundleComponentString() {
     var sku_bundle = "";
@@ -1308,16 +1226,6 @@ $(document).ready(function () {
     if ($("#user_input").valid()) {
       showEasterEgg();
     }
-    // if ($("#prop65-id option:selected").val() === "true") {
-    //   let newValue = $("#prop65_warn_type-id option:selected").html();
-    //   let oldValue = $("#prop65_warn_type-id option:selected").val();
-    //   $("#prop65_warn_type-id option:selected").val(newValue);
-    //   if ($("#user_input").valid()) {
-    //     showEasterEgg();
-    //   } else {
-    //     $("#prop65_warn_type-id option:selected").val(oldValue);
-    //   }
-    // }
   });
 
   var ebayCatVarExclusions = null;

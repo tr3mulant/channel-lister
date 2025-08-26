@@ -33,14 +33,6 @@
         <x-channel-lister::custom.sku-bundle :params="$params" :class-str-default="$classStrDefault" />
     @break
 
-    @case('prop65')
-        <x-channel-lister::custom.prop65 :params="$params" :class-str-default="$classStrDefault" />
-    @break
-
-    @case('brand_id_wish')
-        <x-channel-lister::custom.wish-brand-directory-input :params="$params" :class-str-default="$classStrDefault" />
-    @break
-
     @case('special_features_amazon')
     @case('thesaurus_attribute_amazon')
 

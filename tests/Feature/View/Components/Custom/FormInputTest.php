@@ -183,46 +183,6 @@ class FormInputTest extends TestCase
     }
 
     /**
-     * Test routing to prop65 component.
-     */
-    public function test_prop65_component_routing(): void
-    {
-        $field = ChannelListerField::factory()->create([
-            'field_name' => 'prop65',
-            'display_name' => 'Prop65 Warning',
-        ]);
-
-        $view = $this->blade(
-            '<x-channel-lister::custom.form-input :params="$field" class-str-default="form-control" />',
-            ['field' => $field]
-        );
-
-        // Should render the prop65 component
-        $view->assertSee('form-group', false);
-        $view->assertSee('Prop65 Warning');
-    }
-
-    /**
-     * Test routing to wish brand directory component.
-     */
-    public function test_wish_brand_directory_routing(): void
-    {
-        $field = ChannelListerField::factory()->create([
-            'field_name' => 'brand_id_wish',
-            'display_name' => 'Wish Brand Directory',
-        ]);
-
-        $view = $this->blade(
-            '<x-channel-lister::custom.form-input :params="$field" class-str-default="form-control" />',
-            ['field' => $field]
-        );
-
-        // Should render the wish-brand-directory-input component
-        $view->assertSee('form-group', false);
-        $view->assertSee('Wish Brand Directory');
-    }
-
-    /**
      * Test routing to amazon special refinements component.
      */
     public function test_amazon_special_refinements_routing(): void

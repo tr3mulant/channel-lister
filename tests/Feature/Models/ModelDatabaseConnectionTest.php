@@ -3,8 +3,6 @@
 use IGE\ChannelLister\Models\AmazonListing;
 use IGE\ChannelLister\Models\ChannelListerField;
 use IGE\ChannelLister\Models\ProductDraft;
-use IGE\ChannelLister\Models\Prop65ChemicalData;
-use IGE\ChannelLister\Models\WishBrandDirectory;
 use Illuminate\Support\Facades\DB;
 
 beforeEach(function (): void {
@@ -76,8 +74,6 @@ describe('Model database connection configuration', function (): void {
                 new ChannelListerField,
                 new AmazonListing,
                 new ProductDraft,
-                new Prop65ChemicalData,
-                new WishBrandDirectory,
             ];
 
             foreach ($models as $model) {
@@ -92,8 +88,6 @@ describe('Model database connection configuration', function (): void {
                 new ChannelListerField,
                 new AmazonListing,
                 new ProductDraft,
-                new Prop65ChemicalData,
-                new WishBrandDirectory,
             ];
 
             foreach ($models as $model) {
