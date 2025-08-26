@@ -317,8 +317,6 @@ class TextFormInputTest extends TestCase
         $view->assertSee('id="product_title-id"', false);
         $view->assertSee('class="form-control text-input"', false);
         $view->assertSee('placeholder="Amazing Product - Best Quality"', false);
-        // $view->assertSee('pattern="^[^®^™*_]{10,80}$"', false); // TODO: Fix pattern rendering
-        // $view->assertSee("maxlength='80'", false); // TODO: Fix maxlength rendering
         $view->assertSee('required', false);
         $view->assertSee('Enter a <strong>SEO-friendly</strong> product title', false);
         $view->assertSee('Maps To: <code>product_title</code>', false);

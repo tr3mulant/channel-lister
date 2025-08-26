@@ -5,11 +5,6 @@ namespace IGE\ChannelLister\View\Components;
 use IGE\ChannelLister\Models\ChannelListerField;
 use Illuminate\View\Component;
 
-/**
- * This is placeholder for v/ChannelLister.
- * I don't expect to keep this either as we should expect to extract the view components that exist
- * in v/ChannelLister into their own component classes and associated views.
- */
 class AlertMessage extends Component
 {
     const VALID_ALERT_TYPES = ['success', 'info', 'warning', 'danger'];
