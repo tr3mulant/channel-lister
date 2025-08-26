@@ -40,8 +40,5 @@ jobs:
       - name: Install Composer dependencies
         run: composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist
 
-      - name: Generate Application Key
-        run: php ./vendor/bin/testbench key:generate --ansi
-
       - name: Integration Tests
         run: php ./vendor/bin/pest
