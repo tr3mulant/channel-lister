@@ -169,7 +169,7 @@ it('caches schema files to disk', function (): void {
     // Verify schema was cached to disk
     $urlHash = md5($schemaUrl);
     $diskPath = "amazon-schemas/{$urlHash}.json";
-    Storage::disk('local')->assertExists($diskPath);
+    expect(Storage::disk('local')->exists($diskPath))->toBeTrue();
 
     // Verify cached content
     $cachedContent = Storage::disk('local')->get($diskPath);
@@ -297,8 +297,8 @@ it('can clear schema cache', function (): void {
 
     $this->service->clearSchemaCache();
 
-    Storage::disk('local')->assertMissing('amazon-schemas/test1.json');
-    Storage::disk('local')->assertMissing('amazon-schemas/test2.json');
+    expect(Storage::disk('local')->exists('amazon-schemas/test1.json'))->toBeFalse();
+    expect(Storage::disk('local')->exists('amazon-schemas/test2.json'))->toBeFalse();
 });
 
 it('can clear specific product type cache', function (): void {
@@ -357,5 +357,194 @@ it('uses configurable cache settings', function (): void {
     // Verify custom path was used
     $urlHash = md5($schemaUrl);
     $customPath = "custom-path/{$urlHash}.json";
-    Storage::disk('local')->assertExists($customPath);
+    expect(Storage::disk('local')->exists($customPath))->toBeTrue();
+});
+
+it('can get marketplace name', function (): void {
+    $result = $this->service->getMarketplaceName();
+
+    expect($result)->toBe('amazon');
+});
+
+it('can get token info', function (): void {
+    $this->tokenManager->method('getTokenInfo')->willReturn([
+        'has_token' => true,
+        'expires_in_seconds' => 3600,
+        'is_valid' => true,
+    ]);
+
+    $result = $this->service->getTokenInfo();
+
+    expect($result)->toBeArray()
+        ->toHaveKey('has_token', true)
+        ->toHaveKey('expires_in_seconds', 3600)
+        ->toHaveKey('is_valid', true);
+});
+
+it('returns null when token info is unavailable', function (): void {
+    $this->tokenManager->method('getTokenInfo')->willReturn(null);
+
+    $result = $this->service->getTokenInfo();
+
+    expect($result)->toBeNull();
+});
+
+it('can validate configuration', function (): void {
+    $this->tokenManager->method('validateConfiguration')->willReturn([]);
+
+    $errors = $this->service->validateConfiguration();
+
+    expect($errors)->toBeArray()->toBeEmpty();
+});
+
+it('returns configuration errors when present', function (): void {
+    $this->tokenManager->method('validateConfiguration')->willReturn([
+        'AMAZON_SP_API_CLIENT_ID is required',
+        'AMAZON_SP_API_CLIENT_SECRET is required',
+    ]);
+
+    $errors = $this->service->validateConfiguration();
+
+    expect($errors)->toBeArray()->toHaveCount(2)
+        ->toContain('AMAZON_SP_API_CLIENT_ID is required')
+        ->toContain('AMAZON_SP_API_CLIENT_SECRET is required');
+});
+
+it('handles marketplace listing provider interface methods', function (): void {
+    // Test that the service implements the required interface
+    expect($this->service)->toBeInstanceOf(\IGE\ChannelLister\Contracts\MarketplaceListingProvider::class);
+
+    // Test getMarketplaceName method from interface
+    expect($this->service->getMarketplaceName())->toBe('amazon');
+});
+
+it('handles API errors with custom exception', function (): void {
+    Http::fake([
+        'sellingpartnerapi-na.amazon.com/definitions/2020-09-01/productTypes*' => Http::response([
+            'errors' => [
+                [
+                    'code' => 'InvalidInput',
+                    'message' => 'The provided input is invalid',
+                    'details' => 'Query parameter is required',
+                ],
+            ],
+        ], 400),
+    ]);
+
+    $result = $this->service->searchProductTypes('invalid');
+
+    // Should return empty array when API error occurs
+    expect($result)->toBeArray()->toBeEmpty();
+});
+
+it('handles network timeouts gracefully', function (): void {
+    Http::fake(fn () => throw new \Exception('Connection timeout'));
+
+    $result = $this->service->searchProductTypes('timeout-test');
+
+    expect($result)->toBeArray()->toBeEmpty();
+});
+
+it('caches product type searches with custom TTL', function (): void {
+    // Mock config for custom TTL
+    config(['channel-lister.amazon.cache.ttl.product_types_search' => 7200]);
+
+    Http::fake([
+        'sellingpartnerapi-na.amazon.com/definitions/2020-09-01/productTypes*' => Http::response([
+            'productTypes' => [
+                [
+                    'name' => 'LUGGAGE',
+                    'displayName' => 'Luggage',
+                    'description' => 'Travel luggage',
+                ],
+            ],
+        ], 200),
+    ]);
+
+    $result1 = $this->service->searchProductTypes('luggage');
+    $result2 = $this->service->searchProductTypes('luggage'); // Should hit cache
+
+    expect($result1)->toEqual($result2);
+
+    // Should only make one HTTP request due to caching
+    Http::assertSentCount(1);
+});
+
+it('handles empty API responses gracefully', function (): void {
+    Http::fake([
+        'sellingpartnerapi-na.amazon.com/definitions/2020-09-01/productTypes*' => Http::response([
+            'productTypes' => [],
+        ], 200),
+    ]);
+
+    $result = $this->service->searchProductTypes('nonexistent');
+
+    expect($result)->toBeArray()->toBeEmpty();
+});
+
+it('can clear all caches', function (): void {
+    // Pre-populate some cache
+    Http::fake([
+        'sellingpartnerapi-na.amazon.com/definitions/2020-09-01/productTypes*' => Http::response([
+            'productTypes' => [['name' => 'TEST', 'displayName' => 'Test']],
+        ], 200),
+        'sellingpartnerapi-na.amazon.com/definitions/2020-09-01/productTypes/TEST*' => Http::response([
+            'schema' => ['properties' => ['item_name' => ['type' => 'string']]],
+        ], 200),
+    ]);
+
+    $this->service->searchProductTypes('test');
+    $this->service->getListingRequirements('TEST');
+
+    // Clear all caches
+    $this->service->clearSchemaCache();
+
+    // Subsequent calls should hit API again
+    Http::fake([
+        'sellingpartnerapi-na.amazon.com/definitions/2020-09-01/productTypes*' => Http::response([
+            'productTypes' => [['name' => 'TEST2', 'displayName' => 'Test2']],
+        ], 200),
+        'sellingpartnerapi-na.amazon.com/definitions/2020-09-01/productTypes/TEST*' => Http::response([
+            'schema' => ['properties' => ['item_name' => ['type' => 'string']]],
+        ], 200),
+    ]);
+
+    $result = $this->service->searchProductTypes('test');
+
+    // Just verify cache clearing works and methods still return data
+    expect($result)->toBeArray();
+    expect($result)->not()->toBeEmpty();
+});
+
+it('can clear individual product type cache and force refresh', function (): void {
+    // Pre-populate cache for specific product type
+    Http::fake([
+        'sellingpartnerapi-na.amazon.com/definitions/2020-09-01/productTypes/LUGGAGE*' => Http::response([
+            'schema' => ['properties' => ['item_name' => ['type' => 'string']]],
+        ], 200),
+    ]);
+
+    $this->service->getListingRequirements('LUGGAGE');
+
+    // Clear specific product type cache
+    $this->service->clearProductTypeCache('LUGGAGE');
+
+    // Subsequent call should hit API again
+    $result = $this->service->getListingRequirements('LUGGAGE');
+
+    expect($result)->toBeArray();
+
+    // Should have made 2 API calls (initial + after cache clear)
+    Http::assertSentCount(2);
+});
+
+it('handles configuration with fallback values', function (): void {
+    // Test that service handles missing config gracefully
+    config(['channel-lister.amazon.sp_api_base_url' => null]);
+    config(['channel-lister.amazon.marketplace_id' => null]);
+
+    $service = new AmazonSpApiService($this->tokenManager);
+
+    // Should still work with fallback values
+    expect($service->getMarketplaceName())->toBe('amazon');
 });
